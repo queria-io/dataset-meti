@@ -13,7 +13,7 @@ url = "~/.local/share/fdl"
 public_url = "http://localhost:4001"
 
 [meta]
-license = "政府標準利用規約 第2.0版"
+license = "公共データ利用規約（第1.0版）"
 license_url = "https://www.meti.go.jp/main/rules.html"
 title = "経済産業省 活動指数"
 description = """経済産業省 経済解析室が公表する第３次産業活動指数（2020年基準）。
