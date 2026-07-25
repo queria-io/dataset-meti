@@ -1,0 +1,51 @@
+spec_version: "0.1"
+name: meti
+title: 経済産業省 活動指数
+description: |-
+  経済産業省 経済解析室が公表する第３次産業活動指数（2020年基準）。
+  サービス産業の生産活動を業種別・月次の指数で示す。
+keywords:
+  - 経済産業省
+  - 第3次産業活動指数
+  - サービス産業
+  - 景気
+homepage: https://github.com/queria-io/dataset-meti
+language: ja
+
+licenses:
+  - JP-PDL-1.0
+
+sources:
+  - title: 第３次産業活動指数（経済産業省 経済解析室）
+    path: https://www.meti.go.jp/statistics/tyo/sanzi/
+
+contributors:
+  - title: 経済産業省
+    path: https://www.meti.go.jp/
+    roles: [rightsHolder]
+
+temporal_coverage: { start: "2018-01", end: null }
+spatial_coverage: [JP]
+update_frequency: monthly
+cover: 📈
+
+ai_context:
+  instructions: |
+    サービス産業の景気動向を業種別に見るのに使う。1行が「品目（業種）× 月 × 系列種別」で、
+    2018年1月以降を月次で収録する（毎月のビルドで伸びる）。
+    指数は2020年＝100 の相対値で、金額でも件数でもない。水準そのものより増減で見る。
+    季節調整済指数（seasonally_adjusted）と原指数（original）が同じ表に入っているので、
+    series_type で必ず絞る。混ぜると季節変動の有無が揃わず解釈できない。
+    品目は「第３次産業総合」から日本標準産業分類の大分類・中分類・個別業種までの階層が
+    同居している（252品目）。合計と内訳が同じ列に並ぶので、合算すると二重計上になる。
+    総合の item_code は K1D000000I で、ウエイトは総合＝10000。
+    鉱工業指数（第２次産業）は含まない。全国の値だけで、地域別の内訳は無い。
+  synonyms: [第3次産業活動指数, サービス産業, 景気指数, 経済解析室]
+  examples:
+    - 第３次産業総合の指数の推移が見たい
+    - 業種別に前年同月比を出したい
+    - 季節調整済指数で直近のサービス産業の動きを見たい
+
+schemas:
+  - name: main
+    title: メイン
