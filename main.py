@@ -14,8 +14,8 @@ from ita import download_and_parse
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("pipelines")
 
-FDL_DIR = Path(".fdl")
-CSV_PATH = FDL_DIR / "meti_ita_monthly.csv"
+WORK_DIR = Path(".queria")
+CSV_PATH = WORK_DIR / "meti_ita_monthly.csv"
 
 
 def dbt_build() -> None:
@@ -27,7 +27,7 @@ def dbt_build() -> None:
 
 
 def main() -> None:
-    FDL_DIR.mkdir(exist_ok=True)
+    WORK_DIR.mkdir(exist_ok=True)
 
     logger.info("1/2: ita (第３次産業活動指数 月次)")
     rows = download_and_parse(CSV_PATH)

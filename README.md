@@ -25,7 +25,7 @@
 
 main.py が経済産業省の公開 Excel（第３次産業活動指数 統計表・月次の季節調整済指数／原指数）を
 取得して縦持ち CSV へ整形し、dbt build で指数テーブルを再生成する。
-ビルドは `bash scripts/build.sh local` で実行する。
+ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。
 
 ## ライセンス
 
