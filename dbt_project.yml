@@ -17,3 +17,10 @@ models:
         +materialized: view
       mart:
         +materialized: view
+    energy:
+      raw:
+        +materialized: table
+      stg:
+        +materialized: view
+      mart:
+        +materialized: view
