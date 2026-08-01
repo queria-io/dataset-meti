@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: energy_balance_summary
+    description: |
+      資源エネルギー庁 総合エネルギー統計の時系列表（1990年度〜）。一次エネルギー国内供給・
+      最終消費（エネルギー源別／部門別）・電源構成（発電量／投入量）・CO2排出量・
+      エネルギー自給率の7表を、統計表×項目×系列×年度の1レコードに展開して収録する。
+      series は公表どおりの系列ラベル（PJ・原油換算万kl・億kWh・Mt-CO2・kg-CO2/kWh の
+      単位系列、および構成比・前年度比・％）で、value_type が quantity（実数）か
+      ratio（比率）かを示す。比率は小数（0.25 = 25%）で、実数とは合算できない。
+      合計・内訳・再掲が同じ item_name 列に並ぶため、大項目を単純に合計すると二重計上になる。
+      出典: 経済産業省 資源エネルギー庁 総合エネルギー統計。
+      https://www.enecho.meti.go.jp/statistics/total_energy/
+    access: public
+    config:
+      meta:
+        title: "総合エネルギー統計 時系列表（1990年度〜）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/total_energy/"
+        tags: ["経済産業省", "資源エネルギー庁", "総合エネルギー統計", "エネルギー", "CO2排出量", "電源構成"]
+    columns:
+      - name: table_no
+        meta:
+          title: 統計表番号（1〜7）
+      - name: table_name
+        meta:
+          title: 統計表名
+      - name: item_name
+        meta:
+          title: 項目名（エネルギー源・部門・電源等）
+      - name: item_level
+        meta:
+          title: 項目の階層（0=大項目、1=内訳）
+      - name: series
+        meta:
+          title: 系列ラベル（PJ／原油換算万kl／億kWh／Mt-CO2／kg-CO2/kWh／構成比／前年度比／％）
+      - name: value_type
+        meta:
+          title: 値の種類（quantity=実数、ratio=比率で小数）
+      - name: fiscal_year
+        meta:
+          title: 年度
+      - name: value
+        meta:
+          title: 値（series の単位。ratio は小数で 0.25＝25%）
+      - name: source_edition
+        meta:
+          title: 取り込んだ時系列表の版（例 2024年度確報）

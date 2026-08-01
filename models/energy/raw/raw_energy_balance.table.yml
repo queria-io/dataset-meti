@@ -1,0 +1,21 @@
+schema: energy
+name: raw_energy_balance
+description: 総合エネルギー統計 時系列表の生データ（統計表×項目×系列×年度）
+published: false
+fields:
+  - name: table_no
+    description: 統計表番号（1〜7）
+  - name: table_name
+    description: 統計表名
+  - name: item_name
+    description: 項目名（エネルギー源・部門・電源等）
+  - name: item_level
+    description: 項目の階層（0=大項目、1=内訳）
+  - name: series
+    description: 系列ラベル（単位または構成比・前年度比）
+  - name: fiscal_year
+    description: 年度
+  - name: value
+    description: 値
+  - name: source_edition
+    description: 取り込んだ時系列表の版（例 2024年度確報）
