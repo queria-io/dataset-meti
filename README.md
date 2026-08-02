@@ -1,11 +1,13 @@
 ## データ出典
 
-経済産業省が公表する2つの統計を収録しています。
+経済産業省が公表する3つの統計を収録しています。
 
 - [経済産業省 経済解析室](https://www.meti.go.jp/statistics/tyo/sanzi/)の第３次産業活動指数（2020年基準）。
   サービス産業の生産活動を業種別・月次の指数（2020年=100）で示します。
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
   国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
+- [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
+  小売電気事業者が供給した電力需要量を都道府県別・月次で示します。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -66,10 +68,51 @@
 - 最新年度は確報／速報で入れ替わります。取り込んだ版は source_edition で確認できます。
 - 原典で「N/A」や空欄になっているセルは行として持ちません。
 
-### データ更新手順
+## テーブル: power_demand_by_prefecture
 
-main.py が2つの公開 Excel を取得して縦持ち CSV へ整形し、dbt build で各テーブルを再生成する。
-時系列表のファイル名は公表年度と確報／速報で変わるため、統計表一覧ページからリンクを解決している。
+電力調査統計の統計表 3-(2)「都道府県別電力需要実績」を、都道府県×月で1レコードとした
+月次データです。2016年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- pref_code: 都道府県コード（VARCHAR、全国地方公共団体コード 2 桁）
+- pref_name: 都道府県名（VARCHAR）
+- extra_high_demand_mwh: 特別高圧の電力需要量（DOUBLE、MWh）
+- extra_high_retailers: 特別高圧で当該月に需要実績のある小売電気事業者数（INTEGER）
+- high_demand_mwh: 高圧の電力需要量（DOUBLE、MWh）
+- high_retailers: 高圧で当該月に需要実績のある小売電気事業者数（INTEGER）
+- low_demand_mwh: 低圧の電力需要量（DOUBLE、MWh）
+- low_regulated_demand_mwh: 低圧のうち特定需要（経過措置料金）の電力需要量（DOUBLE、MWh）
+- low_liberalized_demand_mwh: 低圧のうち自由料金の電力需要量（DOUBLE、MWh）
+- low_retailers: 低圧で当該月に需要実績のある小売電気事業者数（INTEGER）
+- total_demand_mwh: 全電圧計の電力需要量（DOUBLE、MWh）
+- total_retailers: 全電圧計で当該月に需要実績のある小売電気事業者数（INTEGER）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意
+
+- 需要量の単位は MWh です。原典は 1,000kWh 表記で、値は同じです。
+- total_demand_mwh は extra_high + high + low です。区分別を合計したうえに total を足すと
+  二重計上になります。low_regulated / low_liberalized も low_demand_mwh の内訳です。
+- 末尾が retailers の列は需要量ではなく事業者の数です。区分をまたいで足せません。
+  total_retailers は重複を除いた数なので、各区分の事業者数の合計より小さくなります。
+- 全国計は持ちません。都道府県を合算すると原典の合計行と丸め誤差程度ずれます
+  （相対誤差はおおむね 1e-5 以下）。2025年4月の低圧のみ、都道府県の合算が原典の合計行より
+  約 447,000 MWh 大きく、原典の側で整合していません。
+- 値は後から改定されます。published_as_of がその月の値の公表時点です。年度が閉じた後に
+  公表される年度計は、改定前の月次を積んだ値になっていることがあるため取り込んでいません
+  （本テーブルの月次を合算すると改定後の年度計になります）。
+- 沖縄県の特定需要には高圧が一部含まれる、という注記が原典にあります。
+- 2015年度以前は旧 Excel 形式での配布のため収録していません。
+
+## データ更新手順
+
+main.py が3つの統計の公開 Excel を取得して CSV へ整形し、dbt build で各テーブルを再生成する。
+時系列表のファイル名は公表年度と確報／速報で変わり、電力調査統計のファイル名は年度で命名規則が
+変わる（西暦・元号・機械判読用レイアウト版）ため、いずれも統計表一覧ページからリンクを解決している。
+電力調査統計は年度ごとに1ファイルなので、1回のビルドで年度数だけ取得する。
 資源エネルギー庁のサイトは CloudFront + AWS WAF の challenge action で保護されており、短時間に
 続けて取得すると HTTP 202 と検証ページが返る。取得側は間隔を空けて取り直す。
 ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。
@@ -82,5 +125,6 @@ main.py が2つの公開 Excel を取得して縦持ち CSV へ整形し、dbt b
 
 - 「第３次産業活動指数」（経済産業省）（https://www.meti.go.jp/statistics/tyo/sanzi/）を加工して作成。
 - 「総合エネルギー統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/total_energy/）を加工して作成。
+- 「電力調査統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/electric_power/ep002/）を加工して作成。
 
-いずれもワイド形式の公表 Excel を縦持ちへ整形する加工を行っている。統計値そのものは改変していない。
+いずれも公表 Excel の表形式を機械可読な行へ整形する加工を行っている。統計値そのものは改変していない。

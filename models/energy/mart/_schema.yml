@@ -47,3 +47,74 @@ models:
       - name: source_edition
         meta:
           title: 取り込んだ時系列表の版（例 2024年度確報）
+
+  - name: power_demand_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 3-(2)「都道府県別電力需要実績」（2016年度〜）。
+      小売電気事業者が供給した電力需要量を都道府県×月の1レコードで収録する。
+      契約区分は特別高圧・高圧・低圧・全電圧計の4つで、低圧だけ特定需要（経過措置料金）と
+      自由料金の内訳を持つ。需要量の単位は MWh（原典の 1,000kWh と同値）。
+      小売電気事業者数は当該月に需要実績のあった事業者の数で、区分をまたいで足せない
+      （全電圧計は重複を除いた数のため各区分の和より小さい）。
+      収録するのは47都道府県で、原典の合計行（全国計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    config:
+      meta:
+        title: "都道府県別電力需要実績（2016年度〜・月次）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
+        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "電力需要", "都道府県", "エネルギー"]
+    columns:
+      - name: fiscal_year
+        meta:
+          title: 年度（4月始まり）
+      - name: year
+        meta:
+          title: 年（暦年）
+      - name: month
+        meta:
+          title: 月
+      - name: year_month
+        meta:
+          title: 年月（YYYYMM）
+      - name: pref_code
+        meta:
+          title: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        meta:
+          title: 都道府県名
+      - name: extra_high_demand_mwh
+        meta:
+          title: 特別高圧の電力需要量（MWh）
+      - name: extra_high_retailers
+        meta:
+          title: 特別高圧で当該月に需要実績のある小売電気事業者数
+      - name: high_demand_mwh
+        meta:
+          title: 高圧の電力需要量（MWh）
+      - name: high_retailers
+        meta:
+          title: 高圧で当該月に需要実績のある小売電気事業者数
+      - name: low_demand_mwh
+        meta:
+          title: 低圧の電力需要量（MWh）
+      - name: low_regulated_demand_mwh
+        meta:
+          title: 低圧のうち特定需要（経過措置料金）の電力需要量（MWh）
+      - name: low_liberalized_demand_mwh
+        meta:
+          title: 低圧のうち自由料金の電力需要量（MWh）
+      - name: low_retailers
+        meta:
+          title: 低圧で当該月に需要実績のある小売電気事業者数
+      - name: total_demand_mwh
+        meta:
+          title: 全電圧計の電力需要量（MWh。特別高圧＋高圧＋低圧）
+      - name: total_retailers
+        meta:
+          title: 全電圧計で当該月に需要実績のある小売電気事業者数（重複を除いた数）
+      - name: published_as_of
+        meta:
+          title: 当該月の値の公表時点（2017年度以前は原典に記載が無く NULL）

@@ -1,0 +1,19 @@
+select
+    fiscal_year,
+    year,
+    month,
+    year_month,
+    pref_code,
+    pref_name,
+    extra_high_demand_mwh,
+    extra_high_retailers,
+    high_demand_mwh,
+    high_retailers,
+    low_demand_mwh,
+    low_regulated_demand_mwh,
+    low_liberalized_demand_mwh,
+    low_retailers,
+    total_demand_mwh,
+    total_retailers,
+    published_as_of
+from {{ ref('stg_power_demand') }}
