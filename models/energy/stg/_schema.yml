@@ -3,3 +3,4 @@ version: 2
 models:
   - name: stg_energy_balance
   - name: stg_power_demand
+  - name: stg_power_generation

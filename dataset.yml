@@ -5,7 +5,7 @@ description: |-
   経済産業省 経済解析室が公表する第３次産業活動指数（2020年基準）と、
   資源エネルギー庁が公表する総合エネルギー統計の時系列表・電力調査統計。
   サービス産業の生産活動、国のエネルギー需給・電源構成・CO2排出量、
-  都道府県別の電力需要を収録する。
+  都道府県別の電力需要と発電実績を収録する。
 keywords:
   - 経済産業省
   - 第3次産業活動指数
@@ -16,6 +16,8 @@ keywords:
   - エネルギー
   - 電力調査統計
   - 電力需要
+  - 発電
+  - 再生可能エネルギー
 homepage: https://github.com/queria-io/dataset-meti
 language: ja
 
@@ -44,8 +46,8 @@ ai_context:
   instructions: |
     3つの統計が入っている。main.tertiary_industry_activity_index が第３次産業活動指数、
     energy.energy_balance_summary が総合エネルギー統計の時系列表、
-    energy.power_demand_by_prefecture が電力調査統計の都道府県別電力需要実績。
-    粒度も単位も別なので混ぜない。
+    energy.power_demand_by_prefecture と energy.power_generation_by_prefecture が
+    電力調査統計の都道府県別電力需要実績・都道府県別発電実績。粒度も単位も別なので混ぜない。
 
     energy.power_demand_by_prefecture は1行が「都道府県 × 月」で、2016年度4月以降の月次。
     47都道府県のみで全国計の行は無い（必要なら都道府県を合算する）。需要量は MWh
@@ -56,6 +58,19 @@ ai_context:
     需要量ではないうえ区分をまたいで足せない（total_retailers は重複を除いた数なので
     各区分の和より小さい）。pref_code は全国地方公共団体コードの2桁で、市区町村コードの
     上2桁と同じ体系。値は後から改定される（published_as_of がその月の公表時点）。
+
+    energy.power_generation_by_prefecture も1行が「都道府県 × 月」で、2016年度4月以降の月次。
+    電力需要実績と同じ粒度・同じ pref_code なので、都道府県ごとに発電（供給）と需要を
+    year_month + pref_code で突き合わせられる。ただし発電量と需要量は別の統計表で、
+    発電した都道府県と消費した都道府県は一致しない（送電がある）ので差を「余剰」とは呼べない。
+    単位は MWh。total_mwh は hydro + thermal + nuclear + new_energy_mwh + other で、
+    new_energy_mwh は wind + solar + geothermal + storage_battery の計。種別を足したうえに
+    total_mwh も足すと二重計上になる。biomass_mwh と waste_mwh は主燃料で見た再掲で、
+    new_energy_mwh にも total_mwh にも含まれない（発電量としては火力等に入っている）ので、
+    再生可能エネルギーの合計を出すときに単純に足すと二重計上になる。
+    storage_battery_mwh は2023年度4月に足された列で、それ以前は NULL。
+    2026年4月分は原典の側で都道府県の行がずれており、佐賀県・鹿児島県の原子力の発電量が
+    長崎県・沖縄県の行に入っている（他の120か月には無い）。原子力を県別に見るときは注意する。
 
     energy.energy_balance_summary は1行が「統計表 × 項目 × 系列 × 年度」で、1990年度以降の
     年度値。全国の値だけで地域別の内訳は無い。統計表は table_no 1〜7（一次エネルギー国内供給／
@@ -96,6 +111,12 @@ ai_context:
       電力需要,
       電力需要量,
       小売電気事業者,
+      発電実績,
+      発電電力量,
+      再生可能エネルギー,
+      太陽光発電,
+      風力発電,
+      原子力発電,
     ]
   examples:
     - 第３次産業総合の指数の推移が見たい
@@ -107,6 +128,9 @@ ai_context:
     - 都道府県別の電力需要量を月次で比べたい
     - 低圧の自由料金への切り替わりがどこまで進んだか見たい
     - 猛暑の年に電力需要がどれだけ増えたか調べたい
+    - 都道府県別に太陽光発電がどれだけ伸びたか見たい
+    - 発電量と電力需要を都道府県ごとに突き合わせたい
+    - 原子力発電の再稼働が県別の発電量にどう出ているか調べたい
 
 schemas:
   - name: main

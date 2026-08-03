@@ -117,4 +117,80 @@ models:
           title: 全電圧計で当該月に需要実績のある小売電気事業者数（重複を除いた数）
       - name: published_as_of
         meta:
-          title: 当該月の値の公表時点（2017年度以前は原典に記載が無く NULL）
+          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
+
+  - name: power_generation_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 2-(2)「都道府県別発電実績」（2016年度〜）。
+      電気事業者の発電所が発電した電力量を都道府県×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、新エネルギー等は
+      風力・太陽光・地熱・蓄電池の内訳を持つ。単位は MWh（原典の 1,000kWh と同値）。
+      バイオマスと廃棄物は主燃料で見た再掲で、新エネルギー等の計にも合計にも含まれない。
+      収録するのは47都道府県で、原典の合計行（全国計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    config:
+      meta:
+        title: "都道府県別発電実績（2016年度〜・月次）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
+        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "発電", "電源構成", "再生可能エネルギー", "都道府県", "エネルギー"]
+    columns:
+      - name: fiscal_year
+        meta:
+          title: 年度（4月始まり）
+      - name: year
+        meta:
+          title: 年（暦年）
+      - name: month
+        meta:
+          title: 月
+      - name: year_month
+        meta:
+          title: 年月（YYYYMM）
+      - name: pref_code
+        meta:
+          title: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        meta:
+          title: 都道府県名
+      - name: hydro_mwh
+        meta:
+          title: 水力発電所の発電電力量（MWh）
+      - name: thermal_mwh
+        meta:
+          title: 火力発電所の発電電力量（MWh）
+      - name: nuclear_mwh
+        meta:
+          title: 原子力発電所の発電電力量（MWh）
+      - name: wind_mwh
+        meta:
+          title: 新エネルギー等発電所のうち風力の発電電力量（MWh）
+      - name: solar_mwh
+        meta:
+          title: 新エネルギー等発電所のうち太陽光の発電電力量（MWh）
+      - name: geothermal_mwh
+        meta:
+          title: 新エネルギー等発電所のうち地熱の発電電力量（MWh）
+      - name: biomass_mwh
+        meta:
+          title: バイオマスを主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
+      - name: waste_mwh
+        meta:
+          title: 廃棄物を主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
+      - name: storage_battery_mwh
+        meta:
+          title: 新エネルギー等発電所のうち蓄電池の放電電力量（MWh。2023年度以降のみで以前は NULL）
+      - name: new_energy_mwh
+        meta:
+          title: 新エネルギー等発電所の計（MWh。風力＋太陽光＋地熱＋蓄電池）
+      - name: other_mwh
+        meta:
+          title: その他の発電電力量（MWh）
+      - name: total_mwh
+        meta:
+          title: 発電電力量の合計（MWh。水力＋火力＋原子力＋新エネルギー等の計＋その他）
+      - name: published_as_of
+        meta:
+          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
