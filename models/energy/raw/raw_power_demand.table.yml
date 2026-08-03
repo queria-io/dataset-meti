@@ -1,0 +1,33 @@
+schema: energy
+name: raw_power_demand
+description: 電力調査統計 都道府県別電力需要実績の生データ（都道府県×月）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: pref_code
+    description: 都道府県コード（全国地方公共団体コード 2 桁）
+  - name: pref_name
+    description: 都道府県名
+  - name: extra_high_demand_mwh
+    description: 特別高圧の電力需要量（MWh）
+  - name: extra_high_retailers
+    description: 特別高圧で当該月に需要実績のある小売電気事業者数
+  - name: high_demand_mwh
+    description: 高圧の電力需要量（MWh）
+  - name: high_retailers
+    description: 高圧で当該月に需要実績のある小売電気事業者数
+  - name: low_demand_mwh
+    description: 低圧の電力需要量（MWh）
+  - name: low_regulated_demand_mwh
+    description: 低圧のうち特定需要（経過措置料金）の電力需要量（MWh）
+  - name: low_liberalized_demand_mwh
+    description: 低圧のうち自由料金の電力需要量（MWh）
+  - name: low_retailers
+    description: 低圧で当該月に需要実績のある小売電気事業者数
+  - name: total_demand_mwh
+    description: 全電圧計の電力需要量（MWh）
+  - name: total_retailers
+    description: 全電圧計で当該月に需要実績のある小売電気事業者数
+  - name: published_as_of
+    description: 当該月の値の公表時点

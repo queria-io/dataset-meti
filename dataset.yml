@@ -3,8 +3,9 @@ name: meti
 title: 経済産業省 活動指数・エネルギー統計
 description: |-
   経済産業省 経済解析室が公表する第３次産業活動指数（2020年基準）と、
-  資源エネルギー庁が公表する総合エネルギー統計の時系列表。
-  サービス産業の生産活動と、国のエネルギー需給・電源構成・CO2排出量を収録する。
+  資源エネルギー庁が公表する総合エネルギー統計の時系列表・電力調査統計。
+  サービス産業の生産活動、国のエネルギー需給・電源構成・CO2排出量、
+  都道府県別の電力需要を収録する。
 keywords:
   - 経済産業省
   - 第3次産業活動指数
@@ -13,6 +14,8 @@ keywords:
   - 資源エネルギー庁
   - 総合エネルギー統計
   - エネルギー
+  - 電力調査統計
+  - 電力需要
 homepage: https://github.com/queria-io/dataset-meti
 language: ja
 
@@ -24,6 +27,8 @@ sources:
     path: https://www.meti.go.jp/statistics/tyo/sanzi/
   - title: 総合エネルギー統計（経済産業省 資源エネルギー庁）
     path: https://www.enecho.meti.go.jp/statistics/total_energy/
+  - title: 電力調査統計（経済産業省 資源エネルギー庁）
+    path: https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
 
 contributors:
   - title: 経済産業省
@@ -37,8 +42,20 @@ cover: 📈
 
 ai_context:
   instructions: |
-    2つの統計が入っている。main.tertiary_industry_activity_index が第３次産業活動指数、
-    energy.energy_balance_summary が総合エネルギー統計の時系列表。粒度も単位も別なので混ぜない。
+    3つの統計が入っている。main.tertiary_industry_activity_index が第３次産業活動指数、
+    energy.energy_balance_summary が総合エネルギー統計の時系列表、
+    energy.power_demand_by_prefecture が電力調査統計の都道府県別電力需要実績。
+    粒度も単位も別なので混ぜない。
+
+    energy.power_demand_by_prefecture は1行が「都道府県 × 月」で、2016年度4月以降の月次。
+    47都道府県のみで全国計の行は無い（必要なら都道府県を合算する）。需要量は MWh
+    （原典の 1,000kWh と同値）。契約区分ごとに列が分かれ、total_demand_mwh は
+    extra_high + high + low と一致するので、区分を足したうえに total も足すと二重計上になる。
+    low_regulated_demand_mwh（特定需要＝経過措置料金）と low_liberalized_demand_mwh（自由料金）は
+    low_demand_mwh の内訳。*_retailers は当該月に需要実績のあった小売電気事業者数で、
+    需要量ではないうえ区分をまたいで足せない（total_retailers は重複を除いた数なので
+    各区分の和より小さい）。pref_code は全国地方公共団体コードの2桁で、市区町村コードの
+    上2桁と同じ体系。値は後から改定される（published_as_of がその月の公表時点）。
 
     energy.energy_balance_summary は1行が「統計表 × 項目 × 系列 × 年度」で、1990年度以降の
     年度値。全国の値だけで地域別の内訳は無い。統計表は table_no 1〜7（一次エネルギー国内供給／
@@ -75,6 +92,10 @@ ai_context:
       電源構成,
       エネルギー自給率,
       資源エネルギー庁,
+      電力調査統計,
+      電力需要,
+      電力需要量,
+      小売電気事業者,
     ]
   examples:
     - 第３次産業総合の指数の推移が見たい
@@ -83,6 +104,9 @@ ai_context:
     - 電源構成の推移を発電量ベースで見たい
     - 部門別のCO2排出量の変化を知りたい
     - エネルギー自給率の推移が見たい
+    - 都道府県別の電力需要量を月次で比べたい
+    - 低圧の自由料金への切り替わりがどこまで進んだか見たい
+    - 猛暑の年に電力需要がどれだけ増えたか調べたい
 
 schemas:
   - name: main
