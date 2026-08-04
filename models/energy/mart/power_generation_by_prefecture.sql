@@ -1,0 +1,21 @@
+select
+    fiscal_year,
+    year,
+    month,
+    year_month,
+    pref_code,
+    pref_name,
+    hydro_mwh,
+    thermal_mwh,
+    nuclear_mwh,
+    wind_mwh,
+    solar_mwh,
+    geothermal_mwh,
+    biomass_mwh,
+    waste_mwh,
+    storage_battery_mwh,
+    new_energy_mwh,
+    other_mwh,
+    total_mwh,
+    published_as_of
+from {{ ref('stg_power_generation') }}
