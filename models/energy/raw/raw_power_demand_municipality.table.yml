@@ -1,0 +1,21 @@
+schema: energy
+name: raw_power_demand_municipality
+description: 電力調査統計 市町村別需要電力量の生データ（市区町村×月）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: pref_code
+    description: 都道府県コード（全国地方公共団体コード 2 桁）
+  - name: pref_name
+    description: 都道府県名
+  - name: municipality_name
+    description: 市区町村名（政令指定都市は市単位、東京都特別区は区単位）
+  - name: extra_high_and_high_demand_mwh
+    description: 特別高圧／高圧の需要電力量（MWh）
+  - name: low_demand_mwh
+    description: 低圧の需要電力量（MWh）
+  - name: total_demand_mwh
+    description: 需要電力量の合計（MWh）
+  - name: published_as_of
+    description: 当該月の値の公表時点
