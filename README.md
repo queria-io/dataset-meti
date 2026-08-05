@@ -7,7 +7,8 @@
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
   国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
-  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で示します。
+  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量・発電所数・最大出力を
+  都道府県別・月次で、需要電力量と逆潮流量を市区町村別・月次で示します。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -156,14 +157,154 @@
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
+## テーブル: power_plants_by_prefecture
+
+電力調査統計の統計表 1-(2)「都道府県別発電所数、出力」を、都道府県×月で1レコードとした
+月次データです。2019年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- pref_code: 都道府県コード（VARCHAR、全国地方公共団体コード 2 桁）
+- pref_name: 都道府県名（VARCHAR）
+- hydro_plants: 水力発電所の発電所数（INTEGER）
+- hydro_capacity_kw: 水力発電所の最大出力計（DOUBLE、kW）
+- thermal_plants: 火力発電所の発電所数（INTEGER）
+- thermal_capacity_kw: 火力発電所の最大出力計（DOUBLE、kW）
+- nuclear_plants: 原子力発電所の発電所数（INTEGER）
+- nuclear_capacity_kw: 原子力発電所の最大出力計（DOUBLE、kW）
+- wind_plants: 新エネルギー等発電所のうち風力の発電所数（INTEGER）
+- wind_capacity_kw: 新エネルギー等発電所のうち風力の最大出力計（DOUBLE、kW）
+- solar_plants: 新エネルギー等発電所のうち太陽光の発電所数（INTEGER）
+- solar_capacity_kw: 新エネルギー等発電所のうち太陽光の最大出力計（DOUBLE、kW）
+- geothermal_plants: 新エネルギー等発電所のうち地熱の発電所数（INTEGER）
+- geothermal_capacity_kw: 新エネルギー等発電所のうち地熱の最大出力計（DOUBLE、kW）
+- biomass_plants: バイオマスを主燃料とする発電所数（INTEGER、再掲）
+- biomass_capacity_kw: バイオマスを主燃料とする発電所の最大出力計（DOUBLE、kW。再掲）
+- waste_plants: 廃棄物を主燃料とする発電所数（INTEGER、再掲）
+- waste_capacity_kw: 廃棄物を主燃料とする発電所の最大出力計（DOUBLE、kW。再掲）
+- storage_battery_plants: 新エネルギー等発電所のうち蓄電池の設備数（INTEGER）
+- storage_battery_capacity_kw: 新エネルギー等発電所のうち蓄電池の最大出力計（DOUBLE、kW）
+- new_energy_plants: 新エネルギー等発電所の計（INTEGER）
+- new_energy_capacity_kw: 新エネルギー等発電所の最大出力計（DOUBLE、kW）
+- other_plants: その他の発電所数（INTEGER）
+- other_capacity_kw: その他の発電所の最大出力計（DOUBLE、kW）
+- total_plants: 発電所数の合計（INTEGER）
+- total_capacity_kw: 最大出力計の合計（DOUBLE、kW）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意
+
+- 最大出力の単位は kW です。発電実績（power_generation_by_prefecture）は MWh なので、
+  設備あたりの発電量を出すときは単位を揃えてください。
+- 発電所数と最大出力は数え方が違います。一つの発電所に電源種別の異なる発電機がある場合、
+  発電所数は最大出力が最大となる種別にだけ計上され、最大出力は種別ごとに計上されます
+  （原典の備考）。種別ごとの発電所数を足しても発電所の実数にはなりません。
+- total_plants / total_capacity_kw は 水力＋火力＋原子力＋新エネルギー等の計＋その他 です。
+  new_energy_* は 風力＋太陽光＋地熱＋蓄電池 の計です。種別を合計したうえに計や total を
+  足すと二重計上になります。
+- biomass_* と waste_* は主燃料で見た火力発電所からの再掲です。new_energy_* にも total_* にも
+  含まれません。再生可能エネルギーの設備量を出すときにこれらを単純に足すと二重計上になります。
+- storage_battery_* は2023年度4月に原典へ足された列です。それ以前の年度は NULL になります。
+- 原典の側で計・合計と内訳の和が一致しない行があります。発電所数で28行（最大5か所のずれ）、
+  最大出力で42行（1kW 超のずれ。最大 107,650kW）、丸め程度（1kW 以下）のずれが192行あり、
+  85か月のうち20か月に散っています。原典のセルを直接確認したうえで原典どおり収録しています。
+- 2026年4月分は原典の側で都道府県の行がずれています。玄海（佐賀県）と川内（鹿児島県）の
+  原子力発電所が、それぞれ長崎県・沖縄県の行に入っています（発電実績の同じ月にも同じずれが
+  あります）。原子力を県別に見るときはこの月を除くか、原典の訂正を待ってください。
+- 都道府県×月の粒度と pref_code は power_generation_by_prefecture・power_demand_by_prefecture と
+  共通なので、year_month + pref_code で突き合わせられます。ただし発電実績が2016年度から
+  あるのに対しこの表は2019年度からで、2018年度以前は統計表 1「電気事業者の発電所数、出力」に
+  まとめられており都道府県別の内訳がありません。
+- 値は後から改定されます。published_as_of がその月の値の公表時点です。この統計表は年度ごとに
+  まとめて公表され直すため、同じ年度の12か月がほぼ同じ日付になります。年度計のシートは
+  取り込んでいません。
+
+## テーブル: power_demand_by_municipality
+
+電力調査統計の統計表 6-(1)「市町村別需要電力量」を、市区町村×月で1レコードとした
+月次データです。2022年度4月から2025年3月までの36か月を収録します。
+1,747市区町村のみで、全国計・都道府県計の行はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- pref_code: 都道府県コード（VARCHAR、全国地方公共団体コード 2 桁）
+- pref_name: 都道府県名（VARCHAR）
+- municipality_name: 市区町村名（VARCHAR）
+- extra_high_and_high_demand_mwh: 特別高圧／高圧の需要電力量（DOUBLE、MWh）
+- low_demand_mwh: 低圧の需要電力量（DOUBLE、MWh）
+- total_demand_mwh: 需要電力量の合計（DOUBLE、MWh）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+## テーブル: reverse_power_flow_by_municipality
+
+電力調査統計の統計表 6-(2)「市町村別逆潮流量」を、市区町村×月で1レコードとした
+月次データです。収録範囲と市区町村の粒度は power_demand_by_municipality と同じです。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- pref_code: 都道府県コード（VARCHAR、全国地方公共団体コード 2 桁）
+- pref_name: 都道府県名（VARCHAR）
+- municipality_name: 市区町村名（VARCHAR）
+- hydro_mwh: 水力の逆潮流量（DOUBLE、MWh）
+- thermal_mwh: 火力の逆潮流量（DOUBLE、MWh）
+- nuclear_mwh: 原子力の逆潮流量（DOUBLE、MWh）
+- wind_mwh: 風力の逆潮流量（DOUBLE、MWh）
+- geothermal_mwh: 地熱の逆潮流量（DOUBLE、MWh）
+- solar_mwh: 太陽光の逆潮流量（DOUBLE、MWh）
+- biomass_mwh: バイオマスの逆潮流量（DOUBLE、MWh）
+- storage_battery_mwh: 蓄電池の逆潮流量（DOUBLE、MWh）
+- other_mwh: その他の電源の逆潮流量（DOUBLE、MWh）
+- total_mwh: 逆潮流量の合計（DOUBLE、MWh）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意（市区町村別の2テーブル共通）
+
+- 単位は MWh です。原典は 1,000kWh 表記で、値は同じです。
+- 市区町村の粒度は、政令指定都市が市単位（区に分かれない）、東京都特別区が区単位です。
+- 原典に市区町村コードの列がないため、市区町村名で持っています。市区町村コードを持つ
+  他のデータと突き合わせるときは pref_name と municipality_name で照合してください。
+- **市区町村名は都道府県の中でも一意ではありません。** 北海道に泊村が2つあります
+  （古宇郡泊村と、北方領土の国後郡泊村）。year_month と pref_name と municipality_name で
+  グループ化すると、この2村だけ1グループに2行入ります。
+- 北方領土の6村（色丹村・泊村・留夜別村・留別村・紗那村・蘂取村）は行としては存在しますが、
+  値は全期間・全項目が 0 です。
+- 収録は2022年度から2024年度までの3年度分です。都道府県別の統計表（2016年度以降・毎月更新）とは
+  収録範囲が違うので、同じ期間で比べられません。6-(1) は2024年度、6-(2) は2025年度が
+  一覧ページの最新ですが、6-(2) の2025年度はリンクが張られているだけで実体が配信されておらず、
+  取得できません。取得できなかった年度はビルドログに警告として残ります。
+- power_demand_by_municipality の契約区分は「特別高圧／高圧」と「低圧」の2つです。
+  都道府県別の統計表のように特別高圧と高圧には分かれていません。
+  total_demand_mwh は2区分の和なので、区分を足したうえに total も足すと二重計上になります。
+- 逆潮流量は発電設備から系統へ流れた電力量で、発電量そのものではありません。
+  power_generation_by_prefecture の発電電力量とは別の測定です。
+- storage_battery_mwh は2023年度に原典へ足された列です。2022年度は NULL になります。
+- 0 ではないが単位（1,000kWh）に満たない値は、原典で「α」と記されています。数値にできないため
+  NULL として収録しています。逆潮流量で 8,768 セル（電源別の列 8,517、合計 251）あり、
+  そのため total_mwh も 251 行が NULL です。需要電力量に α はありません。
+- 需要電力量には負の値の行があります（2022〜2024年度で4行。福島県金山町の2か月と長野県大桑村・
+  鳥取県北栄町の各1か月）。原典の値がそのまま負なので、そのまま収録しています。
+- 需要電力量の published_as_of は 2025-11-14 と 2025-11-20 の2つです。3か月分だけ後から
+  公表されています。
+- 合計と内訳の和は、原典の四捨五入により一致しないことがあります（原典の備考のとおり）。
+  2022〜2024年度では、需要電力量・逆潮流量とも差が 0.5 MWh を超える行はありません。
+- 年度計のシートは取り込んでいません。
+
 ## データ更新手順
 
 main.py が3つの統計の公開 Excel を取得して CSV へ整形し、dbt build で各テーブルを再生成する。
 時系列表のファイル名は公表年度と確報／速報で変わり、電力調査統計のファイル名は年度で命名規則が
 変わる（西暦・元号・機械判読用レイアウト版）ため、いずれも統計表一覧ページからリンクを解決している。
 電力調査統計は統計表ごと・年度ごとに1ファイルなので、1回のビルドで統計表数×年度数だけ取得する。
-発電実績は列の構成が年度で変わる（蓄電池の列は後から足された）ため、列位置ではなく見出しで
-対応づけている。見出しが増減したらそこで失敗する。
+発電実績と市町村別逆潮流量は列の構成が年度で変わる（蓄電池の列は後から足された）ため、
+列位置ではなく見出しで対応づけている。見出しが増減したらそこで失敗する。
+統計表一覧ページに載っていても実体が配信されていないファイルがある（6-(2) の2025年度）。
+そのファイルだけ飛ばして続けるが、飛ばした年度は警告としてログに残す。
 資源エネルギー庁のサイトは CloudFront + AWS WAF の challenge action で保護されており、短時間に
 続けて取得すると HTTP 202 と検証ページが返る。取得側は間隔を空けて取り直す。
 ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。

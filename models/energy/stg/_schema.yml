@@ -4,3 +4,6 @@ models:
   - name: stg_energy_balance
   - name: stg_power_demand
   - name: stg_power_generation
+  - name: stg_power_plants
+  - name: stg_power_demand_municipality
+  - name: stg_reverse_power_flow_municipality
