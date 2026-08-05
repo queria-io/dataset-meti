@@ -1,0 +1,20 @@
+select
+    fiscal_year,
+    year,
+    month,
+    year_month,
+    pref_code,
+    pref_name,
+    municipality_name,
+    hydro_mwh,
+    thermal_mwh,
+    nuclear_mwh,
+    wind_mwh,
+    geothermal_mwh,
+    solar_mwh,
+    biomass_mwh,
+    storage_battery_mwh,
+    other_mwh,
+    total_mwh,
+    published_as_of
+from {{ ref('stg_reverse_power_flow_municipality') }}
