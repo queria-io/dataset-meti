@@ -7,8 +7,8 @@
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
   国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
-  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で、
-  需要電力量と逆潮流量を市区町村別・月次で示します。
+  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量・発電所数・最大出力を
+  都道府県別・月次で、需要電力量と逆潮流量を市区町村別・月次で示します。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -156,6 +156,70 @@
 - 値は後から改定されます。published_as_of がその月の値の公表時点です（2016年度の全月と
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
+
+## テーブル: power_plants_by_prefecture
+
+電力調査統計の統計表 1-(2)「都道府県別発電所数、出力」を、都道府県×月で1レコードとした
+月次データです。2019年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- pref_code: 都道府県コード（VARCHAR、全国地方公共団体コード 2 桁）
+- pref_name: 都道府県名（VARCHAR）
+- hydro_plants: 水力発電所の発電所数（INTEGER）
+- hydro_capacity_kw: 水力発電所の最大出力計（DOUBLE、kW）
+- thermal_plants: 火力発電所の発電所数（INTEGER）
+- thermal_capacity_kw: 火力発電所の最大出力計（DOUBLE、kW）
+- nuclear_plants: 原子力発電所の発電所数（INTEGER）
+- nuclear_capacity_kw: 原子力発電所の最大出力計（DOUBLE、kW）
+- wind_plants: 新エネルギー等発電所のうち風力の発電所数（INTEGER）
+- wind_capacity_kw: 新エネルギー等発電所のうち風力の最大出力計（DOUBLE、kW）
+- solar_plants: 新エネルギー等発電所のうち太陽光の発電所数（INTEGER）
+- solar_capacity_kw: 新エネルギー等発電所のうち太陽光の最大出力計（DOUBLE、kW）
+- geothermal_plants: 新エネルギー等発電所のうち地熱の発電所数（INTEGER）
+- geothermal_capacity_kw: 新エネルギー等発電所のうち地熱の最大出力計（DOUBLE、kW）
+- biomass_plants: バイオマスを主燃料とする発電所数（INTEGER、再掲）
+- biomass_capacity_kw: バイオマスを主燃料とする発電所の最大出力計（DOUBLE、kW。再掲）
+- waste_plants: 廃棄物を主燃料とする発電所数（INTEGER、再掲）
+- waste_capacity_kw: 廃棄物を主燃料とする発電所の最大出力計（DOUBLE、kW。再掲）
+- storage_battery_plants: 新エネルギー等発電所のうち蓄電池の設備数（INTEGER）
+- storage_battery_capacity_kw: 新エネルギー等発電所のうち蓄電池の最大出力計（DOUBLE、kW）
+- new_energy_plants: 新エネルギー等発電所の計（INTEGER）
+- new_energy_capacity_kw: 新エネルギー等発電所の最大出力計（DOUBLE、kW）
+- other_plants: その他の発電所数（INTEGER）
+- other_capacity_kw: その他の発電所の最大出力計（DOUBLE、kW）
+- total_plants: 発電所数の合計（INTEGER）
+- total_capacity_kw: 最大出力計の合計（DOUBLE、kW）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意
+
+- 最大出力の単位は kW です。発電実績（power_generation_by_prefecture）は MWh なので、
+  設備あたりの発電量を出すときは単位を揃えてください。
+- 発電所数と最大出力は数え方が違います。一つの発電所に電源種別の異なる発電機がある場合、
+  発電所数は最大出力が最大となる種別にだけ計上され、最大出力は種別ごとに計上されます
+  （原典の備考）。種別ごとの発電所数を足しても発電所の実数にはなりません。
+- total_plants / total_capacity_kw は 水力＋火力＋原子力＋新エネルギー等の計＋その他 です。
+  new_energy_* は 風力＋太陽光＋地熱＋蓄電池 の計です。種別を合計したうえに計や total を
+  足すと二重計上になります。
+- biomass_* と waste_* は主燃料で見た火力発電所からの再掲です。new_energy_* にも total_* にも
+  含まれません。再生可能エネルギーの設備量を出すときにこれらを単純に足すと二重計上になります。
+- storage_battery_* は2023年度4月に原典へ足された列です。それ以前の年度は NULL になります。
+- 原典の側で計・合計と内訳の和が一致しない行があります。発電所数で28行（最大5か所のずれ）、
+  最大出力で42行（1kW 超のずれ。最大 107,650kW）、丸め程度（1kW 以下）のずれが192行あり、
+  85か月のうち20か月に散っています。原典のセルを直接確認したうえで原典どおり収録しています。
+- 2026年4月分は原典の側で都道府県の行がずれています。玄海（佐賀県）と川内（鹿児島県）の
+  原子力発電所が、それぞれ長崎県・沖縄県の行に入っています（発電実績の同じ月にも同じずれが
+  あります）。原子力を県別に見るときはこの月を除くか、原典の訂正を待ってください。
+- 都道府県×月の粒度と pref_code は power_generation_by_prefecture・power_demand_by_prefecture と
+  共通なので、year_month + pref_code で突き合わせられます。ただし発電実績が2016年度から
+  あるのに対しこの表は2019年度からで、2018年度以前は統計表 1「電気事業者の発電所数、出力」に
+  まとめられており都道府県別の内訳がありません。
+- 値は後から改定されます。published_as_of がその月の値の公表時点です。この統計表は年度ごとに
+  まとめて公表され直すため、同じ年度の12か月がほぼ同じ日付になります。年度計のシートは
+  取り込んでいません。
 
 ## テーブル: power_demand_by_municipality
 

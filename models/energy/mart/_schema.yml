@@ -195,6 +195,120 @@ models:
         meta:
           title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
 
+  - name: power_plants_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 1-(2)「都道府県別発電所数、出力」（2019年度〜）。
+      電気事業者の発電所の数と最大出力（設備容量）を都道府県×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、新エネルギー等は
+      風力・太陽光・地熱・蓄電池の内訳を持つ。最大出力の単位は kW。
+      同じ都道府県×月の発電実績（power_generation_by_prefecture）と突き合わせると
+      設備あたりの発電量を出せる。バイオマスと廃棄物は主燃料で見た火力発電所からの再掲で、
+      新エネルギー等の計にも合計にも含まれない。
+      収録するのは47都道府県で、原典の合計行（全国計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    config:
+      meta:
+        title: "都道府県別発電所数・最大出力（2019年度〜・月次）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
+        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "発電所", "設備容量", "電源構成", "再生可能エネルギー", "都道府県", "エネルギー"]
+    columns:
+      - name: fiscal_year
+        meta:
+          title: 年度（4月始まり）
+      - name: year
+        meta:
+          title: 年（暦年）
+      - name: month
+        meta:
+          title: 月
+      - name: year_month
+        meta:
+          title: 年月（YYYYMM）
+      - name: pref_code
+        meta:
+          title: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        meta:
+          title: 都道府県名
+      - name: hydro_plants
+        meta:
+          title: 水力発電所の発電所数
+      - name: hydro_capacity_kw
+        meta:
+          title: 水力発電所の最大出力計（kW）
+      - name: thermal_plants
+        meta:
+          title: 火力発電所の発電所数
+      - name: thermal_capacity_kw
+        meta:
+          title: 火力発電所の最大出力計（kW）
+      - name: nuclear_plants
+        meta:
+          title: 原子力発電所の発電所数
+      - name: nuclear_capacity_kw
+        meta:
+          title: 原子力発電所の最大出力計（kW）
+      - name: wind_plants
+        meta:
+          title: 新エネルギー等発電所のうち風力の発電所数
+      - name: wind_capacity_kw
+        meta:
+          title: 新エネルギー等発電所のうち風力の最大出力計（kW）
+      - name: solar_plants
+        meta:
+          title: 新エネルギー等発電所のうち太陽光の発電所数
+      - name: solar_capacity_kw
+        meta:
+          title: 新エネルギー等発電所のうち太陽光の最大出力計（kW）
+      - name: geothermal_plants
+        meta:
+          title: 新エネルギー等発電所のうち地熱の発電所数
+      - name: geothermal_capacity_kw
+        meta:
+          title: 新エネルギー等発電所のうち地熱の最大出力計（kW）
+      - name: biomass_plants
+        meta:
+          title: バイオマスを主燃料とする発電所数（再掲で計・合計には含まれない）
+      - name: biomass_capacity_kw
+        meta:
+          title: バイオマスを主燃料とする発電所の最大出力計（kW。再掲）
+      - name: waste_plants
+        meta:
+          title: 廃棄物を主燃料とする発電所数（再掲で計・合計には含まれない）
+      - name: waste_capacity_kw
+        meta:
+          title: 廃棄物を主燃料とする発電所の最大出力計（kW。再掲）
+      - name: storage_battery_plants
+        meta:
+          title: 新エネルギー等発電所のうち蓄電池の設備数（2023年度以降のみで以前は NULL）
+      - name: storage_battery_capacity_kw
+        meta:
+          title: 新エネルギー等発電所のうち蓄電池の最大出力計（kW。2023年度以降のみで以前は NULL）
+      - name: new_energy_plants
+        meta:
+          title: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）
+      - name: new_energy_capacity_kw
+        meta:
+          title: 新エネルギー等発電所の最大出力計（kW）
+      - name: other_plants
+        meta:
+          title: その他の発電所数
+      - name: other_capacity_kw
+        meta:
+          title: その他の発電所の最大出力計（kW）
+      - name: total_plants
+        meta:
+          title: 発電所数の合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）
+      - name: total_capacity_kw
+        meta:
+          title: 最大出力計の合計（kW）
+      - name: published_as_of
+        meta:
+          title: 当該月の値の公表時点
+
   - name: power_demand_by_municipality
     description: |
       資源エネルギー庁 電力調査統計の統計表 6-(1)「市町村別需要電力量」（2022年度〜2024年度）。
