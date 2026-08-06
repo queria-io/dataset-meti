@@ -1,0 +1,59 @@
+schema: energy
+name: power_thermal_fuel_by_type
+title: 火力発電燃料実績（2016年度〜・月次）
+description: '資源エネルギー庁 電力調査統計の統計表 4「火力発電燃料実績」（2016年度〜）。
+
+  電気事業者の火力発電所が受け入れ・消費した燃料を燃料種×月の1レコードで収録する。
+
+  燃料種は石炭・重油・原油・LNG・都市ガス・高炉ガス・バイオマス・廃棄物などで、
+
+  2023年度以前は24種、2024年度以降は28種（木質／その他バイオマスの分割、アンモニア・水素の追加）。
+
+  受入量・消費量・単位量あたりの発熱量・月末貯蔵量を持つ。
+
+  数量の単位は燃料種ごとに違い（t・kl・10^3m3）、quantity_unit に入っている。
+
+  全国の値のみで、都道府県別・発電所別の内訳は無い。
+
+  出典: 経済産業省 資源エネルギー庁 電力調査統計。
+
+  https://www.enecho.meti.go.jp/statistics/electric_power/ep002/'
+keywords:
+  - 経済産業省
+  - 資源エネルギー庁
+  - 電力調査統計
+  - 火力発電
+  - 燃料
+  - LNG
+  - 石炭
+  - エネルギー
+published: true
+sources:
+  - path: https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+fields:
+  - name: fiscal_year
+    title: 年度（4月始まり）
+  - name: year
+    title: 年（暦年）
+  - name: month
+    title: 月
+  - name: year_month
+    title: 年月（YYYYMM）
+  - name: fuel_name
+    title: 燃料種
+  - name: quantity_unit
+    title: 受入量・消費量・月末貯蔵量の単位（t / kl / 10^3m3）
+  - name: heat_value_unit
+    title: 発熱量の単位（kJ/kg / kJ/l / kJ/m3）
+  - name: receipt_quantity
+    title: 受入量（単位は quantity_unit）
+  - name: consumption_quantity
+    title: 発電用の消費量（単位は quantity_unit。雑用は含まない）
+  - name: consumption_dry_quantity
+    title: 乾ベースの消費量（石炭・バイオマスのみ。他の燃料種は NULL）
+  - name: heat_value
+    title: 単位量あたりの発熱量（単位は heat_value_unit）
+  - name: month_end_stock_quantity
+    title: 月末貯蔵量（単位は quantity_unit。振替・棚卸しによる出入りを調整した後の値）
+  - name: published_as_of
+    title: 当該月の値の公表時点（2016年度と2017年度の前半は原典に記載が無く NULL）
