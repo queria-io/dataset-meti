@@ -194,3 +194,127 @@ models:
       - name: published_as_of
         meta:
           title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
+
+  - name: power_generation_by_operator
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 2-(1)「発電実績」（2016年度〜）。
+      電気事業者ごとの発電電力量を事業者×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、水力は一般と揚水式、
+      火力は石炭・ＬＮＧ・石油・ＬＰＧ・その他ガス・歴青質混合物・その他の燃料別、
+      新エネルギー等は風力・太陽光・地熱・蓄電池の内訳を持つ。単位は MWh（原典の 1,000kWh と同値）。
+      バイオマスと廃棄物は火力からの再掲で、どの計にも含まれない。
+      is_ で始まる列は当該月にその事業区分に該当したかを表す。
+      事業者名は原典の表記のままで名寄せしていない。
+      収録するのは事業者の行で、原典の合計行（全事業者計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    config:
+      meta:
+        title: "事業者別発電実績（2016年度〜・月次）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
+        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "発電", "電源構成", "電気事業者", "エネルギー"]
+    columns:
+      - name: fiscal_year
+        meta:
+          title: 年度（4月始まり）
+      - name: year
+        meta:
+          title: 年（暦年）
+      - name: month
+        meta:
+          title: 月
+      - name: year_month
+        meta:
+          title: 年月（YYYYMM）
+      - name: operator_name
+        meta:
+          title: 事業者名（原典の表記どおりで名寄せしていない）
+      - name: is_retail
+        meta:
+          title: 小売電気事業者に該当するか
+      - name: is_general_transmission_distribution
+        meta:
+          title: 一般送配電事業者に該当するか
+      - name: is_transmission
+        meta:
+          title: 送電事業者に該当するか
+      - name: is_distribution
+        meta:
+          title: 配電事業者に該当するか（2022年度の制度新設以降のみで以前は NULL）
+      - name: is_specified_transmission_distribution
+        meta:
+          title: 特定送配電事業者に該当するか
+      - name: is_generation
+        meta:
+          title: 発電事業者に該当するか
+      - name: is_specified_wholesale
+        meta:
+          title: 特定卸供給事業者に該当するか（2022年度の制度新設以降のみで以前は NULL）
+      - name: hydro_conventional_mwh
+        meta:
+          title: 水力発電所のうち一般水力の発電電力量（MWh）
+      - name: hydro_pumped_storage_mwh
+        meta:
+          title: 水力発電所のうち揚水式の発電電力量（MWh）
+      - name: hydro_mwh
+        meta:
+          title: 水力発電所の計（MWh。一般＋揚水式）
+      - name: thermal_coal_mwh
+        meta:
+          title: 火力発電所のうち石炭の発電電力量（MWh）
+      - name: thermal_lng_mwh
+        meta:
+          title: 火力発電所のうちＬＮＧの発電電力量（MWh）
+      - name: thermal_oil_mwh
+        meta:
+          title: 火力発電所のうち石油の発電電力量（MWh）
+      - name: thermal_lpg_mwh
+        meta:
+          title: 火力発電所のうちＬＰＧの発電電力量（MWh）
+      - name: thermal_other_gas_mwh
+        meta:
+          title: 火力発電所のうちその他ガスの発電電力量（MWh）
+      - name: thermal_bituminous_mwh
+        meta:
+          title: 火力発電所のうち歴青質混合物の発電電力量（MWh）
+      - name: thermal_other_mwh
+        meta:
+          title: 火力発電所のうちその他の燃料の発電電力量（MWh）
+      - name: thermal_mwh
+        meta:
+          title: 火力発電所の計（MWh。燃料別の内訳の和）
+      - name: nuclear_mwh
+        meta:
+          title: 原子力発電所の発電電力量（MWh）
+      - name: wind_mwh
+        meta:
+          title: 新エネルギー等発電所のうち風力の発電電力量（MWh）
+      - name: solar_mwh
+        meta:
+          title: 新エネルギー等発電所のうち太陽光の発電電力量（MWh）
+      - name: geothermal_mwh
+        meta:
+          title: 新エネルギー等発電所のうち地熱の発電電力量（MWh）
+      - name: biomass_mwh
+        meta:
+          title: バイオマスを主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
+      - name: waste_mwh
+        meta:
+          title: 廃棄物を主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
+      - name: storage_battery_mwh
+        meta:
+          title: 新エネルギー等発電所のうち蓄電池の放電電力量（MWh。2023年度以降のみで以前は NULL）
+      - name: new_energy_mwh
+        meta:
+          title: 新エネルギー等発電所の計（MWh。風力＋太陽光＋地熱＋蓄電池）
+      - name: other_mwh
+        meta:
+          title: その他の発電電力量（MWh）
+      - name: total_mwh
+        meta:
+          title: 発電電力量の合計（MWh。水力＋火力＋原子力＋新エネルギー等の計＋その他）
+      - name: published_as_of
+        meta:
+          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）

@@ -7,7 +7,8 @@
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
   国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
-  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で示します。
+  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で、
+  電気事業者ごとの発電電力量を月次で示します。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -156,14 +157,90 @@
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
+## テーブル: power_generation_by_operator
+
+電力調査統計の統計表 2-(1)「発電実績」を、事業者×月で1レコードとした月次データです。
+2016年度4月以降を収録します。原典の合計行（全事業者計）はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- operator_name: 事業者名（VARCHAR、原典の表記どおり）
+- is_retail: 小売電気事業者に該当するか（BOOLEAN）
+- is_general_transmission_distribution: 一般送配電事業者に該当するか（BOOLEAN）
+- is_transmission: 送電事業者に該当するか（BOOLEAN）
+- is_distribution: 配電事業者に該当するか（BOOLEAN）
+- is_specified_transmission_distribution: 特定送配電事業者に該当するか（BOOLEAN）
+- is_generation: 発電事業者に該当するか（BOOLEAN）
+- is_specified_wholesale: 特定卸供給事業者に該当するか（BOOLEAN）
+- hydro_conventional_mwh: 水力発電所のうち一般水力（DOUBLE、MWh）
+- hydro_pumped_storage_mwh: 水力発電所のうち揚水式（DOUBLE、MWh）
+- hydro_mwh: 水力発電所の計（DOUBLE、MWh）
+- thermal_coal_mwh: 火力発電所のうち石炭（DOUBLE、MWh）
+- thermal_lng_mwh: 火力発電所のうちＬＮＧ（DOUBLE、MWh）
+- thermal_oil_mwh: 火力発電所のうち石油（DOUBLE、MWh）
+- thermal_lpg_mwh: 火力発電所のうちＬＰＧ（DOUBLE、MWh）
+- thermal_other_gas_mwh: 火力発電所のうちその他ガス（DOUBLE、MWh）
+- thermal_bituminous_mwh: 火力発電所のうち歴青質混合物（DOUBLE、MWh）
+- thermal_other_mwh: 火力発電所のうちその他の燃料（DOUBLE、MWh）
+- thermal_mwh: 火力発電所の計（DOUBLE、MWh）
+- nuclear_mwh: 原子力発電所の発電電力量（DOUBLE、MWh）
+- wind_mwh: 新エネルギー等発電所のうち風力（DOUBLE、MWh）
+- solar_mwh: 新エネルギー等発電所のうち太陽光（DOUBLE、MWh）
+- geothermal_mwh: 新エネルギー等発電所のうち地熱（DOUBLE、MWh）
+- biomass_mwh: バイオマスを主燃料とする発電電力量（DOUBLE、MWh。再掲）
+- waste_mwh: 廃棄物を主燃料とする発電電力量（DOUBLE、MWh。再掲）
+- storage_battery_mwh: 新エネルギー等発電所のうち蓄電池の放電電力量（DOUBLE、MWh）
+- new_energy_mwh: 新エネルギー等発電所の計（DOUBLE、MWh）
+- other_mwh: その他の発電電力量（DOUBLE、MWh）
+- total_mwh: 発電電力量の合計（DOUBLE、MWh）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意
+
+- 単位は MWh です。原典は 1,000kWh 表記で、値は同じです。
+- **operator_name は一意のキーになりません。** 同じ事業者名が同じ月に2行並ぶことが
+  8事業者・のべ66件あります（2016〜2022年度）。値が同じ2行のこともあり、その場合は
+  原典の合計行に1回しか入っていません（2022年8月の戸畑共同火力株式会社で 435,978 MWh）。
+  事業者名で合算すると原典の全国計より多く出ます。
+- 事業者名は原典の表記のままで名寄せしていません。法人格の書き方（株式会社／(株)）や
+  半角カナが年度で変わるため、同じ会社が別の文字列になる月があります
+  （例: 中部電力(株) が2019年10月から 中部電力株式会社）。時系列で追うときは名寄せが要ります。
+- total_mwh は hydro + thermal + nuclear + new_energy_mwh + other です。hydro_mwh は
+  一般＋揚水式、thermal_mwh は燃料別7列の和、new_energy_mwh は wind + solar + geothermal +
+  storage_battery の計です。内訳を合計したうえに計や total_mwh を足すと二重計上になります。
+- biomass_mwh と waste_mwh は主燃料で見た火力からの再掲です。thermal_mwh にも
+  new_energy_mwh にも total_mwh にも含まれません。単純に足すと二重計上になります。
+- storage_battery_mwh は2023年度4月に、is_distribution と is_specified_wholesale は
+  2022年度4月（電気事業法改正での区分新設）に原典へ足された列です。それ以前は NULL です。
+- 原典で「α」（0より大きく1,000kWh未満）と表記されたセルは数値にできないため NULL です。
+  239セルあり、2016〜2023年度に出ます。空欄のセルも NULL です。
+- 原典の内訳と計が合わない行があります。計だけに値があり燃料別の内訳が全て0の行
+  （2022年5月 昭和電工株式会社の火力 55,206 MWh など）、逆に内訳だけに値があり計が0の行
+  （2023年9月 愛知蒲郡バイオマス発電合同会社のその他燃料 26,984 MWh など）があります。
+  total_mwh の恒等式が崩れる行は 159,151 行中 233 行で、うち大半は1〜5 MWh の丸めです。
+  いずれも原典セルを確認済みで、取り込み時の読み違いではありません。原典どおり収録しています。
+- 発電電力量が負の行が25行あります（2018年7月 太平洋セメント(株) の石炭 -125 MWh など）。
+  これも原典どおりです。
+- 2016年度の4月・5月には原典に合計行がありません。他の119か月では、事業者の行を合計した値が
+  原典の合計行と一致します（上記の重複掲載と、2022年2月の新エネルギー等の計の 37 MWh を除く）。
+- power_generation_by_prefecture（統計表 2-(2)）は同じ発電実績を都道府県別に集計したものです。
+  こちらは事業者別で、火力の燃料別内訳と水力の揚水式内訳を持つ一方、地域の内訳はありません。
+  事業者と都道府県を突き合わせる鍵は原典にないので、2つの表を結合することはできません。
+- 値は後から改定されます。published_as_of がその月の値の公表時点です（2016年度の全月と
+  2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
+- 2015年度以前は旧 Excel 形式での配布のため収録していません。
+
 ## データ更新手順
 
 main.py が3つの統計の公開 Excel を取得して CSV へ整形し、dbt build で各テーブルを再生成する。
 時系列表のファイル名は公表年度と確報／速報で変わり、電力調査統計のファイル名は年度で命名規則が
 変わる（西暦・元号・機械判読用レイアウト版）ため、いずれも統計表一覧ページからリンクを解決している。
 電力調査統計は統計表ごと・年度ごとに1ファイルなので、1回のビルドで統計表数×年度数だけ取得する。
-発電実績は列の構成が年度で変わる（蓄電池の列は後から足された）ため、列位置ではなく見出しで
-対応づけている。見出しが増減したらそこで失敗する。
+発電実績は列の構成が年度で変わる（蓄電池・配電事業者・特定卸供給事業者の列は後から足された）ため、
+列位置ではなく見出しで対応づけている。見出しが増減したらそこで失敗する。
+見出しの無い列に値があるときも失敗させ、列の読み落としに気付けるようにしている。
 資源エネルギー庁のサイトは CloudFront + AWS WAF の challenge action で保護されており、短時間に
 続けて取得すると HTTP 202 と検証ページが返る。取得側は間隔を空けて取り直す。
 ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。
