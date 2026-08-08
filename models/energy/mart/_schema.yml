@@ -195,6 +195,107 @@ models:
         meta:
           title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
 
+  - name: power_demand_by_operator
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 3-(1)「電力需要実績」（2016年度〜）。
+      小売電気事業者等が供給した電力需要量を事業者×月の1レコードで収録する。
+      原典は1シートに事業者区分ごとの2つの表を並べており、operator_category がその区分。
+      みなし小売電気事業者等（旧一般電気事業者）は特定需要（経過措置料金）・最終保障供給・
+      離島供給・合計の欄を持ち、みなし小売電気事業者以外は自由料金の欄しか持たない
+      （後者はこれらの列が NULL になる）。需要量の単位は MWh（原典の 1,000kWh と同値）。
+      事業者名は月内でも一意ではなく、原典の合計行は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    config:
+      meta:
+        title: "電力需要実績（事業者別・2016年度〜・月次）"
+        published: true
+        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
+        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "電力需要", "小売電気事業者", "エネルギー"]
+    columns:
+      - name: fiscal_year
+        meta:
+          title: 年度（4月始まり）
+      - name: year
+        meta:
+          title: 年（暦年）
+      - name: month
+        meta:
+          title: 月
+      - name: year_month
+        meta:
+          title: 年月（YYYYMM）
+      - name: operator_category
+        meta:
+          title: 事業者区分コード（deemed_retailer / other_retailer）
+      - name: operator_category_ja
+        meta:
+          title: 事業者区分名（みなし小売電気事業者等 / みなし小売電気事業者以外）
+      - name: operator_name
+        meta:
+          title: 事業者名（原典の表記どおり。月内でも一意ではない）
+      - name: is_retail
+        meta:
+          title: 小売電気事業者に該当するか
+      - name: is_general_transmission_distribution
+        meta:
+          title: 一般送配電事業者に該当するか
+      - name: is_transmission
+        meta:
+          title: 送電事業者に該当するか
+      - name: is_distribution
+        meta:
+          title: 配電事業者に該当するか（原典に欄がある年度のみ。無い年度は NULL）
+      - name: is_specified_transmission_distribution
+        meta:
+          title: 特定送配電事業者に該当するか
+      - name: is_generation
+        meta:
+          title: 発電事業者に該当するか
+      - name: is_specified_wholesale
+        meta:
+          title: 特定卸供給事業者に該当するか（原典に欄がある年度のみ。無い年度は NULL）
+      - name: liberalized_demand_mwh
+        meta:
+          title: その他需要（自由料金）の計（MWh。特別高圧＋高圧＋低圧）
+      - name: liberalized_extra_high_demand_mwh
+        meta:
+          title: 自由料金のうち特別高圧の電力需要量（MWh）
+      - name: liberalized_high_demand_mwh
+        meta:
+          title: 自由料金のうち高圧の電力需要量（MWh）
+      - name: liberalized_low_demand_mwh
+        meta:
+          title: 自由料金のうち低圧の計（MWh。電灯＋電力）
+      - name: liberalized_low_lighting_demand_mwh
+        meta:
+          title: 自由料金の低圧のうち電灯の電力需要量（MWh）
+      - name: liberalized_low_power_demand_mwh
+        meta:
+          title: 自由料金の低圧のうち電力の電力需要量（MWh）
+      - name: regulated_demand_mwh
+        meta:
+          title: 特定需要（経過措置料金）の計（MWh。電灯＋電力。みなし小売電気事業者等のみ）
+      - name: regulated_lighting_demand_mwh
+        meta:
+          title: 経過措置料金のうち電灯の電力需要量（MWh）
+      - name: regulated_power_demand_mwh
+        meta:
+          title: 経過措置料金のうち電力の電力需要量（MWh）
+      - name: last_resort_supply_mwh
+        meta:
+          title: 最終保障供給の電力需要量（MWh。みなし小売電気事業者等のみ）
+      - name: remote_island_supply_mwh
+        meta:
+          title: 離島供給の電力需要量（MWh。みなし小売電気事業者等のみ）
+      - name: total_demand_mwh
+        meta:
+          title: 合計（MWh。自由料金＋経過措置料金＋最終保障供給＋離島供給。みなし小売電気事業者等のみ）
+      - name: published_as_of
+        meta:
+          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
+
   - name: power_generation_by_operator
     description: |
       資源エネルギー庁 電力調査統計の統計表 2-(1)「発電実績」（2016年度〜）。

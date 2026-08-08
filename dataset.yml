@@ -5,7 +5,7 @@ description: |-
   経済産業省 経済解析室が公表する第３次産業活動指数（2020年基準）と、
   資源エネルギー庁が公表する総合エネルギー統計の時系列表・電力調査統計。
   サービス産業の生産活動、国のエネルギー需給・電源構成・CO2排出量、
-  都道府県別の電力需要と発電実績、事業者別の発電実績を収録する。
+  都道府県別の電力需要と発電実績、事業者別の電力需要実績・発電実績を収録する。
 keywords:
   - 経済産業省
   - 第3次産業活動指数
@@ -46,9 +46,10 @@ ai_context:
   instructions: |
     3つの統計が入っている。main.tertiary_industry_activity_index が第３次産業活動指数、
     energy.energy_balance_summary が総合エネルギー統計の時系列表、
-    energy.power_demand_by_prefecture・energy.power_generation_by_prefecture・
-    energy.power_generation_by_operator が電力調査統計の都道府県別電力需要実績・
-    都道府県別発電実績・事業者別発電実績。粒度も単位も別なので混ぜない。
+    energy.power_demand_by_prefecture と energy.power_generation_by_prefecture が
+    電力調査統計の都道府県別電力需要実績・都道府県別発電実績、
+    energy.power_demand_by_operator と energy.power_generation_by_operator が
+    電力調査統計の事業者別電力需要実績・事業者別発電実績。粒度も単位も別なので混ぜない。
 
     energy.power_demand_by_prefecture は1行が「都道府県 × 月」で、2016年度4月以降の月次。
     47都道府県のみで全国計の行は無い（必要なら都道府県を合算する）。需要量は MWh
@@ -72,6 +73,22 @@ ai_context:
     storage_battery_mwh は2023年度4月に足された列で、それ以前は NULL。
     2026年4月分は原典の側で都道府県の行がずれており、佐賀県・鹿児島県の原子力の発電量が
     長崎県・沖縄県の行に入っている（他の120か月には無い）。原子力を県別に見るときは注意する。
+
+    energy.power_demand_by_operator は1行が「事業者 × 月」で、2016年度4月以降の月次。
+    同じ電力需要でも power_demand_by_prefecture とは表が違い、契約区分の切り方も違う
+    （本表は自由料金と経過措置料金が先で、電圧はその内訳）ので列を対応づけて突き合わせられない。
+    原典は1シートに事業者区分ごとの2つの表を並べており、operator_category がその区分。
+    みなし小売電気事業者以外（other_retailer）の表には自由料金の欄しか無いため、
+    regulated_*・last_resort_supply_mwh・remote_island_supply_mwh・total_demand_mwh は NULL になる。
+    区分をまたいで需要量を足すときは total_demand_mwh ではなく liberalized_demand_mwh を使う
+    （total_demand_mwh の合計だと other_retailer の分が落ちる）。単位は MWh。
+    total_demand_mwh は liberalized + regulated + last_resort + remote_island、
+    liberalized_demand_mwh は特別高圧＋高圧＋低圧計、低圧計は電灯＋電力なので、
+    内訳を足したうえに計も足すと二重計上になる。operator_name は月内でも一意ではなく
+    （同名の行が同じ月に並ぶ）、表記も年度で変わる。名寄せはしていないので事業者名で
+    集計すると重複する。原典の「α」（0.5MWh 未満）と空欄は NULL。
+    原典の側で計と内訳が合わない行があり、2019年4月の東京ガス(株)は低圧計が
+    電灯＋電力より27,000 MWh 大きい（桁の取り違えとみられる）。
 
     energy.power_generation_by_operator は1行が「事業者 × 月」で、2016年度4月以降の月次。
     同じ発電実績を都道府県別ではなく電気事業者別に集計したもので、火力の燃料別内訳
@@ -131,13 +148,13 @@ ai_context:
       小売電気事業者,
       発電実績,
       発電電力量,
-      電気事業者,
-      発電事業者,
-      電源別発電量,
       再生可能エネルギー,
       太陽光発電,
       風力発電,
       原子力発電,
+      電気事業者,
+      発電事業者,
+      電源別発電量,
     ]
   examples:
     - 第３次産業総合の指数の推移が見たい
@@ -152,6 +169,9 @@ ai_context:
     - 都道府県別に太陽光発電がどれだけ伸びたか見たい
     - 発電量と電力需要を都道府県ごとに突き合わせたい
     - 原子力発電の再稼働が県別の発電量にどう出ているか調べたい
+    - 小売電気事業者ごとの電力需要量を月次で比べたい
+    - 経過措置料金の需要が自由料金へどれだけ移ったか事業者別に見たい
+    - 新電力の需要量が全体のどれくらいを占めるか調べたい
     - 事業者別に発電電力量の大きい順を見たい
     - 石炭とＬＮＧの発電量の推移を分けて見たい
     - 揚水式水力の発電量がどれだけあるか知りたい

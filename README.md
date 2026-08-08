@@ -7,8 +7,8 @@
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
   国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
 - [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
-  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で、
-  電気事業者ごとの発電電力量を月次で示します。
+  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量を都道府県別・月次で示します。
+  どちらも事業者別の内訳があります。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -157,6 +157,77 @@
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
+## テーブル: power_demand_by_operator
+
+電力調査統計の統計表 3-(1)「電力需要実績」を、事業者×月で1レコードとした月次データです。
+2016年度4月以降を収録します（毎月のビルドで伸びます）。原典は1シートに事業者区分ごとの
+2つの表を並べており、operator_category がその区分です。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER）
+- year_month: 年月（VARCHAR、YYYYMM）
+- operator_category: 事業者区分コード（VARCHAR、deemed_retailer / other_retailer）
+- operator_category_ja: 事業者区分名（VARCHAR、みなし小売電気事業者等 / みなし小売電気事業者以外）
+- operator_name: 事業者名（VARCHAR、原典の表記どおり）
+- is_retail: 小売電気事業者に該当するか（BOOLEAN）
+- is_general_transmission_distribution: 一般送配電事業者に該当するか（BOOLEAN）
+- is_transmission: 送電事業者に該当するか（BOOLEAN）
+- is_distribution: 配電事業者に該当するか（BOOLEAN）
+- is_specified_transmission_distribution: 特定送配電事業者に該当するか（BOOLEAN）
+- is_generation: 発電事業者に該当するか（BOOLEAN）
+- is_specified_wholesale: 特定卸供給事業者に該当するか（BOOLEAN）
+- liberalized_demand_mwh: その他需要（自由料金）の計（DOUBLE、MWh）
+- liberalized_extra_high_demand_mwh: 自由料金のうち特別高圧（DOUBLE、MWh）
+- liberalized_high_demand_mwh: 自由料金のうち高圧（DOUBLE、MWh）
+- liberalized_low_demand_mwh: 自由料金のうち低圧の計（DOUBLE、MWh）
+- liberalized_low_lighting_demand_mwh: 自由料金の低圧のうち電灯（DOUBLE、MWh）
+- liberalized_low_power_demand_mwh: 自由料金の低圧のうち電力（DOUBLE、MWh）
+- regulated_demand_mwh: 特定需要（経過措置料金）の計（DOUBLE、MWh）
+- regulated_lighting_demand_mwh: 経過措置料金のうち電灯（DOUBLE、MWh）
+- regulated_power_demand_mwh: 経過措置料金のうち電力（DOUBLE、MWh）
+- last_resort_supply_mwh: 最終保障供給（DOUBLE、MWh）
+- remote_island_supply_mwh: 離島供給（DOUBLE、MWh）
+- total_demand_mwh: 合計（DOUBLE、MWh）
+- published_as_of: 当該月の値の公表時点（DATE）
+
+### 利用上の注意
+
+- 需要量の単位は MWh です。原典は 1,000kWh 表記で、値は同じです。
+- 区分によって持つ列が違います。みなし小売電気事業者以外（other_retailer）の表は自由料金の
+  6列しか原典に無いため、regulated_*・last_resort_supply_mwh・remote_island_supply_mwh・
+  total_demand_mwh は NULL になります。区分をまたいで需要量を合計するときは
+  liberalized_demand_mwh を使ってください（total_demand_mwh を合計すると
+  みなし小売電気事業者以外の分が落ちます）。
+- total_demand_mwh は liberalized + regulated + last_resort + remote_island です。
+  liberalized_demand_mwh は特別高圧＋高圧＋低圧計、低圧計は電灯＋電力です。
+  内訳を合計したうえに計や合計を足すと二重計上になります。
+- operator_name は月内でも一意ではありません。同じ区分に同じ名前の行が並ぶ月が97件あります
+  （岐阜電力(株) 54か月、日本瓦斯株式会社 24か月、熊本電力(株) 14か月ほか）。
+  表記も年度で変わります（(株)○○ → ○○株式会社）。名寄せはしていないので、事業者名で
+  集計すると重複します。
+- is_distribution は2022年4月に原典へ足された欄ですが、収録範囲では該当する行が1件もありません
+  （配電事業者の需要実績がまだ無いためです）。それ以前の年度は欄そのものが無いので NULL です。
+- 原典の「α」（備考どおり 0.5MWh 未満の値）は数値にできないため NULL にしています。空欄も
+  NULL です。合計を出すときは NULL を 0 とみなすことになる点に注意してください。
+- 原典の側で計と内訳が合わない行があります。自由料金の計と電圧別の和が 1 MWh を超えてずれる行が
+  107件、低圧計と電灯＋電力がずれる行が142件あり、ほとんどは数 MWh の丸めです。大きいものは
+  2019年4月の東京ガス(株)で、低圧計が電灯＋電力より 27,000 MWh 大きく（自由料金の計とも
+  合いません）、桁の取り違えとみられます。内訳が空欄なのに計に値がある行もあります
+  （2024年2月の株式会社いなしきエナジーの高圧など）。いずれも原典どおりに収録しています。
+- 需要量が負の行が1件あります（2025年4月の東京電力パワーグリッド株式会社。高圧 -17,104 MWh）。
+  過去分の訂正が当月に入ったものとみられます。原典どおりに収録しています。
+- 原典の合計行（区分ごとの総計）は持ちません。事業者を合算した値は原典の合計行と
+  丸めの範囲で一致しますが、α を NULL にしている分だけわずかに小さくなります。
+  2017年3月のみなし小売電気事業者以外の低圧電灯のように、原典の合計行そのものが
+  内訳の和と合っていない月もあります。
+- 都道府県別の power_demand_by_prefecture とは同じ電力調査統計の別表です。粒度が
+  事業者と都道府県で違い、契約区分の切り方も違う（本表は自由料金と経過措置料金が先で、
+  電圧はその内訳）ため、列を対応づけて突き合わせることはできません。
+- 値は後から改定されます。published_as_of がその月の値の公表時点です。年度計のシートは
+  取り込んでいません。
+- 2015年度以前は旧 Excel 形式での配布のため収録していません。
+
 ## テーブル: power_generation_by_operator
 
 電力調査統計の統計表 2-(1)「発電実績」を、事業者×月で1レコードとした月次データです。
@@ -239,8 +310,10 @@ main.py が3つの統計の公開 Excel を取得して CSV へ整形し、dbt b
 変わる（西暦・元号・機械判読用レイアウト版）ため、いずれも統計表一覧ページからリンクを解決している。
 電力調査統計は統計表ごと・年度ごとに1ファイルなので、1回のビルドで統計表数×年度数だけ取得する。
 発電実績は列の構成が年度で変わる（蓄電池・配電事業者・特定卸供給事業者の列は後から足された）ため、
-列位置ではなく見出しで対応づけている。見出しが増減したらそこで失敗する。
-見出しの無い列に値があるときも失敗させ、列の読み落としに気付けるようにしている。
+列位置ではなく見出しで対応づけている。見出しが増減したらそこで失敗する。事業者別の電力需要実績は
+1シートに事業者区分ごとの表が縦に並び、区分によって見出しの段数と列数が違うため、大分類と小分類の
+組み合わせで列を引いている。見出しの無い列に値があるときも失敗させ、列の読み落としに
+気付けるようにしている。
 資源エネルギー庁のサイトは CloudFront + AWS WAF の challenge action で保護されており、短時間に
 続けて取得すると HTTP 202 と検証ページが返る。取得側は間隔を空けて取り直す。
 ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。
