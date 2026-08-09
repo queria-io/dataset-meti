@@ -10,6 +10,7 @@ import time
 from pathlib import Path
 
 from curl_cffi import requests
+from curl_cffi.requests.exceptions import HTTPError
 
 logger = logging.getLogger("pipelines")
 
@@ -57,14 +58,23 @@ def fetch_text(path: str) -> str:
     return _get(path).text
 
 
-def fetch_file(path: str, dest: Path) -> None:
-    """Excel などのバイナリを取得して保存する。
+def fetch_file(path: str, dest: Path, missing_ok: bool = False) -> bool:
+    """Excel などのバイナリを取得して保存する。取得できたかを返す。
 
     challenge ページが xlsx として保存されるのを防ぐため、ZIP の
     マジックナンバー（xlsx は ZIP）を確認する。
+
+    missing_ok を立てると、実体の無いファイル（配信側は 403 を返す）で例外にせず
+    False を返す。統計表一覧ページに載っているのに実体が無いリンクがあるため。
     """
-    resp = _get(path)
+    try:
+        resp = _get(path)
+    except HTTPError as error:
+        if missing_ok and getattr(error.response, "status_code", None) in (403, 404):
+            return False
+        raise
     if not resp.content.startswith(b"PK"):
         raise RuntimeError(f"xlsx ではない応答が返った: {path}")
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(resp.content)
+    return True
