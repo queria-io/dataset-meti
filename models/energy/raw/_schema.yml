@@ -207,6 +207,66 @@ models:
       - name: published_as_of
         description: 当該月の値の公表時点
 
+  - name: raw_power_plants
+    description: 電力調査統計 都道府県別発電所数、出力の生データ（都道府県×月）
+    columns:
+      - name: year_month
+        description: 年月（YYYYMM）
+      - name: pref_code
+        description: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        description: 都道府県名
+      - name: hydro_plants
+        description: 水力発電所の発電所数
+      - name: hydro_capacity_kw
+        description: 水力発電所の最大出力計（kW）
+      - name: thermal_plants
+        description: 火力発電所の発電所数
+      - name: thermal_capacity_kw
+        description: 火力発電所の最大出力計（kW）
+      - name: nuclear_plants
+        description: 原子力発電所の発電所数
+      - name: nuclear_capacity_kw
+        description: 原子力発電所の最大出力計（kW）
+      - name: wind_plants
+        description: 新エネルギー等発電所のうち風力の発電所数
+      - name: wind_capacity_kw
+        description: 新エネルギー等発電所のうち風力の最大出力計（kW）
+      - name: solar_plants
+        description: 新エネルギー等発電所のうち太陽光の発電所数
+      - name: solar_capacity_kw
+        description: 新エネルギー等発電所のうち太陽光の最大出力計（kW）
+      - name: geothermal_plants
+        description: 新エネルギー等発電所のうち地熱の発電所数
+      - name: geothermal_capacity_kw
+        description: 新エネルギー等発電所のうち地熱の最大出力計（kW）
+      - name: biomass_plants
+        description: バイオマスを主燃料とする発電所数（火力発電所からの再掲）
+      - name: biomass_capacity_kw
+        description: バイオマスを主燃料とする発電所の最大出力計（kW。再掲）
+      - name: waste_plants
+        description: 廃棄物を主燃料とする発電所数（火力発電所からの再掲）
+      - name: waste_capacity_kw
+        description: 廃棄物を主燃料とする発電所の最大出力計（kW。再掲）
+      - name: storage_battery_plants
+        description: 新エネルギー等発電所のうち蓄電池の設備数（2023年度以降のみ）
+      - name: storage_battery_capacity_kw
+        description: 新エネルギー等発電所のうち蓄電池の最大出力計（kW。2023年度以降のみ）
+      - name: new_energy_plants
+        description: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）
+      - name: new_energy_capacity_kw
+        description: 新エネルギー等発電所の最大出力計（kW）
+      - name: other_plants
+        description: その他の発電所数
+      - name: other_capacity_kw
+        description: その他の発電所の最大出力計（kW）
+      - name: total_plants
+        description: 発電所数の合計
+      - name: total_capacity_kw
+        description: 最大出力計の合計（kW）
+      - name: published_as_of
+        description: 当該月の値の公表時点
+
   - name: raw_power_demand_municipality
     description: 電力調査統計 市町村別需要電力量の生データ（市区町村×月）
     columns:
