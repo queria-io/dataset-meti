@@ -5,3 +5,4 @@ models:
   - name: stg_power_demand
   - name: stg_power_generation
   - name: stg_power_demand_operator
+  - name: stg_power_generation_operator
