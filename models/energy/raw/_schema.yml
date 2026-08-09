@@ -207,6 +207,60 @@ models:
       - name: published_as_of
         description: 当該月の値の公表時点
 
+  - name: raw_power_demand_municipality
+    description: 電力調査統計 市町村別需要電力量の生データ（市区町村×月）
+    columns:
+      - name: year_month
+        description: 年月（YYYYMM）
+      - name: pref_code
+        description: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        description: 都道府県名
+      - name: municipality_name
+        description: 市区町村名（政令指定都市は市単位、東京都特別区は区単位）
+      - name: extra_high_and_high_demand_mwh
+        description: 特別高圧／高圧の需要電力量（MWh）
+      - name: low_demand_mwh
+        description: 低圧の需要電力量（MWh）
+      - name: total_demand_mwh
+        description: 需要電力量の合計（MWh）
+      - name: published_as_of
+        description: 当該月の値の公表時点
+
+  - name: raw_reverse_power_flow_municipality
+    description: 電力調査統計 市町村別逆潮流量の生データ（市区町村×月）
+    columns:
+      - name: year_month
+        description: 年月（YYYYMM）
+      - name: pref_code
+        description: 都道府県コード（全国地方公共団体コード 2 桁）
+      - name: pref_name
+        description: 都道府県名
+      - name: municipality_name
+        description: 市区町村名（政令指定都市は市単位、東京都特別区は区単位）
+      - name: hydro_mwh
+        description: 水力の逆潮流量（MWh）
+      - name: thermal_mwh
+        description: 火力の逆潮流量（MWh）
+      - name: nuclear_mwh
+        description: 原子力の逆潮流量（MWh）
+      - name: wind_mwh
+        description: 風力の逆潮流量（MWh）
+      - name: geothermal_mwh
+        description: 地熱の逆潮流量（MWh）
+      - name: solar_mwh
+        description: 太陽光の逆潮流量（MWh）
+      - name: biomass_mwh
+        description: バイオマスの逆潮流量（MWh）
+      - name: storage_battery_mwh
+        description: 蓄電池の逆潮流量（MWh。2023年度以降のみ）
+      - name: other_mwh
+        description: その他の電源の逆潮流量（MWh）
+      - name: total_mwh
+        description: 逆潮流量の合計（MWh）
+      - name: published_as_of
+        description: 当該月の値の公表時点
+
   - name: raw_power_thermal_fuel
     description: 電力調査統計 火力発電燃料実績の生データ（燃料種×月）
     columns:
