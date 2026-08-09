@@ -178,6 +178,52 @@ models:
       - name: total_mwh
       - name: published_as_of
 
+  - name: power_plants_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 1-(2)「都道府県別発電所数、出力」（2019年度〜）。
+      電気事業者の発電所の数と最大出力（設備容量）を都道府県×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、新エネルギー等は
+      風力・太陽光・地熱・蓄電池の内訳を持つ。最大出力の単位は kW。
+      同じ都道府県×月の発電実績（power_generation_by_prefecture）と突き合わせると
+      設備あたりの発電量を出せる。バイオマスと廃棄物は主燃料で見た火力発電所からの再掲で、
+      新エネルギー等の計にも合計にも含まれない。
+      収録するのは47都道府県で、原典の合計行（全国計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: pref_code
+      - name: pref_name
+      - name: hydro_plants
+      - name: hydro_capacity_kw
+      - name: thermal_plants
+      - name: thermal_capacity_kw
+      - name: nuclear_plants
+      - name: nuclear_capacity_kw
+      - name: wind_plants
+      - name: wind_capacity_kw
+      - name: solar_plants
+      - name: solar_capacity_kw
+      - name: geothermal_plants
+      - name: geothermal_capacity_kw
+      - name: biomass_plants
+      - name: biomass_capacity_kw
+      - name: waste_plants
+      - name: waste_capacity_kw
+      - name: storage_battery_plants
+      - name: storage_battery_capacity_kw
+      - name: new_energy_plants
+      - name: new_energy_capacity_kw
+      - name: other_plants
+      - name: other_capacity_kw
+      - name: total_plants
+      - name: total_capacity_kw
+      - name: published_as_of
+
   - name: power_demand_by_municipality
     description: |
       資源エネルギー庁 電力調査統計の統計表 6-(1)「市町村別需要電力量」（2022年度〜2024年度）。

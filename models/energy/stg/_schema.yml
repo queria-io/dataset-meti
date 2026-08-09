@@ -6,6 +6,7 @@ models:
   - name: stg_power_generation
   - name: stg_power_demand_operator
   - name: stg_power_generation_operator
+  - name: stg_power_plants
   - name: stg_power_demand_municipality
   - name: stg_reverse_power_flow_municipality
   - name: stg_power_thermal_fuel
