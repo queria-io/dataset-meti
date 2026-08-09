@@ -13,40 +13,16 @@ models:
       出典: 経済産業省 資源エネルギー庁 総合エネルギー統計。
       https://www.enecho.meti.go.jp/statistics/total_energy/
     access: public
-    config:
-      meta:
-        title: "総合エネルギー統計 時系列表（1990年度〜）"
-        published: true
-        source_url: "https://www.enecho.meti.go.jp/statistics/total_energy/"
-        tags: ["経済産業省", "資源エネルギー庁", "総合エネルギー統計", "エネルギー", "CO2排出量", "電源構成"]
     columns:
       - name: table_no
-        meta:
-          title: 統計表番号（1〜7）
       - name: table_name
-        meta:
-          title: 統計表名
       - name: item_name
-        meta:
-          title: 項目名（エネルギー源・部門・電源等）
       - name: item_level
-        meta:
-          title: 項目の階層（0=大項目、1=内訳）
       - name: series
-        meta:
-          title: 系列ラベル（PJ／原油換算万kl／億kWh／Mt-CO2／kg-CO2/kWh／構成比／前年度比／％）
       - name: value_type
-        meta:
-          title: 値の種類（quantity=実数、ratio=比率で小数）
       - name: fiscal_year
-        meta:
-          title: 年度
       - name: value
-        meta:
-          title: 値（series の単位。ratio は小数で 0.25＝25%）
       - name: source_edition
-        meta:
-          title: 取り込んだ時系列表の版（例 2024年度確報）
 
   - name: power_demand_by_prefecture
     description: |
@@ -60,64 +36,24 @@ models:
       出典: 経済産業省 資源エネルギー庁 電力調査統計。
       https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
     access: public
-    config:
-      meta:
-        title: "都道府県別電力需要実績（2016年度〜・月次）"
-        published: true
-        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
-        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "電力需要", "都道府県", "エネルギー"]
     columns:
       - name: fiscal_year
-        meta:
-          title: 年度（4月始まり）
       - name: year
-        meta:
-          title: 年（暦年）
       - name: month
-        meta:
-          title: 月
       - name: year_month
-        meta:
-          title: 年月（YYYYMM）
       - name: pref_code
-        meta:
-          title: 都道府県コード（全国地方公共団体コード 2 桁）
       - name: pref_name
-        meta:
-          title: 都道府県名
       - name: extra_high_demand_mwh
-        meta:
-          title: 特別高圧の電力需要量（MWh）
       - name: extra_high_retailers
-        meta:
-          title: 特別高圧で当該月に需要実績のある小売電気事業者数
       - name: high_demand_mwh
-        meta:
-          title: 高圧の電力需要量（MWh）
       - name: high_retailers
-        meta:
-          title: 高圧で当該月に需要実績のある小売電気事業者数
       - name: low_demand_mwh
-        meta:
-          title: 低圧の電力需要量（MWh）
       - name: low_regulated_demand_mwh
-        meta:
-          title: 低圧のうち特定需要（経過措置料金）の電力需要量（MWh）
       - name: low_liberalized_demand_mwh
-        meta:
-          title: 低圧のうち自由料金の電力需要量（MWh）
       - name: low_retailers
-        meta:
-          title: 低圧で当該月に需要実績のある小売電気事業者数
       - name: total_demand_mwh
-        meta:
-          title: 全電圧計の電力需要量（MWh。特別高圧＋高圧＋低圧）
       - name: total_retailers
-        meta:
-          title: 全電圧計で当該月に需要実績のある小売電気事業者数（重複を除いた数）
       - name: published_as_of
-        meta:
-          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
 
   - name: power_generation_by_prefecture
     description: |
@@ -130,70 +66,117 @@ models:
       出典: 経済産業省 資源エネルギー庁 電力調査統計。
       https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
     access: public
-    config:
-      meta:
-        title: "都道府県別発電実績（2016年度〜・月次）"
-        published: true
-        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
-        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "発電", "電源構成", "再生可能エネルギー", "都道府県", "エネルギー"]
     columns:
       - name: fiscal_year
-        meta:
-          title: 年度（4月始まり）
       - name: year
-        meta:
-          title: 年（暦年）
       - name: month
-        meta:
-          title: 月
       - name: year_month
-        meta:
-          title: 年月（YYYYMM）
       - name: pref_code
-        meta:
-          title: 都道府県コード（全国地方公共団体コード 2 桁）
       - name: pref_name
-        meta:
-          title: 都道府県名
       - name: hydro_mwh
-        meta:
-          title: 水力発電所の発電電力量（MWh）
       - name: thermal_mwh
-        meta:
-          title: 火力発電所の発電電力量（MWh）
       - name: nuclear_mwh
-        meta:
-          title: 原子力発電所の発電電力量（MWh）
       - name: wind_mwh
-        meta:
-          title: 新エネルギー等発電所のうち風力の発電電力量（MWh）
       - name: solar_mwh
-        meta:
-          title: 新エネルギー等発電所のうち太陽光の発電電力量（MWh）
       - name: geothermal_mwh
-        meta:
-          title: 新エネルギー等発電所のうち地熱の発電電力量（MWh）
       - name: biomass_mwh
-        meta:
-          title: バイオマスを主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
       - name: waste_mwh
-        meta:
-          title: 廃棄物を主燃料とする発電電力量（MWh。再掲で計・合計には含まれない）
       - name: storage_battery_mwh
-        meta:
-          title: 新エネルギー等発電所のうち蓄電池の放電電力量（MWh。2023年度以降のみで以前は NULL）
       - name: new_energy_mwh
-        meta:
-          title: 新エネルギー等発電所の計（MWh。風力＋太陽光＋地熱＋蓄電池）
       - name: other_mwh
-        meta:
-          title: その他の発電電力量（MWh）
       - name: total_mwh
-        meta:
-          title: 発電電力量の合計（MWh。水力＋火力＋原子力＋新エネルギー等の計＋その他）
       - name: published_as_of
-        meta:
-          title: 当該月の値の公表時点（古い月は原典に記載が無く NULL）
+
+  - name: power_demand_by_operator
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 3-(1)「電力需要実績」（2016年度〜）。
+      小売電気事業者等が供給した電力需要量を事業者×月の1レコードで収録する。
+      原典は1シートに事業者区分ごとの2つの表を並べており、operator_category がその区分。
+      みなし小売電気事業者等（旧一般電気事業者）は特定需要（経過措置料金）・最終保障供給・
+      離島供給・合計の欄を持ち、みなし小売電気事業者以外は自由料金の欄しか持たない
+      （後者はこれらの列が NULL になる）。需要量の単位は MWh（原典の 1,000kWh と同値）。
+      事業者名は月内でも一意ではなく、原典の合計行は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: operator_category
+      - name: operator_category_ja
+      - name: operator_name
+      - name: is_retail
+      - name: is_general_transmission_distribution
+      - name: is_transmission
+      - name: is_distribution
+      - name: is_specified_transmission_distribution
+      - name: is_generation
+      - name: is_specified_wholesale
+      - name: liberalized_demand_mwh
+      - name: liberalized_extra_high_demand_mwh
+      - name: liberalized_high_demand_mwh
+      - name: liberalized_low_demand_mwh
+      - name: liberalized_low_lighting_demand_mwh
+      - name: liberalized_low_power_demand_mwh
+      - name: regulated_demand_mwh
+      - name: regulated_lighting_demand_mwh
+      - name: regulated_power_demand_mwh
+      - name: last_resort_supply_mwh
+      - name: remote_island_supply_mwh
+      - name: total_demand_mwh
+      - name: published_as_of
+
+  - name: power_generation_by_operator
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 2-(1)「発電実績」（2016年度〜）。
+      電気事業者ごとの発電電力量を事業者×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、水力は一般と揚水式、
+      火力は石炭・ＬＮＧ・石油・ＬＰＧ・その他ガス・歴青質混合物・その他の燃料別、
+      新エネルギー等は風力・太陽光・地熱・蓄電池の内訳を持つ。単位は MWh（原典の 1,000kWh と同値）。
+      バイオマスと廃棄物は火力からの再掲で、どの計にも含まれない。
+      is_ で始まる列は当該月にその事業区分に該当したかを表す。
+      事業者名は原典の表記のままで名寄せしていない。
+      収録するのは事業者の行で、原典の合計行（全事業者計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: operator_name
+      - name: is_retail
+      - name: is_general_transmission_distribution
+      - name: is_transmission
+      - name: is_distribution
+      - name: is_specified_transmission_distribution
+      - name: is_generation
+      - name: is_specified_wholesale
+      - name: hydro_conventional_mwh
+      - name: hydro_pumped_storage_mwh
+      - name: hydro_mwh
+      - name: thermal_coal_mwh
+      - name: thermal_lng_mwh
+      - name: thermal_oil_mwh
+      - name: thermal_lpg_mwh
+      - name: thermal_other_gas_mwh
+      - name: thermal_bituminous_mwh
+      - name: thermal_other_mwh
+      - name: thermal_mwh
+      - name: nuclear_mwh
+      - name: wind_mwh
+      - name: solar_mwh
+      - name: geothermal_mwh
+      - name: biomass_mwh
+      - name: waste_mwh
+      - name: storage_battery_mwh
+      - name: new_energy_mwh
+      - name: other_mwh
+      - name: total_mwh
+      - name: published_as_of
 
   - name: power_thermal_fuel_by_type
     description: |
@@ -208,49 +191,17 @@ models:
       出典: 経済産業省 資源エネルギー庁 電力調査統計。
       https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
     access: public
-    config:
-      meta:
-        title: "火力発電燃料実績（2016年度〜・月次）"
-        published: true
-        source_url: "https://www.enecho.meti.go.jp/statistics/electric_power/ep002/"
-        tags: ["経済産業省", "資源エネルギー庁", "電力調査統計", "火力発電", "燃料", "LNG", "石炭", "エネルギー"]
     columns:
       - name: fiscal_year
-        meta:
-          title: 年度（4月始まり）
       - name: year
-        meta:
-          title: 年（暦年）
       - name: month
-        meta:
-          title: 月
       - name: year_month
-        meta:
-          title: 年月（YYYYMM）
       - name: fuel_name
-        meta:
-          title: 燃料種
       - name: quantity_unit
-        meta:
-          title: 受入量・消費量・月末貯蔵量の単位（t / kl / 10^3m3）
       - name: heat_value_unit
-        meta:
-          title: 発熱量の単位（kJ/kg / kJ/l / kJ/m3）
       - name: receipt_quantity
-        meta:
-          title: 受入量（単位は quantity_unit）
       - name: consumption_quantity
-        meta:
-          title: 発電用の消費量（単位は quantity_unit。雑用は含まない）
       - name: consumption_dry_quantity
-        meta:
-          title: 乾ベースの消費量（石炭・バイオマスのみ。他の燃料種は NULL）
       - name: heat_value
-        meta:
-          title: 単位量あたりの発熱量（単位は heat_value_unit）
       - name: month_end_stock_quantity
-        meta:
-          title: 月末貯蔵量（単位は quantity_unit。振替・棚卸しによる出入りを調整した後の値）
       - name: published_as_of
-        meta:
-          title: 当該月の値の公表時点（2016年度と2017年度の前半は原典に記載が無く NULL）

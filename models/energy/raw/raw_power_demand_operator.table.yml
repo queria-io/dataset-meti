@@ -1,0 +1,53 @@
+schema: energy
+name: raw_power_demand_operator
+description: 電力調査統計 電力需要実績（事業者別）の生データ（事業者×月）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: operator_category
+    description: 事業者区分コード（deemed_retailer / other_retailer）
+  - name: operator_category_ja
+    description: 事業者区分名（みなし小売電気事業者等 / みなし小売電気事業者以外）
+  - name: operator_name
+    description: 事業者名（原典の表記どおり）
+  - name: is_retail
+    description: 小売電気事業者に該当するか
+  - name: is_general_transmission_distribution
+    description: 一般送配電事業者に該当するか
+  - name: is_transmission
+    description: 送電事業者に該当するか
+  - name: is_distribution
+    description: 配電事業者に該当するか（原典に欄がある年度のみ）
+  - name: is_specified_transmission_distribution
+    description: 特定送配電事業者に該当するか
+  - name: is_generation
+    description: 発電事業者に該当するか
+  - name: is_specified_wholesale
+    description: 特定卸供給事業者に該当するか（原典に欄がある年度のみ）
+  - name: liberalized_demand_mwh
+    description: その他需要（自由料金）の計（MWh）
+  - name: liberalized_extra_high_demand_mwh
+    description: 自由料金のうち特別高圧の電力需要量（MWh）
+  - name: liberalized_high_demand_mwh
+    description: 自由料金のうち高圧の電力需要量（MWh）
+  - name: liberalized_low_demand_mwh
+    description: 自由料金のうち低圧の計（MWh）
+  - name: liberalized_low_lighting_demand_mwh
+    description: 自由料金の低圧のうち電灯の電力需要量（MWh）
+  - name: liberalized_low_power_demand_mwh
+    description: 自由料金の低圧のうち電力の電力需要量（MWh）
+  - name: regulated_demand_mwh
+    description: 特定需要（経過措置料金）の計（MWh。みなし小売電気事業者等のみ）
+  - name: regulated_lighting_demand_mwh
+    description: 経過措置料金のうち電灯の電力需要量（MWh）
+  - name: regulated_power_demand_mwh
+    description: 経過措置料金のうち電力の電力需要量（MWh）
+  - name: last_resort_supply_mwh
+    description: 最終保障供給の電力需要量（MWh）
+  - name: remote_island_supply_mwh
+    description: 離島供給の電力需要量（MWh）
+  - name: total_demand_mwh
+    description: 合計（MWh。みなし小売電気事業者等のみ）
+  - name: published_as_of
+    description: 当該月の値の公表時点
