@@ -320,3 +320,27 @@ models:
         description: 逆潮流量の合計（MWh）
       - name: published_as_of
         description: 当該月の値の公表時点
+
+  - name: raw_power_thermal_fuel
+    description: 電力調査統計 火力発電燃料実績の生データ（燃料種×月）
+    columns:
+      - name: year_month
+        description: 年月（YYYYMM）
+      - name: fuel_name
+        description: 燃料種
+      - name: quantity_unit
+        description: 受入量・消費量・月末貯蔵量の単位（t / kl / 10^3m3）
+      - name: heat_value_unit
+        description: 発熱量の単位（kJ/kg / kJ/l / kJ/m3）
+      - name: receipt_quantity
+        description: 受入量
+      - name: consumption_quantity
+        description: 発電用の消費量
+      - name: consumption_dry_quantity
+        description: 乾ベースの消費量（石炭・バイオマスのみ）
+      - name: heat_value
+        description: 単位量あたりの発熱量
+      - name: month_end_stock_quantity
+        description: 月末貯蔵量
+      - name: published_as_of
+        description: 当該月の値の公表時点
