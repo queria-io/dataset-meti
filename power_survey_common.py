@@ -16,8 +16,9 @@ ARCHIVE_PATH = "/statistics/electric_power/ep002/results_archive.html"
 # 取り込む最も古い年度。2015年度以前は旧 Excel 形式（.xls）で配布されている。
 FIRST_FISCAL_YEAR = 2016
 
-# 月次シートの名前は「2025.4」または元号の「H28.4」。
-SHEET_PATTERN = re.compile(r"^(\d{4}|H(\d{2}))\.(\d{1,2})$")
+# 月次シートの名前は「2025.4」または元号の「H28.4」。統計表 1-(1) の2023年度だけ
+# 「2023年4月」と書かれているので、区切りと末尾の「月」も許す。
+SHEET_PATTERN = re.compile(r"^(\d{4}|H(\d{2}))[.年](\d{1,2})月?$")
 
 # データを持たないシート。表紙の Sheet1 と、年度が閉じた後に足される年度計。
 # 年度計の名前は統計表と年度で揺れる

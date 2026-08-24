@@ -1,0 +1,109 @@
+schema: energy
+name: raw_power_plants_operator
+description: 電力調査統計 電気事業者の発電所数、出力の生データ（事業者×月）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: operator_name
+    description: 事業者名（原典の表記のまま。名寄せしていない）
+  - name: is_retail
+    description: 当該月に小売電気事業者に該当したか
+  - name: is_general_transmission_distribution
+    description: 当該月に一般送配電事業者に該当したか
+  - name: is_transmission
+    description: 当該月に送電事業者に該当したか
+  - name: is_distribution
+    description: 当該月に配電事業者に該当したか（2022年4月に新設された区分で以前は NULL）
+  - name: is_specified_transmission_distribution
+    description: 当該月に特定送配電事業者に該当したか
+  - name: is_generation
+    description: 当該月に発電事業者に該当したか
+  - name: is_specified_wholesale
+    description: 当該月に特定卸供給事業者に該当したか（2022年4月に新設された区分で以前は NULL）
+  - name: hydro_conventional_plants
+    description: 水力発電所のうち一般水力の発電所数
+  - name: hydro_conventional_capacity_kw
+    description: 水力発電所のうち一般水力の最大出力計（kW）
+  - name: hydro_pumped_storage_plants
+    description: 水力発電所のうち揚水式の発電所数
+  - name: hydro_pumped_storage_capacity_kw
+    description: 水力発電所のうち揚水式の最大出力計（kW）
+  - name: hydro_plants
+    description: 水力発電所の計の発電所数
+  - name: hydro_capacity_kw
+    description: 水力発電所の計の最大出力計（kW）
+  - name: thermal_coal_plants
+    description: 火力発電所のうち石炭の発電所数
+  - name: thermal_coal_capacity_kw
+    description: 火力発電所のうち石炭の最大出力計（kW）
+  - name: thermal_lng_plants
+    description: 火力発電所のうちＬＮＧの発電所数
+  - name: thermal_lng_capacity_kw
+    description: 火力発電所のうちＬＮＧの最大出力計（kW）
+  - name: thermal_oil_plants
+    description: 火力発電所のうち石油の発電所数
+  - name: thermal_oil_capacity_kw
+    description: 火力発電所のうち石油の最大出力計（kW）
+  - name: thermal_lpg_plants
+    description: 火力発電所のうちＬＰＧの発電所数
+  - name: thermal_lpg_capacity_kw
+    description: 火力発電所のうちＬＰＧの最大出力計（kW）
+  - name: thermal_other_gas_plants
+    description: 火力発電所のうちその他ガスの発電所数
+  - name: thermal_other_gas_capacity_kw
+    description: 火力発電所のうちその他ガスの最大出力計（kW）
+  - name: thermal_bituminous_plants
+    description: 火力発電所のうち歴青質混合物の発電所数
+  - name: thermal_bituminous_capacity_kw
+    description: 火力発電所のうち歴青質混合物の最大出力計（kW）
+  - name: thermal_other_plants
+    description: 火力発電所のうちその他の燃料の発電所数
+  - name: thermal_other_capacity_kw
+    description: 火力発電所のうちその他の燃料の最大出力計（kW）
+  - name: thermal_plants
+    description: 火力発電所の計の発電所数
+  - name: thermal_capacity_kw
+    description: 火力発電所の計の最大出力計（kW）
+  - name: nuclear_plants
+    description: 原子力発電所の発電所数
+  - name: nuclear_capacity_kw
+    description: 原子力発電所の最大出力計（kW）
+  - name: wind_plants
+    description: 新エネルギー等発電所のうち風力の発電所数
+  - name: wind_capacity_kw
+    description: 新エネルギー等発電所のうち風力の最大出力計（kW）
+  - name: solar_plants
+    description: 新エネルギー等発電所のうち太陽光の発電所数
+  - name: solar_capacity_kw
+    description: 新エネルギー等発電所のうち太陽光の最大出力計（kW）
+  - name: geothermal_plants
+    description: 新エネルギー等発電所のうち地熱の発電所数
+  - name: geothermal_capacity_kw
+    description: 新エネルギー等発電所のうち地熱の最大出力計（kW）
+  - name: biomass_plants
+    description: バイオマスを主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の発電所数
+  - name: biomass_capacity_kw
+    description: バイオマスを主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の最大出力計（kW）
+  - name: waste_plants
+    description: 廃棄物を主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の発電所数
+  - name: waste_capacity_kw
+    description: 廃棄物を主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の最大出力計（kW）
+  - name: storage_battery_plants
+    description: 新エネルギー等発電所のうち蓄電池（2023年度以降のみで以前は NULL）の発電所数
+  - name: storage_battery_capacity_kw
+    description: 新エネルギー等発電所のうち蓄電池（2023年度以降のみで以前は NULL）の最大出力計（kW）
+  - name: new_energy_plants
+    description: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）の発電所数
+  - name: new_energy_capacity_kw
+    description: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）の最大出力計（kW）
+  - name: other_plants
+    description: その他の発電所の発電所数
+  - name: other_capacity_kw
+    description: その他の発電所の最大出力計（kW）
+  - name: total_plants
+    description: 合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）の発電所数
+  - name: total_capacity_kw
+    description: 合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）の最大出力計（kW）
+  - name: published_as_of
+    description: 当該月の値の公表時点

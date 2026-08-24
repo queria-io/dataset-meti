@@ -1,0 +1,65 @@
+{# 電力調査統計 1-(1) 電気事業者の発電所数、出力の生データ。
+   main.py が資源エネルギー庁の公開 Excel を年度ごとに取得・整形して
+   .queria/meti_power_plants_operator.csv に保存する。 #}
+
+{{ config(materialized='table') }}
+
+select *
+from read_csv(
+    '.queria/meti_power_plants_operator.csv',
+    header=true,
+    columns={
+        'year_month': 'VARCHAR',
+        'operator_name': 'VARCHAR',
+        'is_retail': 'BOOLEAN',
+        'is_general_transmission_distribution': 'BOOLEAN',
+        'is_transmission': 'BOOLEAN',
+        'is_distribution': 'BOOLEAN',
+        'is_specified_transmission_distribution': 'BOOLEAN',
+        'is_generation': 'BOOLEAN',
+        'is_specified_wholesale': 'BOOLEAN',
+        'hydro_conventional_plants': 'INTEGER',
+        'hydro_conventional_capacity_kw': 'DOUBLE',
+        'hydro_pumped_storage_plants': 'INTEGER',
+        'hydro_pumped_storage_capacity_kw': 'DOUBLE',
+        'hydro_plants': 'INTEGER',
+        'hydro_capacity_kw': 'DOUBLE',
+        'thermal_coal_plants': 'INTEGER',
+        'thermal_coal_capacity_kw': 'DOUBLE',
+        'thermal_lng_plants': 'INTEGER',
+        'thermal_lng_capacity_kw': 'DOUBLE',
+        'thermal_oil_plants': 'INTEGER',
+        'thermal_oil_capacity_kw': 'DOUBLE',
+        'thermal_lpg_plants': 'INTEGER',
+        'thermal_lpg_capacity_kw': 'DOUBLE',
+        'thermal_other_gas_plants': 'INTEGER',
+        'thermal_other_gas_capacity_kw': 'DOUBLE',
+        'thermal_bituminous_plants': 'INTEGER',
+        'thermal_bituminous_capacity_kw': 'DOUBLE',
+        'thermal_other_plants': 'INTEGER',
+        'thermal_other_capacity_kw': 'DOUBLE',
+        'thermal_plants': 'INTEGER',
+        'thermal_capacity_kw': 'DOUBLE',
+        'nuclear_plants': 'INTEGER',
+        'nuclear_capacity_kw': 'DOUBLE',
+        'wind_plants': 'INTEGER',
+        'wind_capacity_kw': 'DOUBLE',
+        'solar_plants': 'INTEGER',
+        'solar_capacity_kw': 'DOUBLE',
+        'geothermal_plants': 'INTEGER',
+        'geothermal_capacity_kw': 'DOUBLE',
+        'biomass_plants': 'INTEGER',
+        'biomass_capacity_kw': 'DOUBLE',
+        'waste_plants': 'INTEGER',
+        'waste_capacity_kw': 'DOUBLE',
+        'storage_battery_plants': 'INTEGER',
+        'storage_battery_capacity_kw': 'DOUBLE',
+        'new_energy_plants': 'INTEGER',
+        'new_energy_capacity_kw': 'DOUBLE',
+        'other_plants': 'INTEGER',
+        'other_capacity_kw': 'DOUBLE',
+        'total_plants': 'INTEGER',
+        'total_capacity_kw': 'DOUBLE',
+        'published_as_of': 'DATE'
+    }
+)
