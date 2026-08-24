@@ -314,3 +314,76 @@ models:
       - name: heat_value
       - name: month_end_stock_quantity
       - name: published_as_of
+
+  - name: power_plants_by_operator
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 1-(1)「電気事業者の発電所数、出力」（2019年度〜）。
+      電気事業者ごとの発電所の数と最大出力（設備容量）を事業者×月の1レコードで収録する。
+      発電所の種別は水力・火力・原子力・新エネルギー等・その他で、水力は一般と揚水式、
+      火力は石炭・ＬＮＧ・石油・ＬＰＧ・その他ガス・歴青質混合物・その他の燃料別、
+      新エネルギー等は風力・太陽光・地熱・蓄電池の内訳を持つ。最大出力の単位は kW。
+      同じ事業者×月の発電実績（power_generation_by_operator）と突き合わせると
+      設備あたりの発電量を出せる。バイオマスと廃棄物は主燃料で見た火力発電所からの再掲で、
+      火力の計と合計には含まれ、新エネルギー等の計には含まれない（原典の備考3）。
+      発電所数と最大出力は数え方が違い、種別ごとの発電所数を足しても発電所の実数にはならない。is_ で始まる列は当該月にその事業区分に該当したかを表す。
+      事業者名は原典の表記のままで名寄せしておらず、同じ月に同じ名前が2行並ぶことがある。
+      収録するのは事業者の行で、原典の合計行（全事業者計）は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: operator_name
+      - name: is_retail
+      - name: is_general_transmission_distribution
+      - name: is_transmission
+      - name: is_distribution
+      - name: is_specified_transmission_distribution
+      - name: is_generation
+      - name: is_specified_wholesale
+      - name: hydro_conventional_plants
+      - name: hydro_conventional_capacity_kw
+      - name: hydro_pumped_storage_plants
+      - name: hydro_pumped_storage_capacity_kw
+      - name: hydro_plants
+      - name: hydro_capacity_kw
+      - name: thermal_coal_plants
+      - name: thermal_coal_capacity_kw
+      - name: thermal_lng_plants
+      - name: thermal_lng_capacity_kw
+      - name: thermal_oil_plants
+      - name: thermal_oil_capacity_kw
+      - name: thermal_lpg_plants
+      - name: thermal_lpg_capacity_kw
+      - name: thermal_other_gas_plants
+      - name: thermal_other_gas_capacity_kw
+      - name: thermal_bituminous_plants
+      - name: thermal_bituminous_capacity_kw
+      - name: thermal_other_plants
+      - name: thermal_other_capacity_kw
+      - name: thermal_plants
+      - name: thermal_capacity_kw
+      - name: nuclear_plants
+      - name: nuclear_capacity_kw
+      - name: wind_plants
+      - name: wind_capacity_kw
+      - name: solar_plants
+      - name: solar_capacity_kw
+      - name: geothermal_plants
+      - name: geothermal_capacity_kw
+      - name: biomass_plants
+      - name: biomass_capacity_kw
+      - name: waste_plants
+      - name: waste_capacity_kw
+      - name: storage_battery_plants
+      - name: storage_battery_capacity_kw
+      - name: new_energy_plants
+      - name: new_energy_capacity_kw
+      - name: other_plants
+      - name: other_capacity_kw
+      - name: total_plants
+      - name: total_capacity_kw
+      - name: published_as_of

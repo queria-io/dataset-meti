@@ -1,0 +1,141 @@
+schema: energy
+name: power_plants_by_operator
+title: 電気事業者別発電所数・最大出力（2019年度〜・月次）
+description: |-
+  資源エネルギー庁 電力調査統計の統計表 1-(1)「電気事業者の発電所数、出力」（2019年度〜）。
+  電気事業者ごとの発電所の数と最大出力（設備容量）を事業者×月の1レコードで収録する。
+  発電所の種別は水力・火力・原子力・新エネルギー等・その他で、水力は一般と揚水式、
+  火力は石炭・ＬＮＧ・石油・ＬＰＧ・その他ガス・歴青質混合物・その他の燃料別、
+  新エネルギー等は風力・太陽光・地熱・蓄電池の内訳を持つ。最大出力の単位は kW。
+  同じ事業者×月の発電実績（power_generation_by_operator）と突き合わせると
+  設備あたりの発電量を出せる。バイオマスと廃棄物は主燃料で見た火力発電所からの再掲で、
+  火力の計と合計には含まれ、新エネルギー等の計には含まれない（原典の備考3）。
+  発電所数と最大出力は数え方が違い、種別ごとの発電所数を足しても発電所の実数にはならない。is_ で始まる列は当該月にその事業区分に該当したかを表す。
+  事業者名は原典の表記のままで名寄せしておらず、同じ月に同じ名前が2行並ぶことがある。
+  収録するのは事業者の行で、原典の合計行（全事業者計）は持たない。
+  出典: 経済産業省 資源エネルギー庁 電力調査統計。
+  https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+keywords:
+  - 経済産業省
+  - 資源エネルギー庁
+  - 電力調査統計
+  - 発電所
+  - 設備容量
+  - 電源構成
+  - 再生可能エネルギー
+  - 電気事業者
+  - エネルギー
+published: true
+sources:
+  - path: https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+fields:
+  - name: fiscal_year
+    title: 年度（4月始まり）
+  - name: year
+    title: 年（暦年）
+  - name: month
+    title: 月
+  - name: year_month
+    title: 年月（YYYYMM）
+  - name: operator_name
+    title: 事業者名（原典の表記のまま。名寄せしていない）
+  - name: is_retail
+    title: 当該月に小売電気事業者に該当したか
+  - name: is_general_transmission_distribution
+    title: 当該月に一般送配電事業者に該当したか
+  - name: is_transmission
+    title: 当該月に送電事業者に該当したか
+  - name: is_distribution
+    title: 当該月に配電事業者に該当したか（2022年4月に新設された区分で以前は NULL）
+  - name: is_specified_transmission_distribution
+    title: 当該月に特定送配電事業者に該当したか
+  - name: is_generation
+    title: 当該月に発電事業者に該当したか
+  - name: is_specified_wholesale
+    title: 当該月に特定卸供給事業者に該当したか（2022年4月に新設された区分で以前は NULL）
+  - name: hydro_conventional_plants
+    title: 水力発電所のうち一般水力の発電所数
+  - name: hydro_conventional_capacity_kw
+    title: 水力発電所のうち一般水力の最大出力計（kW）
+  - name: hydro_pumped_storage_plants
+    title: 水力発電所のうち揚水式の発電所数
+  - name: hydro_pumped_storage_capacity_kw
+    title: 水力発電所のうち揚水式の最大出力計（kW）
+  - name: hydro_plants
+    title: 水力発電所の計の発電所数
+  - name: hydro_capacity_kw
+    title: 水力発電所の計の最大出力計（kW）
+  - name: thermal_coal_plants
+    title: 火力発電所のうち石炭の発電所数
+  - name: thermal_coal_capacity_kw
+    title: 火力発電所のうち石炭の最大出力計（kW）
+  - name: thermal_lng_plants
+    title: 火力発電所のうちＬＮＧの発電所数
+  - name: thermal_lng_capacity_kw
+    title: 火力発電所のうちＬＮＧの最大出力計（kW）
+  - name: thermal_oil_plants
+    title: 火力発電所のうち石油の発電所数
+  - name: thermal_oil_capacity_kw
+    title: 火力発電所のうち石油の最大出力計（kW）
+  - name: thermal_lpg_plants
+    title: 火力発電所のうちＬＰＧの発電所数
+  - name: thermal_lpg_capacity_kw
+    title: 火力発電所のうちＬＰＧの最大出力計（kW）
+  - name: thermal_other_gas_plants
+    title: 火力発電所のうちその他ガスの発電所数
+  - name: thermal_other_gas_capacity_kw
+    title: 火力発電所のうちその他ガスの最大出力計（kW）
+  - name: thermal_bituminous_plants
+    title: 火力発電所のうち歴青質混合物の発電所数
+  - name: thermal_bituminous_capacity_kw
+    title: 火力発電所のうち歴青質混合物の最大出力計（kW）
+  - name: thermal_other_plants
+    title: 火力発電所のうちその他の燃料の発電所数
+  - name: thermal_other_capacity_kw
+    title: 火力発電所のうちその他の燃料の最大出力計（kW）
+  - name: thermal_plants
+    title: 火力発電所の計の発電所数
+  - name: thermal_capacity_kw
+    title: 火力発電所の計の最大出力計（kW）
+  - name: nuclear_plants
+    title: 原子力発電所の発電所数
+  - name: nuclear_capacity_kw
+    title: 原子力発電所の最大出力計（kW）
+  - name: wind_plants
+    title: 新エネルギー等発電所のうち風力の発電所数
+  - name: wind_capacity_kw
+    title: 新エネルギー等発電所のうち風力の最大出力計（kW）
+  - name: solar_plants
+    title: 新エネルギー等発電所のうち太陽光の発電所数
+  - name: solar_capacity_kw
+    title: 新エネルギー等発電所のうち太陽光の最大出力計（kW）
+  - name: geothermal_plants
+    title: 新エネルギー等発電所のうち地熱の発電所数
+  - name: geothermal_capacity_kw
+    title: 新エネルギー等発電所のうち地熱の最大出力計（kW）
+  - name: biomass_plants
+    title: バイオマスを主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の発電所数
+  - name: biomass_capacity_kw
+    title: バイオマスを主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の最大出力計（kW）
+  - name: waste_plants
+    title: 廃棄物を主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の発電所数
+  - name: waste_capacity_kw
+    title: 廃棄物を主燃料とする発電所（火力からの再掲。火力の計と合計に含まれる）の最大出力計（kW）
+  - name: storage_battery_plants
+    title: 新エネルギー等発電所のうち蓄電池（2023年度以降のみで以前は NULL）の発電所数
+  - name: storage_battery_capacity_kw
+    title: 新エネルギー等発電所のうち蓄電池（2023年度以降のみで以前は NULL）の最大出力計（kW）
+  - name: new_energy_plants
+    title: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）の発電所数
+  - name: new_energy_capacity_kw
+    title: 新エネルギー等発電所の計（風力＋太陽光＋地熱＋蓄電池）の最大出力計（kW）
+  - name: other_plants
+    title: その他の発電所の発電所数
+  - name: other_capacity_kw
+    title: その他の発電所の最大出力計（kW）
+  - name: total_plants
+    title: 合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）の発電所数
+  - name: total_capacity_kw
+    title: 合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）の最大出力計（kW）
+  - name: published_as_of
+    title: 当該月の値の公表時点
