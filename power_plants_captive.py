@@ -116,12 +116,19 @@ def _resolve_columns(rows: list[tuple], header: int, sheet_name: str) -> dict[st
     return resolved
 
 
-def _parse_block(rows: list[tuple], title: int, sheet_name: str) -> dict[str, list[float | None]]:
-    """表題行から 1 つの表を読み、地域ごとの値を大分類の並び順で返す。"""
+def _parse_block(
+    rows: list[tuple], title: int, end: int, sheet_name: str
+) -> dict[str, list[float | None]]:
+    """表題行から 1 つの表を読み、地域ごとの値を大分類の並び順で返す。
+
+    end は次の表の表題行（無ければシートの終端）で、そこから先は読まない。
+    表の終わりは原典の合計行で、見出しが見つからないまま次の表に達したら
+    読み違えているので失敗させる。合計行を素通りすると次の表の値で上書きしてしまう。
+    """
     header = next(
         (
             index
-            for index in range(title + 1, len(rows))
+            for index in range(title + 1, end)
             if any(squash(cell) == NAME_HEADING for cell in rows[index])
         ),
         None,
@@ -131,9 +138,11 @@ def _parse_block(rows: list[tuple], title: int, sheet_name: str) -> dict[str, li
     columns = _resolve_columns(rows, header, sheet_name)
 
     values: dict[str, list[float | None]] = {}
-    for row in rows[header + 1 :]:
+    closed = False
+    for row in rows[header + 1 : end]:
         name = squash(row[0] if row else None)
         if name == TOTAL_ROW_HEADING:
+            closed = True
             break
         if name not in AREA_NAMES:
             continue
@@ -142,6 +151,8 @@ def _parse_block(rows: list[tuple], title: int, sheet_name: str) -> dict[str, li
             for column in (columns.get(category) for category in CATEGORIES)
         ]
 
+    if not closed:
+        raise RuntimeError(f"{sheet_name}: 表題 {title + 1} 行目の表に '{TOTAL_ROW_HEADING}' の行が無い")
     if len(values) != len(AREA_NAMES):
         raise RuntimeError(f"{sheet_name}: 地域が {len(values)} 件しか読めない")
     return values
@@ -149,16 +160,21 @@ def _parse_block(rows: list[tuple], title: int, sheet_name: str) -> dict[str, li
 
 def _parse_sheet(rows: list[tuple], sheet_name: str, year: int, month: int) -> list[tuple]:
     """1 シートの 2 つの表を地域ごとの 1 行にまとめる。"""
-    blocks: dict[str, dict[str, list[float | None]]] = {}
+    titles: list[tuple[int, str]] = []
     for index, row in enumerate(rows):
         title = squash(row[0] if row else None)
         if title.startswith(NOTE_PREFIX):
             continue
         for name, measure in BLOCK_TITLES.items():
             if name in title:
-                if measure in blocks:
-                    raise RuntimeError(f"{sheet_name}: 表 '{name}' が 2 つある")
-                blocks[measure] = _parse_block(rows, index, sheet_name)
+                titles.append((index, measure))
+
+    blocks: dict[str, dict[str, list[float | None]]] = {}
+    for order, (index, measure) in enumerate(titles):
+        if measure in blocks:
+            raise RuntimeError(f"{sheet_name}: 表 '{measure}' が 2 つある")
+        end = titles[order + 1][0] if order + 1 < len(titles) else len(rows)
+        blocks[measure] = _parse_block(rows, index, end, sheet_name)
     missing = set(MEASURES) - set(blocks)
     if missing:
         raise RuntimeError(f"{sheet_name}: 表が足りない（{'・'.join(sorted(missing))}）")
