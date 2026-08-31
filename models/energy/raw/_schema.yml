@@ -452,3 +452,67 @@ models:
         description: "合計（水力＋火力＋原子力＋新エネルギー等の計＋その他）の最大出力計（kW）"
       - name: published_as_of
         description: "当該月の値の公表時点"
+
+  - name: raw_power_plants_captive
+    description: 電力調査統計 自家用発電所数、出力の生データ（地域×時点）
+    columns:
+      - name: year_month
+        description: "年月（YYYYMM）。その月末時点の値で、9月末と3月末の年2回"
+      - name: area_name
+        description: "地域名（北海道・東北・関東・中部・北陸・近畿・中国・四国・九州・沖縄）"
+      - name: hydro_plants
+        description: "水力の自家用発電所数"
+      - name: hydro_capacity_kw
+        description: "水力の最大出力（kW）"
+      - name: thermal_steam_plants
+        description: "火力のうち汽力の自家用発電所数"
+      - name: thermal_steam_capacity_kw
+        description: "火力のうち汽力の最大出力（kW）"
+      - name: thermal_gas_turbine_plants
+        description: "火力のうちガスタービンの自家用発電所数"
+      - name: thermal_gas_turbine_capacity_kw
+        description: "火力のうちガスタービンの最大出力（kW）"
+      - name: thermal_internal_combustion_plants
+        description: "火力のうち内燃力の自家用発電所数"
+      - name: thermal_internal_combustion_capacity_kw
+        description: "火力のうち内燃力の最大出力（kW）"
+      - name: thermal_plants
+        description: "火力の計（汽力＋ガスタービン＋内燃力）の自家用発電所数"
+      - name: thermal_capacity_kw
+        description: "火力の計（汽力＋ガスタービン＋内燃力）の最大出力（kW）"
+      - name: thermal_cogeneration_plants
+        description: "火力のうちコージェネレーションの自家用発電所数（火力の内数）"
+      - name: thermal_cogeneration_capacity_kw
+        description: "火力のうちコージェネレーションの最大出力（kW。火力の内数）"
+      - name: nuclear_plants
+        description: "原子力の自家用発電所数"
+      - name: nuclear_capacity_kw
+        description: "原子力の最大出力（kW）"
+      - name: wind_plants
+        description: "新エネルギー等のうち風力の自家用発電所数"
+      - name: wind_capacity_kw
+        description: "新エネルギー等のうち風力の最大出力（kW）"
+      - name: solar_plants
+        description: "新エネルギー等のうち太陽光の自家用発電所数"
+      - name: solar_capacity_kw
+        description: "新エネルギー等のうち太陽光の最大出力（kW）"
+      - name: geothermal_plants
+        description: "新エネルギー等のうち地熱の自家用発電所数"
+      - name: geothermal_capacity_kw
+        description: "新エネルギー等のうち地熱の最大出力（kW）"
+      - name: storage_battery_plants
+        description: "新エネルギー等のうち蓄電池の設備数（2023年度以降のみで以前は NULL）"
+      - name: storage_battery_capacity_kw
+        description: "新エネルギー等のうち蓄電池の最大出力（kW。2023年度以降のみで以前は NULL）"
+      - name: new_energy_plants
+        description: "新エネルギー等の計（風力＋太陽光＋地熱＋蓄電池）の自家用発電所数"
+      - name: new_energy_capacity_kw
+        description: "新エネルギー等の計（風力＋太陽光＋地熱＋蓄電池）の最大出力（kW）"
+      - name: other_plants
+        description: "その他（燃料電池等）の自家用発電所数"
+      - name: other_capacity_kw
+        description: "その他（燃料電池等）の最大出力（kW）"
+      - name: total_plants
+        description: "合計（水力＋火力の計＋原子力＋新エネルギー等の計＋その他）の自家用発電所数"
+      - name: total_capacity_kw
+        description: "合計（水力＋火力の計＋原子力＋新エネルギー等の計＋その他）の最大出力（kW）"

@@ -11,6 +11,7 @@
   都道府県別・月次で、需要電力量と逆潮流量を市区町村別・月次で、
   火力発電所が消費した燃料を燃料種別・月次で示します。
   需要量・発電量・発電所数・最大出力には事業者別の内訳もあります。
+  自家用発電所の発電所数・最大出力は地域別・半期（9月末／3月末）で示します。
 
 ## テーブル: tertiary_industry_activity_index
 
@@ -476,6 +477,72 @@
   取り込んでいません。
 - 2018年度以前は統計表 1「電気事業者の発電所数、出力」にまとまっており、この形式では
   配布されていません。
+
+## テーブル: captive_power_plants_by_area
+
+電力調査統計の統計表 5-(1)「自家用発電所数、出力」を、地域×時点で1レコードとしたデータです。
+公表は月次ではなく9月末・3月末の年2回で、2016年9月末から2024年3月末までの16時点を収録します。
+10地域のみで、全国合計の行はありません。
+
+- fiscal_year: 年度（INTEGER、4月始まり）
+- year: 年（INTEGER、暦年）
+- month: 月（INTEGER、9 または 3）
+- year_month: 年月（VARCHAR、YYYYMM。その月末時点の値）
+- area_name: 地域名（VARCHAR、北海道・東北・関東・中部・北陸・近畿・中国・四国・九州・沖縄）
+- hydro_plants: 水力の自家用発電所数（INTEGER）
+- hydro_capacity_kw: 水力の最大出力（DOUBLE、kW）
+- thermal_steam_plants: 火力のうち汽力の自家用発電所数（INTEGER）
+- thermal_steam_capacity_kw: 火力のうち汽力の最大出力（DOUBLE、kW）
+- thermal_gas_turbine_plants: 火力のうちガスタービンの自家用発電所数（INTEGER）
+- thermal_gas_turbine_capacity_kw: 火力のうちガスタービンの最大出力（DOUBLE、kW）
+- thermal_internal_combustion_plants: 火力のうち内燃力の自家用発電所数（INTEGER）
+- thermal_internal_combustion_capacity_kw: 火力のうち内燃力の最大出力（DOUBLE、kW）
+- thermal_plants: 火力の計の自家用発電所数（INTEGER）
+- thermal_capacity_kw: 火力の計の最大出力（DOUBLE、kW）
+- thermal_cogeneration_plants: 火力のうちコージェネレーションの自家用発電所数（INTEGER、内数）
+- thermal_cogeneration_capacity_kw: 火力のうちコージェネレーションの最大出力（DOUBLE、kW。内数）
+- nuclear_plants: 原子力の自家用発電所数（INTEGER）
+- nuclear_capacity_kw: 原子力の最大出力（DOUBLE、kW）
+- wind_plants: 新エネルギー等のうち風力の自家用発電所数（INTEGER）
+- wind_capacity_kw: 新エネルギー等のうち風力の最大出力（DOUBLE、kW）
+- solar_plants: 新エネルギー等のうち太陽光の自家用発電所数（INTEGER）
+- solar_capacity_kw: 新エネルギー等のうち太陽光の最大出力（DOUBLE、kW）
+- geothermal_plants: 新エネルギー等のうち地熱の自家用発電所数（INTEGER）
+- geothermal_capacity_kw: 新エネルギー等のうち地熱の最大出力（DOUBLE、kW）
+- storage_battery_plants: 新エネルギー等のうち蓄電池の設備数（INTEGER）
+- storage_battery_capacity_kw: 新エネルギー等のうち蓄電池の最大出力（DOUBLE、kW）
+- new_energy_plants: 新エネルギー等の計の自家用発電所数（INTEGER）
+- new_energy_capacity_kw: 新エネルギー等の計の最大出力（DOUBLE、kW）
+- other_plants: その他（燃料電池等）の自家用発電所数（INTEGER）
+- other_capacity_kw: その他（燃料電池等）の最大出力（DOUBLE、kW）
+- total_plants: 合計の自家用発電所数（INTEGER）
+- total_capacity_kw: 合計の最大出力（DOUBLE、kW）
+
+### 利用上の注意
+
+- 対象が他の発電所の表と違います。power_plants_by_prefecture と power_plants_by_operator は
+  電気事業者の発電所を数えたもので、この表は自家用発電所（自らの需要のために発電する設備）です。
+  対象が重ならないため、足し合わせても国内の発電設備の全量にはなりません。
+- 報告の対象は発電設備の合計出力が1,000kW以上の自家用発電所です。そのため、単独では
+  1,000kW未満の発電設備も報告に含まれます（原典の注1）。
+- 複数の発電方式の発電設備を持つ発電所は、発電方式ごとに1つの発電所として数えています
+  （原典の注2）。電気事業者の表とは数え方が逆で、こちらは種別の発電所数を足すと合計に一致します。
+- total_* は 水力＋火力の計＋原子力＋新エネルギー等の計＋その他 です。thermal_* は
+  汽力＋ガスタービン＋内燃力、new_energy_* は 風力＋太陽光＋地熱＋蓄電池 の計です。内訳を足したうえに
+  計や total も足すと二重計上になります。
+- thermal_cogeneration_* は火力の内数（再掲）で、火力の計にも合計にも含まれます。
+- storage_battery_* は2023年度に原典へ足された列です。それ以前の時点は NULL になります。
+- 2016年4月に施行された改正電気事業法（第2弾改正）により、発電事業に該当することになった
+  発電所・発電設備は報告の対象外になりました（原典の注3）。それ以前の年度とは対象が違います。
+- 地域より細かい内訳は原典にありません。都道府県別の表とは結合できません。
+- 公表時点を示す欄が原典に無いため、published_as_of は持っていません。
+- 原典の側で計と内訳の和が合わない行が4つあります。2016年9月の沖縄は新エネルギー等の計が
+  内訳より1か所多く（合計の側は内訳と整合します）、2024年3月の近畿は新エネルギー等の計から
+  蓄電池の分（1か所・2,646kW）が抜け、2024年3月の沖縄は新エネルギー等の計が0で太陽光の
+  17,593kW が計にも合計にも入っていません。原典どおり収録しています。原典の全国合計の行も
+  同じずれを持ちます。
+- 2024年度以降は原典が「自家用発電所等運転半期報集計結果」（発電電力量や送電電力量を含む
+  別レイアウトの1ファイル）に統合され、この統計表の形式では配布されていません。
 
 ## テーブル: power_demand_by_municipality
 

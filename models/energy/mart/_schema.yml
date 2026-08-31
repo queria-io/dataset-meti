@@ -387,3 +387,54 @@ models:
       - name: total_plants
       - name: total_capacity_kw
       - name: published_as_of
+
+  - name: captive_power_plants_by_area
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 5-(1)「自家用発電所数、出力」。
+      自家用発電所（自らの需要のために発電する設備）の数と最大出力を地域×時点の1レコードで
+      収録する。公表は月次ではなく9月末・3月末の年2回で、year_month はその月末時点を表す。
+      原動力は水力・火力（汽力／ガスタービン／内燃力）・原子力・
+      新エネルギー等（風力／太陽光／地熱／蓄電池）・その他（燃料電池等）。最大出力の単位は kW。
+      power_plants_by_prefecture と power_plants_by_operator は電気事業者の発電所を数えた
+      別の表で、対象が重ならない。報告の対象は合計出力が1,000kW以上の自家用発電所。
+      複数の発電方式を持つ発電所は方式ごとに1つとして数えるため、種別の発電所数を足すと
+      合計と一致する。thermal_cogeneration_* は火力の内数で火力の計にも合計にも含まれる。
+      収録するのは10地域で、原典の全国合計の行は持たない。収録は2016年9月末から
+      2024年3月末までの16時点で、2024年度以降はこの形式では配布されていない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: area_name
+      - name: hydro_plants
+      - name: hydro_capacity_kw
+      - name: thermal_steam_plants
+      - name: thermal_steam_capacity_kw
+      - name: thermal_gas_turbine_plants
+      - name: thermal_gas_turbine_capacity_kw
+      - name: thermal_internal_combustion_plants
+      - name: thermal_internal_combustion_capacity_kw
+      - name: thermal_plants
+      - name: thermal_capacity_kw
+      - name: thermal_cogeneration_plants
+      - name: thermal_cogeneration_capacity_kw
+      - name: nuclear_plants
+      - name: nuclear_capacity_kw
+      - name: wind_plants
+      - name: wind_capacity_kw
+      - name: solar_plants
+      - name: solar_capacity_kw
+      - name: geothermal_plants
+      - name: geothermal_capacity_kw
+      - name: storage_battery_plants
+      - name: storage_battery_capacity_kw
+      - name: new_energy_plants
+      - name: new_energy_capacity_kw
+      - name: other_plants
+      - name: other_capacity_kw
+      - name: total_plants
+      - name: total_capacity_kw
