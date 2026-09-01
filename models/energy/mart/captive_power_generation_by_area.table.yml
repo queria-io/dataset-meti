@@ -1,0 +1,73 @@
+schema: energy
+name: captive_power_generation_by_area
+title: 自家用発電実績（地域別・原動力別・2017年度〜・月次）
+description: |-
+  資源エネルギー庁 電力調査統計の統計表 5-(2)「自家用発電実績」。
+  自家用発電所（自らの需要のために発電する設備）が発電した電力量と、その行き先を
+  地域×月×原動力の1レコードで収録する。単位はすべて MWh（原典の 1,000kWh と同値）。
+  発電した電力量（generation_mwh）は、所内及び損失電力量・電気事業者等への送電電力量・
+  自家消費電力量に分かれる。送電電力量は送電先（電気事業者／特定供給の相手方／その他事業者）の
+  内訳を持ち、transmission_via_exchange_mwh はそのうち卸電力取引所を通じた取引の再掲。
+  原動力は power_source_group（水力・火力・火力（燃料別）・原子力・新エネルギー等・その他・合計）と
+  power_source_name の2列で持つ。合計と内訳と再掲が同じ列に並ぶので、
+  is_reference が true の行と power_source_name が「計」の行を混ぜて足すと二重計上になる。
+  同じ自家用発電所を数えた captive_power_plants_by_area とは地域名が揃っており、
+  発電所数・最大出力と発電電力量を突き合わせられる（ただしあちらは9月末・3月末の年2回）。
+  power_generation_by_prefecture と power_generation_by_operator は電気事業者の発電実績で、
+  対象が重ならないので足し合わせても国内の発電量の全量にはならない。
+  収録するのは10地域（経済産業局の管轄）で、原典の全国合計の列は持たない。
+  収録は2017年4月から2024年3月までの84か月・19,440行。2016年度は原典が別のレイアウトで、
+  収録している値も発電電力量ではなく自家消費と特定供給の合計だけなので取り込んでいない。
+  蓄電池は2023年度に足された行で、発電電力量の欄は原典で空欄か0（所内損失・送電・自家消費だけが入る）。
+  原典の側の食い違いをそのまま収録している。2021年度上期の近畿は2020年度下期の値がそのまま
+  写されており、2017年度下期は一部修正が地域の値にだけ反映され、全国合計の列と北陸の
+  新エネルギー等の計が古いままになっている。
+  出典: 経済産業省 資源エネルギー庁 電力調査統計。
+  https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+keywords:
+  - 経済産業省
+  - 資源エネルギー庁
+  - 電力調査統計
+  - 自家用発電
+  - 発電電力量
+  - 自家消費
+  - 卸電力取引所
+  - コージェネレーション
+  - 地域
+  - エネルギー
+published: true
+sources:
+  - path: https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+fields:
+  - name: fiscal_year
+    title: 年度（4月始まり）
+  - name: year
+    title: 年（暦年）
+  - name: month
+    title: 月
+  - name: year_month
+    title: 年月（YYYYMM）
+  - name: area_name
+    title: 地域名（北海道・東北・関東・中部・北陸・近畿・中国・四国・九州・沖縄）
+  - name: power_source_group
+    title: 原動力の大分類（水力・火力・火力（燃料別）・原子力・新エネルギー等・その他・合計）
+  - name: power_source_name
+    title: 原動力の小分類。大分類が小分類を持たないときは大分類と同じ値
+  - name: is_reference
+    title: 再掲の行か（火力のコージェネレーションと燃料別、新エネルギー等のバイオマスと廃棄物）
+  - name: generation_mwh
+    title: 発電電力量（MWh）
+  - name: station_use_and_loss_mwh
+    title: 所内及び損失電力量（MWh）
+  - name: transmission_to_utilities_mwh
+    title: 電気事業者への送電電力量（MWh）
+  - name: transmission_to_specified_supply_mwh
+    title: 特定供給の相手方への送電電力量（MWh）
+  - name: transmission_to_other_operators_mwh
+    title: その他事業者への送電電力量（MWh）
+  - name: transmission_total_mwh
+    title: 電気事業者等への送電電力量の合計（MWh）
+  - name: transmission_via_exchange_mwh
+    title: 送電電力量の合計のうち卸電力取引所を通じた取引（MWh。合計の内数）
+  - name: self_consumption_mwh
+    title: 自家消費電力量（MWh）

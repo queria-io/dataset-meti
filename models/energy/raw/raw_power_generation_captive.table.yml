@@ -1,0 +1,31 @@
+schema: energy
+name: raw_power_generation_captive
+description: 電力調査統計 自家用発電実績の生データ（地域×月×原動力）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: area_name
+    description: 地域名（北海道・東北・関東・中部・北陸・近畿・中国・四国・九州・沖縄）
+  - name: power_source_group
+    description: 原動力の大分類（水力・火力・火力（燃料別）・原子力・新エネルギー等・その他・合計）
+  - name: power_source_name
+    description: 原動力の小分類。大分類が小分類を持たないときは大分類と同じ値
+  - name: is_reference
+    description: 再掲の行か（火力のコージェネレーションと燃料別、新エネルギー等のバイオマスと廃棄物）
+  - name: generation_mwh
+    description: 発電電力量（MWh。原典の 1,000kWh と同値）
+  - name: station_use_and_loss_mwh
+    description: 所内及び損失電力量（MWh）
+  - name: transmission_to_utilities_mwh
+    description: 電気事業者への送電電力量（MWh）
+  - name: transmission_to_specified_supply_mwh
+    description: 特定供給の相手方への送電電力量（MWh）
+  - name: transmission_to_other_operators_mwh
+    description: その他事業者への送電電力量（MWh）
+  - name: transmission_total_mwh
+    description: 電気事業者等への送電電力量の合計（MWh）
+  - name: transmission_via_exchange_mwh
+    description: 送電電力量の合計のうち卸電力取引所を通じた取引（MWh。合計の内数）
+  - name: self_consumption_mwh
+    description: 自家消費電力量（MWh）
