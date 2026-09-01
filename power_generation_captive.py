@@ -145,10 +145,13 @@ def _resolve_category(
         if sub != THERMAL_BY_PRIME_MOVER:
             raise RuntimeError(f"{sheet_name}: 火力の系統 '{sub}' が未知")
         return GROUP_THERMAL, name, name in REFERENCE_THERMAL_NAMES
-    if group == GROUP_NEW_ENERGY:
+    if group in (GROUP_NEW_ENERGY, GROUP_OTHER):
+        # 小分類を持つ大分類。名前が空だと次元の値が空のまま出てしまうので落とす。
+        if not name:
+            raise RuntimeError(f"{sheet_name}: '{group}' の小分類の欄が空")
+        if group == GROUP_OTHER:
+            return GROUP_OTHER, name, False
         return GROUP_NEW_ENERGY, name, name in REFERENCE_NEW_ENERGY_NAMES
-    if group == GROUP_OTHER:
-        return GROUP_OTHER, name, False
     if group in (GROUP_HYDRO, GROUP_NUCLEAR, GROUP_TOTAL):
         # 小分類を持たない大分類。名前の欄は空なので大分類をそのまま名前にする。
         if name:
@@ -203,6 +206,9 @@ def _parse_sheet(
             continue
         if month not in HALF_MONTHS[half]:
             raise RuntimeError(f"{sheet_name}: {half}に {month}月 の塊がある")
+        # 同じ月の塊が 2 つあると行が二重になる。月の集合だけを見ると気付けない。
+        if month in months:
+            raise RuntimeError(f"{sheet_name}: {month}月 の塊が 2 つある")
         months.append(month)
         year = fiscal_year if month >= 4 else fiscal_year + 1
         out.extend(_parse_block(rows, start, end, sheet_name, areas, f"{year}{month:02d}"))
