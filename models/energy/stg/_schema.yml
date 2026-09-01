@@ -11,3 +11,4 @@ models:
   - name: stg_reverse_power_flow_municipality
   - name: stg_power_thermal_fuel
   - name: stg_power_plants_operator
+  - name: stg_power_plants_captive

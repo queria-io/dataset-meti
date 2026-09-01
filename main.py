@@ -10,7 +10,8 @@
 8. power_plants:  電力調査統計 都道府県別発電所数、出力の公開 Excel を年度ごとに取得し CSV へ整形
 9. power_thermal_fuel: 電力調査統計 火力発電燃料実績の公開 Excel を年度ごとに取得し CSV へ整形
 10. power_plants_operator: 電力調査統計 電気事業者の発電所数、出力の公開 Excel を年度ごとに取得し CSV へ整形
-11. dbt:        dbt ビルド
+11. power_plants_captive: 電力調査統計 自家用発電所数、出力の公開 Excel を年度ごとに取得し CSV へ整形
+12. dbt:        dbt ビルド
 """
 
 import logging
@@ -23,6 +24,7 @@ import power_generation
 import power_generation_operator
 import power_municipality
 import power_plants
+import power_plants_captive
 import power_plants_operator
 import power_survey
 import power_thermal_fuel
@@ -44,6 +46,7 @@ REVERSE_FLOW_CSV_PATH = WORK_DIR / "meti_reverse_power_flow_municipality.csv"
 PLANTS_CSV_PATH = WORK_DIR / "meti_power_plants.csv"
 THERMAL_FUEL_CSV_PATH = WORK_DIR / "meti_power_thermal_fuel.csv"
 PLANTS_OPERATOR_CSV_PATH = WORK_DIR / "meti_power_plants_operator.csv"
+PLANTS_CAPTIVE_CSV_PATH = WORK_DIR / "meti_power_plants_captive.csv"
 
 
 def dbt_build() -> None:
@@ -57,31 +60,31 @@ def dbt_build() -> None:
 def main() -> None:
     WORK_DIR.mkdir(exist_ok=True)
 
-    logger.info("1/11: ita (第３次産業活動指数 月次)")
+    logger.info("1/12: ita (第３次産業活動指数 月次)")
     rows = download_and_parse(CSV_PATH)
     logger.info(f"  meti_ita_monthly.csv: {rows} rows")
 
-    logger.info("2/11: total_energy (総合エネルギー統計 時系列表)")
+    logger.info("2/12: total_energy (総合エネルギー統計 時系列表)")
     rows = total_energy.download_and_parse(ENERGY_CSV_PATH)
     logger.info(f"  meti_energy_balance.csv: {rows} rows")
 
-    logger.info("3/11: power_survey (電力調査統計 都道府県別電力需要実績)")
+    logger.info("3/12: power_survey (電力調査統計 都道府県別電力需要実績)")
     rows = power_survey.download_and_parse(POWER_CSV_PATH)
     logger.info(f"  meti_power_demand.csv: {rows} rows")
 
-    logger.info("4/11: power_generation (電力調査統計 都道府県別発電実績)")
+    logger.info("4/12: power_generation (電力調査統計 都道府県別発電実績)")
     rows = power_generation.download_and_parse(GENERATION_CSV_PATH)
     logger.info(f"  meti_power_generation.csv: {rows} rows")
 
-    logger.info("5/11: power_demand_operator (電力調査統計 電力需要実績 事業者別)")
+    logger.info("5/12: power_demand_operator (電力調査統計 電力需要実績 事業者別)")
     rows = power_demand_operator.download_and_parse(DEMAND_OPERATOR_CSV_PATH)
     logger.info(f"  meti_power_demand_operator.csv: {rows} rows")
 
-    logger.info("6/11: power_generation_operator (電力調査統計 発電実績 事業者別)")
+    logger.info("6/12: power_generation_operator (電力調査統計 発電実績 事業者別)")
     rows = power_generation_operator.download_and_parse(GENERATION_OPERATOR_CSV_PATH)
     logger.info(f"  meti_power_generation_operator.csv: {rows} rows")
 
-    logger.info("7/11: power_municipality (電力調査統計 市町村別需要電力量・逆潮流量)")
+    logger.info("7/12: power_municipality (電力調査統計 市町村別需要電力量・逆潮流量)")
     rows = power_municipality.download_and_parse(
         power_municipality.DEMAND, MUNICIPAL_DEMAND_CSV_PATH
     )
@@ -91,19 +94,23 @@ def main() -> None:
     )
     logger.info(f"  meti_reverse_power_flow_municipality.csv: {rows} rows")
 
-    logger.info("8/11: power_plants (電力調査統計 都道府県別発電所数、出力)")
+    logger.info("8/12: power_plants (電力調査統計 都道府県別発電所数、出力)")
     rows = power_plants.download_and_parse(PLANTS_CSV_PATH)
     logger.info(f"  meti_power_plants.csv: {rows} rows")
 
-    logger.info("9/11: power_thermal_fuel (電力調査統計 火力発電燃料実績)")
+    logger.info("9/12: power_thermal_fuel (電力調査統計 火力発電燃料実績)")
     rows = power_thermal_fuel.download_and_parse(THERMAL_FUEL_CSV_PATH)
     logger.info(f"  meti_power_thermal_fuel.csv: {rows} rows")
 
-    logger.info("10/11: power_plants_operator (電力調査統計 電気事業者の発電所数、出力)")
+    logger.info("10/12: power_plants_operator (電力調査統計 電気事業者の発電所数、出力)")
     rows = power_plants_operator.download_and_parse(PLANTS_OPERATOR_CSV_PATH)
     logger.info(f"  meti_power_plants_operator.csv: {rows} rows")
 
-    logger.info("11/11: dbt build")
+    logger.info("11/12: power_plants_captive (電力調査統計 自家用発電所数、出力)")
+    rows = power_plants_captive.download_and_parse(PLANTS_CAPTIVE_CSV_PATH)
+    logger.info(f"  meti_power_plants_captive.csv: {rows} rows")
+
+    logger.info("12/12: dbt build")
     dbt_build()
 
 
