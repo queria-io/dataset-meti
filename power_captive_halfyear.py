@@ -222,22 +222,33 @@ def _check_national_total(
     """全国合計のブロックが 47 都道府県の和と一致することを確かめる。
 
     行がずれて読めていれば都道府県の和が合わなくなる。年度計の列（発電所数を含む）も
-    突き合わせるので、収録しない期間の読み違いにも気付ける。
+    突き合わせるので、収録しない期間の読み違いにも気付ける。ブロックの測定項目の見出しは
+    全国合計のブロックでしか照合していないので、都道府県の列ずれを捉える網はこれだけ。
+
+    数値でないセル（原典が「－」を書き始めた場合など）があると和を取れず、その組は
+    突き合わせられない。網がどれだけ張れたかを数えてログに残し、1 組も突き合わせられなければ
+    網が消えているので失敗させる。
     """
     national = blocks[0][0]
     width = len(rows[national + 2])
+    compared = skipped = 0
     for offset in range(len(ROW_SPEC)):
         for column in range(1, width):
             total = number(_cell(rows[national + 2 + offset], column))
             parts = [number(_cell(rows[block + 2 + offset], column)) for block, _ in blocks[1:]]
             if total is None or any(part is None for part in parts):
+                skipped += 1
                 continue
+            compared += 1
             summed = sum(parts)
             if abs(total - summed) > max(TOTAL_ABS_TOLERANCE, abs(total) * 1e-9):
                 raise RuntimeError(
                     f"{sheet_name}: {ROW_SPEC[offset][0]} の列 {column} で"
                     f" 全国合計 {total} が都道府県の和 {summed} と合わない"
                 )
+    if not compared:
+        raise RuntimeError(f"{sheet_name}: 全国合計と都道府県の和を 1 組も突き合わせられない")
+    logger.info(f"  {sheet_name}: 全国合計と突合 {compared} 組（数値でなく飛ばした組 {skipped}）")
 
 
 def _parse_sheet(rows: list[tuple], sheet_name: str, fiscal_year: int) -> list[tuple]:

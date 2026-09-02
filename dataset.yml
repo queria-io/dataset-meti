@@ -222,7 +222,7 @@ ai_context:
     月次で持つ（発電所数は原典が年度計の欄にしか持たないため収録していない）。
 
     energy.captive_power_generation_by_area は1行が「地域 × 月 × 原動力」で、2017年4月以降の
-    月次（84か月・10地域・23の原動力区分で19,320行）。captive_power_plants_by_area と同じ
+    月次（84か月・10地域・原動力区分は23、蓄電池が足された2023年度だけ24で19,440行）。captive_power_plants_by_area と同じ
     自家用発電所が対象で、あちらが発電所数と最大出力なのに対しこちらは発電した電力量。
     地域名は揃えてあるが、あちらは9月末・3月末の年2回なので突き合わせられるのは3月と9月だけ。
     単位はすべて MWh。generation_mwh は station_use_and_loss_mwh（所内及び損失）・
