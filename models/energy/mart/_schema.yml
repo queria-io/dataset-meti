@@ -438,3 +438,34 @@ models:
       - name: other_capacity_kw
       - name: total_plants
       - name: total_capacity_kw
+
+  - name: captive_power_generation_by_area
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 5-(2)「自家用発電実績」（2017年度〜）。
+      自家用発電所（自らの需要のために発電する設備）が発電した電力量と、その行き先を
+      地域×月×原動力の1レコードで収録する。単位はすべて MWh（原典の 1,000kWh と同値）。
+      発電電力量は所内及び損失電力量・電気事業者等への送電電力量・自家消費電力量に分かれ、
+      送電電力量は送電先（電気事業者／特定供給の相手方／その他事業者）の内訳を持つ。
+      原動力は power_source_group と power_source_name の2列で持ち、合計・内訳・再掲が
+      同じ列に並ぶので、is_reference が true の行と「計」の行を混ぜて足すと二重計上になる。
+      収録するのは10地域（経済産業局の管轄）で、原典の全国合計の列は持たない。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: area_name
+      - name: power_source_group
+      - name: power_source_name
+      - name: is_reference
+      - name: generation_mwh
+      - name: station_use_and_loss_mwh
+      - name: transmission_to_utilities_mwh
+      - name: transmission_to_specified_supply_mwh
+      - name: transmission_to_other_operators_mwh
+      - name: transmission_total_mwh
+      - name: transmission_via_exchange_mwh
+      - name: self_consumption_mwh
