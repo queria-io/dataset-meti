@@ -469,3 +469,38 @@ models:
       - name: transmission_total_mwh
       - name: transmission_via_exchange_mwh
       - name: self_consumption_mwh
+
+  - name: captive_power_generation_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 5「自家用発電所等実績」（2024年度〜）。
+      自家用発電所（自らの需要のために発電する設備）の最大出力と発電した電力量、
+      その行き先を都道府県×月×原動力の1レコードで収録する。
+      電力量は MWh（原典の kWh を 1,000 で割った値）、最大出力は kW。
+      発電電力量は所内及び損失電力量・電気事業者等への送電電力量・自家消費電力量に分かれ、
+      送電電力量は送電先（電気事業者／特定供給の相手方／その他事業者）の内訳を持つ。
+      原動力は power_source_group と power_source_name の2列で持ち、合計・内訳・再掲が
+      同じ列に並ぶので、is_reference が true の行と「計」の行を混ぜて足すと二重計上になる。
+      収録するのは47都道府県で、原典の全国合計のブロックは持たない。
+      2023年度以前を10地域で収録した captive_power_generation_by_area の後継。
+      出典: 経済産業省 資源エネルギー庁 電力調査統計。
+      https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: pref_code
+      - name: pref_name
+      - name: power_source_group
+      - name: power_source_name
+      - name: is_reference
+      - name: capacity_kw
+      - name: generation_mwh
+      - name: station_use_and_loss_mwh
+      - name: transmission_to_utilities_mwh
+      - name: transmission_to_specified_supply_mwh
+      - name: transmission_to_other_operators_mwh
+      - name: transmission_total_mwh
+      - name: transmission_via_exchange_mwh
+      - name: self_consumption_mwh
