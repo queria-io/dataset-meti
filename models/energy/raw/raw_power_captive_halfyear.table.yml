@@ -1,0 +1,35 @@
+schema: energy
+name: raw_power_captive_halfyear
+description: 電力調査統計 自家用発電所等実績の生データ（都道府県×月×原動力）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: pref_code
+    description: 都道府県コード（全国地方公共団体コードの上2桁）
+  - name: pref_name
+    description: 都道府県名
+  - name: power_source_group
+    description: 原動力の大分類（水力・火力・火力（燃料別）・原子力・新エネルギー・燃料電池等・蓄電池・合計）
+  - name: power_source_name
+    description: 原動力の小分類。大分類が小分類を持たないときは大分類と同じ値
+  - name: is_reference
+    description: 再掲の行か（火力のコージェネレーションと燃料別、新エネルギーのバイオマス）
+  - name: capacity_kw
+    description: 最大出力（kW。当該月の値）
+  - name: generation_kwh
+    description: 発電電力量（kWh。原典の単位）
+  - name: station_use_and_loss_kwh
+    description: 所内及び損失電力量（kWh）
+  - name: transmission_total_kwh
+    description: 電気事業者等への送電電力量の合計（kWh）
+  - name: transmission_to_utilities_kwh
+    description: 電気事業者への送電電力量（kWh）
+  - name: transmission_to_specified_supply_kwh
+    description: 特定供給の相手方への送電電力量（kWh）
+  - name: transmission_to_other_operators_kwh
+    description: その他事業者への送電電力量（kWh）
+  - name: transmission_via_exchange_kwh
+    description: 送電電力量の合計のうち卸電力取引所を通じた取引（kWh。合計の内数）
+  - name: self_consumption_kwh
+    description: 自家消費電力量（kWh）

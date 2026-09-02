@@ -13,3 +13,4 @@ models:
   - name: stg_power_plants_operator
   - name: stg_power_plants_captive
   - name: stg_power_generation_captive
+  - name: stg_power_captive_halfyear

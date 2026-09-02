@@ -70,13 +70,22 @@ def resolve_sources(table_no: str) -> list[tuple[int, str]]:
     """統計表一覧ページから年度と Excel の URL を解決する。
 
     ファイル名の年表記は年度で命名規則が変わる（2-2-H28 / 2-2-2018 / 3-2-2020n）ため、
-    URL は組み立てずに一覧ページから拾う。最新年度は results.html、過去年度は
-    results_archive.html にある。同じ年度に伝統レイアウト版と機械判読用レイアウト版
-    （ファイル名末尾 n）が並ぶ場合は伝統レイアウト版を採る。
+    URL は組み立てずに一覧ページから拾う。
+    """
+    return resolve_named_sources(
+        rf"{re.escape(table_no)}-(?:\d{{4}}|H\d{{2}})n?\.xlsx", f"統計表 {table_no}"
+    )
+
+
+def resolve_named_sources(filename_pattern: str, label: str) -> list[tuple[int, str]]:
+    """ファイル名の形から年度と Excel の URL を解決する。
+
+    最新年度は results.html、過去年度は results_archive.html にある。同じ年度に
+    伝統レイアウト版と機械判読用レイアウト版（ファイル名末尾 n）が並ぶ場合は
+    伝統レイアウト版を採る。
     """
     pattern = re.compile(
-        r"/statistics/electric_power/ep002/xls/(\d{4})/"
-        rf"({re.escape(table_no)}-(?:\d{{4}}|H\d{{2}})n?\.xlsx)"
+        rf"/statistics/electric_power/ep002/xls/(\d{{4}})/({filename_pattern})"
     )
     found: dict[int, str] = {}
     for path in (ARCHIVE_PATH, RESULTS_PATH):
@@ -88,7 +97,7 @@ def resolve_sources(table_no: str) -> list[tuple[int, str]]:
                 continue
             found[year] = f"/statistics/electric_power/ep002/xls/{fiscal_year}/{filename}"
     if not found:
-        raise RuntimeError(f"統計表 {table_no} のリンクが統計表一覧ページに見つからない")
+        raise RuntimeError(f"{label} のリンクが統計表一覧ページに見つからない")
     return sorted(found.items())
 
 
