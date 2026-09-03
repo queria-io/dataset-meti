@@ -504,3 +504,25 @@ models:
       - name: transmission_total_mwh
       - name: transmission_via_exchange_mwh
       - name: self_consumption_mwh
+
+  - name: captive_power_plants_by_prefecture
+    description: |
+      資源エネルギー庁 電力調査統計の統計表 5「自家用発電所等実績」のうち発電所数（2024年度〜）。
+      自家用発電所（自らの需要のために発電する設備）の数を都道府県×年度×原動力の
+      1レコードで収録する。原典が発電所数を年度計の欄にしか持たないため粒度は年度で、
+      同じ表の最大出力と発電電力量は captive_power_generation_by_prefecture が月次で持つ。
+      2023年度末で切れている captive_power_plants_by_area の続きにあたる系列。
+      原動力は power_source_group と power_source_name の2列で持ち、合計・内訳・再掲が
+      同じ列に並ぶので、is_reference が true の行と「計」の行を混ぜて足すと二重計上になる。
+      合計は 水力＋火力の計＋原子力＋新エネルギーの計＋燃料電池等＋蓄電池 から
+      バイオマスの再掲を差し引いた値。
+      収録は2024年度と2025年度・47都道府県・25の原動力区分で2,350行。
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: pref_code
+      - name: pref_name
+      - name: power_source_group
+      - name: power_source_name
+      - name: is_reference
+      - name: plant_count
