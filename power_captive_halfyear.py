@@ -8,8 +8,9 @@
 縦に積まれ、ブロックの中は原動力が縦・年度計と 12 か月が横に並ぶ。10 地域までしか
 持たなかった 5-(1) / 5-(2) と違い、こちらは都道府県別の内訳を持つ。
 
-発電所数の欄は年度計にしか無く（最大出力は年度計も期末の値。原典の注7）、月次の欄は
-最大出力と電力量だけなので、収録するのは月次の 12 期間。年度計は読み取りの検算にだけ使う。
+発電所数を持つのは年度計の欄だけで、月次の欄は最大出力と電力量だけ。1 度の読み取りで
+月次の 12 期間を都道府県×月×原動力の CSV へ、年度計の発電所数を都道府県×年度×原動力の
+CSV へ書き分ける。年度計の最大出力は期末（3 月）の値（原典の注7）で月次と重なるため持たない。
 """
 
 import csv
@@ -92,6 +93,16 @@ ROW_SPEC = (
 # 全国合計とブロックの和を突き合わせるときの許容差。実測の最大は 1e-6 kWh。
 TOTAL_ABS_TOLERANCE = 1e-3
 
+PLANTS_OUTPUT_COLUMNS = [
+    "fiscal_year",
+    "pref_code",
+    "pref_name",
+    "power_source_group",
+    "power_source_name",
+    "is_reference",
+    "plant_count",
+]
+
 OUTPUT_COLUMNS = [
     "year_month",
     "pref_code",
@@ -115,8 +126,8 @@ def _check_unit(rows: list[tuple], sheet_name: str) -> None:
 
 def _resolve_periods(
     rows: list[tuple], block: int, fiscal_year: int, sheet_name: str
-) -> list[tuple[str, int]]:
-    """ブロックの見出し 2 行から、月次の期間と測定項目の先頭列を解決する。
+) -> tuple[list[tuple[str, int]], int]:
+    """ブロックの見出し 2 行から、月次の期間と測定項目の先頭列、発電所数の列を解決する。
 
     年度計の期間は発電所数の列が 1 つ多く、月次より列数が違う。列位置を数えずに
     見出しから解決し、想定と違う並びなら失敗させる。
@@ -135,11 +146,12 @@ def _resolve_periods(
         raise RuntimeError(f"{sheet_name}: {block + 1} 行目に期間の見出しが無い")
 
     periods: list[tuple[str, int]] = []
-    annual = 0
+    annual: list[int] = []
     for order, (start, label) in enumerate(marks):
         end = marks[order + 1][0] if order + 1 < len(marks) else len(measure_row)
         headings = [squash(_cell(measure_row, column)) for column in range(start, end)]
-        base = start + 1 if headings and headings[0] == squash(PLANTS_HEADING) else start
+        has_plants = bool(headings) and headings[0] == squash(PLANTS_HEADING)
+        base = start + 1 if has_plants else start
         for offset, (_, heading) in enumerate(MEASURES):
             if squash(_cell(measure_row, base + offset)) != squash(heading):
                 raise RuntimeError(f"{sheet_name}: {label} の列 {base + offset} が '{heading}' ではない")
@@ -148,13 +160,17 @@ def _resolve_periods(
             raise RuntimeError(f"{sheet_name}: {label} に想定外の列（{'・'.join(extra)}）がある")
 
         if ANNUAL_PERIOD_PATTERN.match(label):
-            # 年度計は発電所数と期末の最大出力だけが月次に無い値で、電力量は 12 か月の和。
-            # 収録はせず、読み取りの検算にだけ使う。
-            annual += 1
+            # 発電所数を持つのは年度計だけ。最大出力は期末の値で 3 月と重なり、電力量は
+            # 12 か月の和なので、この期間から採るのは発電所数だけにする。
+            if not has_plants:
+                raise RuntimeError(f"{sheet_name}: {label} に '{PLANTS_HEADING}' の列が無い")
+            annual.append(start)
             continue
         matched = MONTH_PERIOD_PATTERN.match(label)
         if matched is None:
             raise RuntimeError(f"{sheet_name}: 期間の見出し '{label}' が読めない")
+        if has_plants:
+            raise RuntimeError(f"{sheet_name}: {label} に '{PLANTS_HEADING}' の列がある")
         year, month = int(matched.group(1)), int(matched.group(2))
         if (year if month >= 4 else year - 1) != fiscal_year:
             raise RuntimeError(f"{sheet_name}: {fiscal_year}年度のファイルに {label} が入っている")
@@ -166,9 +182,9 @@ def _resolve_periods(
     }
     if {year_month for year_month, _ in periods} != expected:
         raise RuntimeError(f"{sheet_name}: 12 か月が揃っていない（{len(periods)} 期間）")
-    if annual != 1:
-        raise RuntimeError(f"{sheet_name}: 年度計の期間が {annual} 個ある")
-    return periods
+    if len(annual) != 1:
+        raise RuntimeError(f"{sheet_name}: 年度計の期間が {len(annual)} 個ある")
+    return periods, annual[0]
 
 
 def _resolve_blocks(rows: list[tuple], sheet_name: str) -> list[tuple[int, str]]:
@@ -216,6 +232,35 @@ def _check_duplicate_row(rows: list[tuple], block: int, area: str, sheet_name: s
             )
 
 
+def _check_annual_capacity(
+    rows: list[tuple],
+    block: int,
+    area: str,
+    plants_column: int,
+    periods: list[tuple[str, int]],
+    fiscal_year: int,
+    sheet_name: str,
+) -> None:
+    """年度計の最大出力が期末（3 月）の値と一致することを確かめる。
+
+    一致するので年度計の最大出力は収録していない（原典の注7）。原典が年度計に別の値を
+    書き始めたら持たないという判断ごと変わるので、黙って通さずここで失敗させる。
+    """
+    march = f"{fiscal_year + 1}03"
+    base = next(column for year_month, column in periods if year_month == march)
+    for offset in range(len(ROW_SPEC)):
+        row = rows[block + 2 + offset]
+        annual = number(_cell(row, plants_column + 1))
+        monthly = number(_cell(row, base))
+        if annual is None and monthly is None:
+            continue
+        if annual is None or monthly is None or abs(annual - monthly) > TOTAL_ABS_TOLERANCE:
+            raise RuntimeError(
+                f"{sheet_name}: {area} の '{ROW_SPEC[offset][0]}' で年度計の最大出力"
+                f" {annual} が {march} の {monthly} と違う"
+            )
+
+
 def _check_national_total(
     rows: list[tuple], blocks: list[tuple[int, str]], sheet_name: str
 ) -> None:
@@ -251,32 +296,40 @@ def _check_national_total(
     logger.info(f"  {sheet_name}: 全国合計と突合 {compared} 組（数値でなく飛ばした組 {skipped}）")
 
 
-def _parse_sheet(rows: list[tuple], sheet_name: str, fiscal_year: int) -> list[tuple]:
+def _parse_sheet(
+    rows: list[tuple], sheet_name: str, fiscal_year: int
+) -> tuple[list[tuple], list[tuple]]:
     _check_unit(rows, sheet_name)
     blocks = _resolve_blocks(rows, sheet_name)
-    periods = _resolve_periods(rows, blocks[0][0], fiscal_year, sheet_name)
+    periods, plants_column = _resolve_periods(rows, blocks[0][0], fiscal_year, sheet_name)
     for block, area in blocks:
         _check_labels(rows, block, area, sheet_name)
         _check_duplicate_row(rows, block, area, sheet_name)
+        _check_annual_capacity(
+            rows, block, area, plants_column, periods, fiscal_year, sheet_name
+        )
     _check_national_total(rows, blocks, sheet_name)
 
     out: list[tuple] = []
+    plants: list[tuple] = []
     for block, area in blocks[1:]:
         for offset, (_, group, name, is_reference) in enumerate(ROW_SPEC):
             if group is None:
                 continue
             row = rows[block + 2 + offset]
+            key = (PREFECTURE_CODES[area], area, group, name, is_reference)
+            count = number(_cell(row, plants_column))
+            plants.append((fiscal_year, *key, None if count is None else int(count)))
             for year_month, base in periods:
                 values = [number(_cell(row, base + index)) for index in range(len(MEASURES))]
-                out.append(
-                    (year_month, PREFECTURE_CODES[area], area, group, name, is_reference, *values)
-                )
-    return out
+                out.append((year_month, *key, *values))
+    return out, plants
 
 
-def _parse_workbook(path: Path, fiscal_year: int) -> list[tuple]:
+def _parse_workbook(path: Path, fiscal_year: int) -> tuple[list[tuple], list[tuple]]:
     workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
     out: list[tuple] = []
+    plants: list[tuple] = []
     sheets = 0
     for sheet_name in workbook.sheetnames:
         matched = SHEET_PATTERN.match(sheet_name)
@@ -286,32 +339,48 @@ def _parse_workbook(path: Path, fiscal_year: int) -> list[tuple]:
         if int(matched.group(1)) != fiscal_year:
             raise RuntimeError(f"{fiscal_year}年度のファイルに '{sheet_name}' が入っている")
         rows = list(workbook[sheet_name].iter_rows(values_only=True))
-        out.extend(_parse_sheet(rows, sheet_name, fiscal_year))
+        sheet_rows, sheet_plants = _parse_sheet(rows, sheet_name, fiscal_year)
+        out.extend(sheet_rows)
+        plants.extend(sheet_plants)
         sheets += 1
     workbook.close()
     if not sheets:
         raise RuntimeError(f"{fiscal_year}年度のファイルに年度のシートが無い")
-    return out
+    return out, plants
 
 
-def download_and_parse(csv_path: Path, work_dir: Path | None = None) -> int:
-    """自家用発電所等実績を取得・整形して CSV に書き出し、行数を返す。"""
+def _write_csv(csv_path: Path, columns: list[str], rows: list[tuple]) -> int:
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(columns)
+        writer.writerows(rows)
+    return len(rows)
+
+
+def download_and_parse(
+    csv_path: Path, plants_csv_path: Path, work_dir: Path | None = None
+) -> tuple[int, int]:
+    """自家用発電所等実績を取得・整形して 2 つの CSV に書き出し、それぞれの行数を返す。
+
+    月次の実績（csv_path）と年度計の発電所数（plants_csv_path）は同じ Excel から採るので、
+    1 度の取得で両方を書く。
+    """
     work_dir = Path(work_dir) if work_dir else csv_path.parent
     work_dir.mkdir(parents=True, exist_ok=True)
 
     all_rows: list[tuple] = []
+    all_plants: list[tuple] = []
     for fiscal_year, path in resolve_named_sources(FILENAME_PATTERN, TABLE_LABEL):
         if fiscal_year < FIRST_FISCAL_YEAR:
             continue
         xlsx_path = work_dir / f"power_captive_halfyear_{fiscal_year}.xlsx"
         fetch_file(path, xlsx_path)
-        rows = _parse_workbook(xlsx_path, fiscal_year)
-        logger.info(f"  {fiscal_year}年度: {len(rows)} rows ({path})")
+        rows, plants = _parse_workbook(xlsx_path, fiscal_year)
+        logger.info(f"  {fiscal_year}年度: {len(rows)} rows / 発電所数 {len(plants)} rows ({path})")
         all_rows.extend(rows)
+        all_plants.extend(plants)
 
-    with open(csv_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(OUTPUT_COLUMNS)
-        writer.writerows(all_rows)
-
-    return len(all_rows)
+    return (
+        _write_csv(csv_path, OUTPUT_COLUMNS, all_rows),
+        _write_csv(plants_csv_path, PLANTS_OUTPUT_COLUMNS, all_plants),
+    )

@@ -12,7 +12,8 @@
 10. power_plants_operator: 電力調査統計 電気事業者の発電所数、出力の公開 Excel を年度ごとに取得し CSV へ整形
 11. power_plants_captive: 電力調査統計 自家用発電所数、出力の公開 Excel を年度ごとに取得し CSV へ整形
 12. power_generation_captive: 電力調査統計 自家用発電実績の公開 Excel を年度ごとに取得し CSV へ整形
-13. power_captive_halfyear: 電力調査統計 自家用発電所等実績の公開 Excel を年度ごとに取得し CSV へ整形
+13. power_captive_halfyear: 電力調査統計 自家用発電所等実績の公開 Excel を年度ごとに取得し
+    月次の実績と年度計の発電所数の2つの CSV へ整形
 14. dbt:        dbt ビルド
 """
 
@@ -53,6 +54,7 @@ PLANTS_OPERATOR_CSV_PATH = WORK_DIR / "meti_power_plants_operator.csv"
 PLANTS_CAPTIVE_CSV_PATH = WORK_DIR / "meti_power_plants_captive.csv"
 GENERATION_CAPTIVE_CSV_PATH = WORK_DIR / "meti_power_generation_captive.csv"
 CAPTIVE_HALFYEAR_CSV_PATH = WORK_DIR / "meti_power_captive_halfyear.csv"
+CAPTIVE_HALFYEAR_PLANTS_CSV_PATH = WORK_DIR / "meti_power_captive_halfyear_plants.csv"
 
 
 def dbt_build() -> None:
@@ -121,8 +123,11 @@ def main() -> None:
     logger.info(f"  meti_power_generation_captive.csv: {rows} rows")
 
     logger.info("13/14: power_captive_halfyear (電力調査統計 自家用発電所等実績)")
-    rows = power_captive_halfyear.download_and_parse(CAPTIVE_HALFYEAR_CSV_PATH)
+    rows, plants = power_captive_halfyear.download_and_parse(
+        CAPTIVE_HALFYEAR_CSV_PATH, CAPTIVE_HALFYEAR_PLANTS_CSV_PATH
+    )
     logger.info(f"  meti_power_captive_halfyear.csv: {rows} rows")
+    logger.info(f"  meti_power_captive_halfyear_plants.csv: {plants} rows")
 
     logger.info("14/14: dbt build")
     dbt_build()

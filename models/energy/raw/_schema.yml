@@ -580,3 +580,21 @@ models:
         description: "送電電力量の合計のうち卸電力取引所を通じた取引（kWh。合計の内数）"
       - name: self_consumption_kwh
         description: "自家消費電力量（kWh）"
+
+  - name: raw_power_captive_halfyear_plants
+    description: 電力調査統計 自家用発電所等実績の年度計の欄にある発電所数の生データ（都道府県×年度×原動力）
+    columns:
+      - name: fiscal_year
+        description: "年度（4月始まり）"
+      - name: pref_code
+        description: "都道府県コード（全国地方公共団体コードの上2桁）"
+      - name: pref_name
+        description: "都道府県名"
+      - name: power_source_group
+        description: "原動力の大分類（水力・火力・火力（燃料別）・原子力・新エネルギー・燃料電池等・蓄電池・合計）"
+      - name: power_source_name
+        description: "原動力の小分類。大分類が小分類を持たないときは大分類と同じ値"
+      - name: is_reference
+        description: "再掲の行か（火力のコージェネレーションと燃料別、新エネルギーのバイオマス）"
+      - name: plant_count
+        description: "自家用発電所数"
