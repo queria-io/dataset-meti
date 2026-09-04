@@ -145,9 +145,10 @@
 - total_mwh は hydro + thermal + nuclear + new_energy_mwh + other です。new_energy_mwh は
   wind + solar + geothermal + storage_battery の計です。種別を合計したうえに計や total_mwh を
   足すと二重計上になります。
-- biomass_mwh と waste_mwh は主燃料で見た再掲です。new_energy_mwh にも total_mwh にも
-  含まれません（発電量としては火力等の中に入っています）。再生可能エネルギーの発電量を
-  出すときにこれらを単純に足すと二重計上になります。
+- biomass_mwh と waste_mwh は、主に使う燃料がバイオマス・廃棄物である発電を火力発電所の欄から
+  抜き出した再掲です（原典の備考）。thermal_mwh と total_mwh には含まれ、new_energy_mwh には
+  含まれません。再生可能エネルギーの発電量を出すときにこれらを new_energy_mwh に足すのは
+  正しく、thermal_mwh や total_mwh に足すと二重計上になります。
 - storage_battery_mwh は2023年度4月に原典へ足された列です。それ以前の年度は NULL になります。
 - 発電量と power_demand_by_prefecture の需要量は別の統計表です。同じ pref_code と year_month で
   突き合わせられますが、発電した都道府県と消費した都道府県は送電により一致しません。
@@ -287,8 +288,10 @@
 - total_mwh は hydro + thermal + nuclear + new_energy_mwh + other です。hydro_mwh は
   一般＋揚水式、thermal_mwh は燃料別7列の和、new_energy_mwh は wind + solar + geothermal +
   storage_battery の計です。内訳を合計したうえに計や total_mwh を足すと二重計上になります。
-- biomass_mwh と waste_mwh は主燃料で見た火力からの再掲です。thermal_mwh にも
-  new_energy_mwh にも total_mwh にも含まれません。単純に足すと二重計上になります。
+- biomass_mwh と waste_mwh は、主に使う燃料がバイオマス・廃棄物である発電を火力発電所の欄から
+  抜き出した再掲です（原典の備考）。thermal_mwh と total_mwh には含まれ、new_energy_mwh には
+  含まれません。new_energy_mwh に足すのは正しく、thermal_mwh や total_mwh に足すと
+  二重計上になります。
 - storage_battery_mwh は2023年度4月に、is_distribution と is_specified_wholesale は
   2022年度4月（電気事業法改正での区分新設）に原典へ足された列です。それ以前は NULL です。
 - 原典で「α」（0より大きく1,000kWh未満）と表記されたセルは数値にできないため NULL です。
@@ -356,8 +359,10 @@
 - total_plants / total_capacity_kw は 水力＋火力＋原子力＋新エネルギー等の計＋その他 です。
   new_energy_* は 風力＋太陽光＋地熱＋蓄電池 の計です。種別を合計したうえに計や total を
   足すと二重計上になります。
-- biomass_* と waste_* は主燃料で見た火力発電所からの再掲です。new_energy_* にも total_* にも
-  含まれません。再生可能エネルギーの設備量を出すときにこれらを単純に足すと二重計上になります。
+- biomass_* と waste_* は、主に使う燃料がバイオマス・廃棄物である発電所を火力発電所の欄から
+  抜き出した再掲です（原典の備考）。thermal_* と total_* には含まれ、new_energy_* には
+  含まれません。再生可能エネルギーの設備量を出すときにこれらを new_energy_* に足すのは
+  正しく、thermal_* や total_* に足すと二重計上になります。
 - storage_battery_* は2023年度4月に原典へ足された列です。それ以前の年度は NULL になります。
 - 原典の側で計・合計と内訳の和が一致しない行があります。発電所数で28行（最大5か所のずれ）、
   最大出力で42行（1kW 超のずれ。最大 107,650kW）、丸め程度（1kW 以下）のずれが192行あり、
