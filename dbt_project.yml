@@ -24,3 +24,10 @@ models:
         +materialized: view
       mart:
         +materialized: view
+    commerce:
+      raw:
+        +materialized: table
+      stg:
+        +materialized: view
+      mart:
+        +materialized: view

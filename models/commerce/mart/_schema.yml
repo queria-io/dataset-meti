@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: commercial_sales_by_industry
+    description: |
+      経済産業省 商業動態統計調査の業種別商業販売額（月次）。卸売業・小売業の販売額を
+      業種別に収録する。単位は10億円。1980年1月以降の全国の値で、地域別の内訳は無い。
+      1行は「業種 × 月」。商業計・卸売業計・小売業計と、その内訳の業種、内訳を足し上げた
+      参考系列が同じ列に並ぶので、業種を絞らずに合計すると二重計上になる。
+      industry_order は原典の統計表での並び順で、合計とその内訳の対応を追うために使う。
+      販売額は原典の公表値そのままで、調査の見直しをまたぐ接続処理はしていない。
+      1998年4月・1999年4月・2015年7月・2020年3月・2025年1月に水準の不連続がある。
+      出典: 経済産業省 商業動態統計調査。
+      https://www.meti.go.jp/statistics/tyo/syoudou/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: industry_order
+      - name: industry_name
+      - name: industry_name_en
+      - name: sales_value_billion_yen
+
+  - name: retail_sales_by_business_type_and_item
+    description: |
+      経済産業省 商業動態統計調査の業態別・商品別販売額（月次）。百貨店・スーパー・
+      コンビニエンスストア・家電大型専門店・ドラッグストア・ホームセンターの販売額を
+      商品分類別に収録する。販売額の単位は百万円、店舗数は店。全国の値で、地域別の内訳は無い。
+      1行は「業態 × 商品分類 × 月」。業態ごとに商品分類の体系が違い、収録の開始時点も
+      百貨店・スーパーが1980年1月、コンビニエンスストアが1997年4月、それ以外が2014年1月と違う。
+      「百貨店・スーパー」は百貨店とスーパーの合計なので、業態を絞らずに合計すると
+      二重計上になる。商品分類も合計と内訳が同じ列に並ぶため同様。
+      item_order は原典の統計表での並び順で、同じ名前の商品分類を区別し、
+      合計とその内訳の対応を追うために使う。
+      販売額は原典の公表値そのままで、調査の見直しをまたぐ接続処理はしていない。
+      不連続の時点は業態で違う（リンク係数とともに原典の注に載る）。
+      出典: 経済産業省 商業動態統計調査。
+      https://www.meti.go.jp/statistics/tyo/syoudou/
+    access: public
+    columns:
+      - name: fiscal_year
+      - name: year
+      - name: month
+      - name: year_month
+      - name: business_type
+      - name: item_order
+      - name: item_name
+      - name: item_name_en
+      - name: sales_value_million_yen
+      - name: establishments

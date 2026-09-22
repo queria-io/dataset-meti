@@ -1,0 +1,64 @@
+schema: commerce
+name: retail_sales_by_business_type_and_item
+title: 業態別・商品別販売額（月次）
+description: '経済産業省 商業動態統計調査の業態別・商品別販売額（月次）。百貨店・スーパー・
+
+  コンビニエンスストア・家電大型専門店・ドラッグストア・ホームセンターの販売額を
+
+  商品分類別に収録する。販売額の単位は百万円、店舗数は店。全国の値で、地域別の内訳は無い。
+
+  1行は「業態 × 商品分類 × 月」。収録の開始時点は業態で違い、百貨店・スーパーが1980年1月、
+
+  コンビニエンスストアが1997年4月、それ以外が2014年1月。
+
+  「百貨店・スーパー」は百貨店とスーパーの合計なので、業態を絞らずに合計すると
+
+  二重計上になる。商品分類も合計と内訳が同じ列に並ぶため同様。
+
+  item_order は原典の統計表での並び順で、同じ名前の商品分類を区別し、
+
+  合計とその内訳の対応を追うために使う。
+
+  販売額は原典の公表値そのままで、調査の見直しをまたぐ接続処理はしていない。
+
+  不連続の時点は業態で違う（リンク係数とともに原典の注に載る）。
+
+  出典: 経済産業省 商業動態統計調査。
+
+  https://www.meti.go.jp/statistics/tyo/syoudou/'
+keywords:
+  - 経済産業省
+  - 商業動態統計調査
+  - 小売業
+  - 百貨店
+  - スーパー
+  - コンビニエンスストア
+  - 家電大型専門店
+  - ドラッグストア
+  - ホームセンター
+  - 商品別販売額
+  - 店舗数
+published: true
+sources:
+  - path: https://www.meti.go.jp/statistics/tyo/syoudou/
+fields:
+  - name: fiscal_year
+    title: 年度（4月始まり）
+  - name: year
+    title: 年
+  - name: month
+    title: 月
+  - name: year_month
+    title: 年月（YYYYMM）
+  - name: business_type
+    title: 業態
+  - name: item_order
+    title: 原典の統計表での商品分類の並び順
+  - name: item_name
+    title: 商品分類名
+  - name: item_name_en
+    title: 商品分類名（英語）
+  - name: sales_value_million_yen
+    title: 販売額（百万円）
+  - name: establishments
+    title: 期末の店舗数（店）
