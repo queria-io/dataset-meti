@@ -1,8 +1,10 @@
-"""資源エネルギー庁（enecho.meti.go.jp）からのファイル取得。
+"""資源エネルギー庁（enecho.meti.go.jp）と経済産業省（www.meti.go.jp）からのファイル取得。
 
-このホストは CloudFront + AWS WAF の challenge action で保護されており、
+どちらのホストも CloudFront + AWS WAF の challenge action で保護されており、
 短時間に続けて叩くと HTTP 202 と JavaScript の検証ページが返る。
 challenge は時間で解けるので、202 が返ったら間隔を空けて取り直す。
+
+www.meti.go.jp のファイルは絶対 URL で渡す（BASE_URL は enecho のもの）。
 """
 
 import logging

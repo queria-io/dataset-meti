@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_commercial_sales_industry
+  - name: stg_retail_sales_business_type

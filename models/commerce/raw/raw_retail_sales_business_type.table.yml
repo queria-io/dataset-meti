@@ -1,0 +1,19 @@
+schema: commerce
+name: raw_retail_sales_business_type
+description: 商業動態統計調査 業態別・商品別販売額（月次）の生データ（業態×商品×月）
+published: false
+fields:
+  - name: year_month
+    description: 年月（YYYYMM）
+  - name: business_type
+    description: 業態
+  - name: item_order
+    description: 原典の統計表での商品分類の並び順
+  - name: item_name
+    description: 商品分類名
+  - name: item_name_en
+    description: 商品分類名（英語）
+  - name: sales_value_million_yen
+    description: 販売額（百万円）。店舗数の行では NULL
+  - name: establishments
+    description: 期末の店舗数（店）。販売額の行では NULL
