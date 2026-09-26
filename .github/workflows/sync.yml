@@ -18,4 +18,8 @@ jobs:
     uses: queria-io/dataset-shared/.github/workflows/sync.yml@main
     with:
       dataset_name: meti
+      # 共通の既定 90 分では足りない。成功ランの実測は最大 280 分。360 分はランナーの
+      # 実行時間上限と同値で打ち切りとしては働かず、既定を外すためだけに渡している。
+      # 止まったのか遅いのかを時間で見分けられるようにするにはビルドを分ける
+      timeout_minutes: 360
     secrets: inherit
