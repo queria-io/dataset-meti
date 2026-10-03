@@ -44,6 +44,7 @@ fields:
     title: 年月（YYYYMM）
   - name: pref_code
     title: 都道府県コード（全国地方公共団体コード 2 桁）
+    semantic: { role: entity, name: prefecture }
   - name: pref_name
     title: 都道府県名
   - name: hydro_plants
