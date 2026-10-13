@@ -1,0 +1,27 @@
+schema: energy
+name: raw_petroleum_retail_price
+description: 石油製品価格調査 給油所小売価格の生データ（調査日×油種×地域）
+published: false
+fields:
+  - name: survey_date
+    description: 調査日
+  - name: product_name
+    description: 油種（ハイオク / レギュラー / 軽油 / 灯油店頭 / 灯油配達）
+  - name: price_unit
+    description: 価格の単位（円/L / 円/18L）
+  - name: area_order
+    description: 原典の表での地域の並び順
+  - name: area_name
+    description: 地域名（原典の見出しのまま）
+  - name: area_level
+    description: 地域の区分（全国 / 経済産業局 / 都道府県）
+  - name: pref_code
+    description: 都道府県コード（1都道府県だけを表す地域のみ）
+  - name: pref_name
+    description: 都道府県名（1都道府県だけを表す地域のみ）
+  - name: price_yen
+    description: 給油所の小売価格（現金価格）
+  - name: fuel_tax_yen
+    description: 価格に含まれるガソリン税または軽油引取税（円/L）
+  - name: consumption_tax_rate
+    description: 調査日時点の消費税率

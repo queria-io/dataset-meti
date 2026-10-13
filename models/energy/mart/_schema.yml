@@ -528,3 +528,28 @@ models:
       - name: power_source_name
       - name: is_reference
       - name: plant_count
+
+  - name: petroleum_retail_price_by_area
+    description: |
+      資源エネルギー庁 石油製品価格調査の給油所小売価格（1990年8月〜・週次）。
+      ハイオク・レギュラー・軽油・灯油（店頭・配達）の現金価格を調査日×油種×地域の
+      1レコードで収録する。地域は全国・経済産業局・都道府県で、都道府県の値は
+      2004年6月14日調査以降のみ。単位はガソリン・軽油が円/L、灯油が円/18L。
+      2004年3月までの調査は消費税抜き、2004年4月以降は消費税込みの価格。
+      出典: 経済産業省 資源エネルギー庁 石油製品価格調査。
+      https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/
+    access: public
+    columns:
+      - name: survey_date
+      - name: year
+      - name: product_name
+      - name: price_unit
+      - name: area_order
+      - name: area_name
+      - name: area_level
+      - name: pref_code
+      - name: pref_name
+      - name: price_yen
+      - name: fuel_tax_yen
+      - name: consumption_tax_rate
+      - name: includes_consumption_tax

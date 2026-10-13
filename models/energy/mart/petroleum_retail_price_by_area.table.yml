@@ -1,0 +1,59 @@
+schema: energy
+name: petroleum_retail_price_by_area
+title: 給油所小売価格（1990年8月〜・週次）
+description: '資源エネルギー庁 石油製品価格調査の給油所小売価格（1990年8月〜）。
+
+  ハイオク・レギュラー・軽油・灯油（店頭・配達）の現金価格を調査日×油種×地域の1レコードで収録する。
+
+  調査は原則毎週月曜で、1990年8月27日から約1,840回分。
+
+  地域は全国・経済産業局・都道府県で、都道府県の値は2004年6月14日調査以降のみ。
+
+  単位はガソリン・軽油が円/L、灯油が円/18L。
+
+  2004年3月までの調査は消費税抜き、2004年4月以降は消費税込みの価格。
+
+  出典: 経済産業省 資源エネルギー庁 石油製品価格調査。
+
+  https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/'
+keywords:
+  - 経済産業省
+  - 資源エネルギー庁
+  - 石油製品価格調査
+  - ガソリン価格
+  - 軽油
+  - 灯油
+  - 給油所
+  - ガソリンスタンド
+  - エネルギー
+published: true
+sources:
+  - path: https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/
+fields:
+  - name: survey_date
+    title: 調査日
+  - name: year
+    title: 年（暦年）
+  - name: product_name
+    title: 油種（ハイオク / レギュラー / 軽油 / 灯油店頭 / 灯油配達）
+  - name: price_unit
+    title: 価格の単位（ガソリン・軽油は 円/L、灯油は 円/18L）
+  - name: area_order
+    title: 原典の表での地域の並び順（1 = 全国）
+  - name: area_name
+    title: 地域名（原典の見出しのまま。都道府県は「県」「府」「都」を付けない）
+  - name: area_level
+    title: 地域の区分（全国 / 経済産業局 / 都道府県）
+  - name: pref_code
+    title: 都道府県コード（全国地方公共団体コード 2 桁。北海道局は 01、沖縄局は 47。複数の都道府県にまたがる地域は NULL）
+    semantic: { role: entity, name: prefecture }
+  - name: pref_name
+    title: 都道府県名（pref_code のある行のみ）
+  - name: price_yen
+    title: 給油所の小売価格（現金価格。単位は price_unit）
+  - name: fuel_tax_yen
+    title: 価格に含まれる税（円/L。ハイオク・レギュラーはガソリン税、軽油は軽油引取税、灯油は NULL）
+  - name: consumption_tax_rate
+    title: 調査日時点の消費税率（0.1 = 10%）
+  - name: includes_consumption_tax
+    title: 価格が消費税込みか（2004年4月以降の調査で true）
