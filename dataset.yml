@@ -48,6 +48,7 @@ keywords:
   - 給油所
 homepage: https://github.com/queria-io/dataset-meti
 language: ja
+themes: [energy_water, commerce_services]
 
 licenses:
   - JP-PDL-1.0

@@ -27,6 +27,7 @@ keywords:
   - ガソリンスタンド
   - エネルギー
 published: true
+themes: [energy_water]
 sources:
   - path: https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/
 fields:

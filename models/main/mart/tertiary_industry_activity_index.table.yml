@@ -19,6 +19,7 @@ keywords:
   - 景気
   - 指数
 published: true
+themes: [commerce_services]
 sources:
   - path: https://www.meti.go.jp/statistics/tyo/sanzi/
 fields:
