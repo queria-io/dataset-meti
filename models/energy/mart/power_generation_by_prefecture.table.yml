@@ -28,6 +28,7 @@ keywords:
   - 都道府県
   - エネルギー
 published: true
+themes: [energy_water]
 sources:
   - path: https://www.enecho.meti.go.jp/statistics/electric_power/ep002/
 fields:

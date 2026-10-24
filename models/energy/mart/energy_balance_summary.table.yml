@@ -26,6 +26,7 @@ keywords:
   - CO2排出量
   - 電源構成
 published: true
+themes: [energy_water]
 sources:
   - path: https://www.enecho.meti.go.jp/statistics/total_energy/
 fields:
