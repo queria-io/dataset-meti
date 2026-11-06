@@ -9,4 +9,5 @@ dependencies = [
     "dbt-duckdb>=1.10.0",
     "openpyxl>=3.1",
     "curl-cffi>=0.7",
+    "fdl-cli>=0.19.0",
 ]

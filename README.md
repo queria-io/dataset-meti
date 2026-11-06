@@ -1,27 +1,69 @@
-## データ出典
+# 経済産業省 活動指数・商業動態・エネルギー統計
 
-経済産業省が公表する5つの統計を収録しています。
+経済産業省と資源エネルギー庁が公表する5つの統計を、SQL で検索・集計できるテーブルにしたデータセットです。サービス産業の活動指数、商業販売額、国のエネルギー需給、電力の需要・発電・発電所、給油所の小売価格を収録しています。
 
-- [経済産業省 経済解析室](https://www.meti.go.jp/statistics/tyo/sanzi/)の第３次産業活動指数（2020年基準）。
-  サービス産業の生産活動を業種別・月次の指数（2020年=100）で示します。
-- [経済産業省](https://www.meti.go.jp/statistics/tyo/syoudou/)の商業動態統計調査。
-  卸売業・小売業の商業販売額を業種別・月次で、百貨店・スーパー・コンビニエンスストア・
-  家電大型専門店・ドラッグストア・ホームセンターの販売額を商品分類別・月次で示します。
-- [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/total_energy/)の総合エネルギー統計 時系列表。
-  国のエネルギー需給・電源構成・CO2排出量・エネルギー自給率を年度別に示します。
-- [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)の電力調査統計。
-  小売電気事業者が供給した電力需要量と、電気事業者の発電所の発電電力量・発電所数・最大出力を
-  都道府県別・月次で、需要電力量と逆潮流量を市区町村別・月次で、
-  火力発電所が消費した燃料を燃料種別・月次で示します。
-  需要量・発電量・発電所数・最大出力には事業者別の内訳もあります。
-  自家用発電所の発電所数・最大出力は地域別・半期（9月末／3月末）で、
-  自家用発電の発電電力量・送電電力量・自家消費電力量は地域別・原動力別・月次で示します。
-  2024年度以降の自家用発電は都道府県別・原動力別で、発電電力量と最大出力は月次、
-  発電所数は年度で示します。
-- [経済産業省 資源エネルギー庁](https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/)の石油製品価格調査。
-  給油所のハイオク・レギュラー・軽油・灯油の小売価格を全国・経済産業局・都道府県別・週次で示します。
+## 出典と利用条件
 
-## テーブル: tertiary_industry_activity_index
+- [第３次産業活動指数](https://www.meti.go.jp/statistics/tyo/sanzi/)（経済産業省 経済解析室）
+- [商業動態統計調査](https://www.meti.go.jp/statistics/tyo/syoudou/)（経済産業省）
+- [総合エネルギー統計](https://www.enecho.meti.go.jp/statistics/total_energy/)（資源エネルギー庁）
+- [電力調査統計](https://www.enecho.meti.go.jp/statistics/electric_power/ep002/)（資源エネルギー庁）
+- [石油製品価格調査](https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/)（資源エネルギー庁）
+
+経済産業省ウェブサイトのコンテンツに準拠する[公共データ利用規約（第1.0版）（PDL1.0）](https://www.meti.go.jp/main/rules.html)に従います。
+
+出典の表記:
+
+- 「第３次産業活動指数」（経済産業省）（https://www.meti.go.jp/statistics/tyo/sanzi/）を加工して作成。
+- 「商業動態統計調査」（経済産業省）（https://www.meti.go.jp/statistics/tyo/syoudou/）を加工して作成。
+- 「総合エネルギー統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/total_energy/）を加工して作成。
+- 「電力調査統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/electric_power/ep002/）を加工して作成。
+- 「石油製品価格調査」（経済産業省）（https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/）を加工して作成。
+
+いずれも公表 Excel の表を機械可読な行の形に整形しています。統計値そのものは変更していません。
+
+## テーブル
+
+| テーブル | 内容 | 行数 |
+| --- | --- | ---: |
+| `main.tertiary_industry_activity_index` | 第３次産業活動指数（2020年基準）の業種別・月次の指数（2020年=100） | 52,416 |
+| `commerce.commercial_sales_by_industry` | 商業動態統計調査の業種別・月次の商業販売額（10億円、全国） | 14,674 |
+| `commerce.retail_sales_by_business_type_and_item` | 商業動態統計調査の、百貨店・スーパー・コンビニエンスストアなど業態別・商品分類別の月次販売額（全国） | 29,551 |
+| `energy.energy_balance_summary` | 総合エネルギー統計の時系列表（1990年度〜）の、一次エネルギー供給・最終消費・電源構成・CO2排出量・自給率 | 5,723 |
+| `energy.power_demand_by_prefecture` | 電力調査統計の、小売電気事業者が供給した都道府県別・月次の電力需要量（MWh） | 5,828 |
+| `energy.power_generation_by_prefecture` | 電力調査統計の、電気事業者の発電所の都道府県別・月次の発電電力量（MWh） | 5,828 |
+| `energy.power_demand_by_operator` | 電力調査統計の、小売電気事業者等ごとの月次の電力需要量（MWh） | 78,821 |
+| `energy.power_generation_by_operator` | 電力調査統計の、電気事業者ごとの月次の発電電力量（MWh） | 164,424 |
+| `energy.power_plants_by_prefecture` | 電力調査統計の、電気事業者の発電所の都道府県別・月次の発電所数と最大出力（kW） | 4,136 |
+| `energy.power_plants_by_operator` | 電力調査統計の、電気事業者ごとの月次の発電所数と最大出力（kW） | 130,910 |
+| `energy.captive_power_plants_by_area` | 電力調査統計の、自家用発電所の10地域別の発電所数と最大出力（9月末・3月末、2016〜2023年度） | 160 |
+| `energy.captive_power_generation_by_area` | 電力調査統計の、自家用発電の10地域別・原動力別・月次の発電電力量と行き先（MWh、2017〜2023年度） | 19,440 |
+| `energy.captive_power_generation_by_prefecture` | 電力調査統計の、自家用発電の都道府県別・原動力別・月次の最大出力と発電電力量（2024年度〜） | 28,200 |
+| `energy.captive_power_plants_by_prefecture` | 電力調査統計の、自家用発電所の都道府県別・原動力別・年度の発電所数（2024年度〜） | 2,350 |
+| `energy.power_demand_by_municipality` | 電力調査統計の、市区町村別・月次の需要電力量（MWh、2022〜2024年度） | 62,892 |
+| `energy.reverse_power_flow_by_municipality` | 電力調査統計の、市区町村別・電源別・月次の逆潮流量（MWh、2022〜2024年度） | 62,892 |
+| `energy.power_thermal_fuel_by_type` | 電力調査統計の、電気事業者の火力発電所の燃料種別・月次の受入量・消費量・発熱量・月末貯蔵量 | 3,088 |
+| `energy.petroleum_retail_price_by_area` | 石油製品価格調査の、給油所のガソリン・軽油・灯油の週次の小売価格（全国・経済産業局・都道府県） | 350,815 |
+
+## 使い方
+
+2024年度の都道府県別の電力需要量を大きい順に並べる:
+
+```sql
+SELECT pref_name, sum(total_demand_mwh) AS demand_mwh
+FROM meti.energy.power_demand_by_prefecture
+WHERE fiscal_year = 2024
+GROUP BY ALL
+ORDER BY demand_mwh DESC;
+```
+
+## 注意
+
+- 多くのテーブルは合計と内訳（と再掲）を同じ列に持ちます。絞らずに合計すると二重に数えるので、各テーブルの説明で合計の行や列を確認してください。
+- 電力調査統計の電気事業者の表と自家用発電の表（`captive_*`）は対象が重なりません。足し合わせても国内の全量にはなりません。
+- 値は原典の公表値のままで、調査の見直しをまたぐ接続処理はしていません。
+
+## main.tertiary_industry_activity_index
 
 業種（品目）×月×系列種別を1レコードとする月次指数です。2018年1月以降を収録します。
 
@@ -38,7 +80,7 @@
 品目（item_code / item_name）は「第３次産業総合」から日本標準産業分類の大分類・中分類・
 個別業種までの階層を含みます。
 
-## テーブル: commercial_sales_by_industry
+## commerce.commercial_sales_by_industry
 
 業種×月を1レコードとする商業販売額です。1980年1月以降を収録します。
 指数ではなく販売額そのもので、単位は10億円です。全国の値のみで、地域別の内訳はありません。
@@ -78,7 +120,7 @@
 
 集計に必要なデータが無い月（原典の「***」）と秘匿された値（「X」）は行ごと落としています。
 
-## テーブル: retail_sales_by_business_type_and_item
+## commerce.retail_sales_by_business_type_and_item
 
 業態×商品分類×月を1レコードとする業態別・商品別販売額です。販売額の単位は百万円、
 店舗数は店です。全国の値のみで、地域別の内訳はありません。
@@ -137,7 +179,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
 集計に必要なデータが無い月（原典の「***」）と秘匿された値（「X」）は行ごと落としています。
 コンビニエンスストアは1997年1月から表に行がありますが、値が入るのは1997年4月分からです。
 
-## テーブル: energy_balance_summary
+## energy.energy_balance_summary
 
 総合エネルギー統計の時系列表を、統計表×項目×系列×年度で1レコードに展開した年度データです。
 1990年度以降を収録します。全国の値のみで、地域別の内訳はありません。
@@ -179,7 +221,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
 - 最新年度は確報／速報で入れ替わります。取り込んだ版は source_edition で確認できます。
 - 原典で「N/A」や空欄になっているセルは行として持ちません。
 
-## テーブル: power_demand_by_prefecture
+## energy.power_demand_by_prefecture
 
 電力調査統計の統計表 3-(2)「都道府県別電力需要実績」を、都道府県×月で1レコードとした
 月次データです。2016年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
@@ -218,7 +260,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
 - 沖縄県の特定需要には高圧が一部含まれる、という注記が原典にあります。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
-## テーブル: power_generation_by_prefecture
+## energy.power_generation_by_prefecture
 
 電力調査統計の統計表 2-(2)「都道府県別発電実績」を、都道府県×月で1レコードとした
 月次データです。2016年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
@@ -268,7 +310,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
-## テーブル: power_demand_by_operator
+## energy.power_demand_by_operator
 
 電力調査統計の統計表 3-(1)「電力需要実績」を、事業者×月で1レコードとした月次データです。
 2016年度4月以降を収録します（毎月のビルドで伸びます）。原典は1シートに事業者区分ごとの
@@ -339,7 +381,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
   取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
-## テーブル: power_generation_by_operator
+## energy.power_generation_by_operator
 
 電力調査統計の統計表 2-(1)「発電実績」を、事業者×月で1レコードとした月次データです。
 2016年度4月以降を収録します。原典の合計行（全事業者計）はありません。
@@ -416,7 +458,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
-## テーブル: power_plants_by_prefecture
+## energy.power_plants_by_prefecture
 
 電力調査統計の統計表 1-(2)「都道府県別発電所数、出力」を、都道府県×月で1レコードとした
 月次データです。2019年度4月以降を収録します。47都道府県のみで、全国計の行はありません。
@@ -482,7 +524,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
   まとめて公表され直すため、同じ年度の12か月がほぼ同じ日付になります。年度計のシートは
   取り込んでいません。
 
-## テーブル: power_plants_by_operator
+## energy.power_plants_by_operator
 
 電力調査統計の統計表 1-(1)「電気事業者の発電所数、出力」を、事業者×月で1レコードとした
 月次データです。2019年度4月以降を収録します。原典の合計行（全事業者計）はありません。
@@ -590,7 +632,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
 - 2018年度以前は統計表 1「電気事業者の発電所数、出力」にまとまっており、この形式では
   配布されていません。
 
-## テーブル: captive_power_plants_by_area
+## energy.captive_power_plants_by_area
 
 電力調査統計の統計表 5-(1)「自家用発電所数、出力」を、地域×時点で1レコードとしたデータです。
 公表は月次ではなく9月末・3月末の年2回で、2016年9月末から2024年3月末までの16時点を収録します。
@@ -658,7 +700,7 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
   2024年度以降の発電所数は captive_power_plants_by_prefecture が年度で、最大出力は
   captive_power_generation_by_prefecture が月次で持ちます。
 
-## テーブル: captive_power_generation_by_area
+## energy.captive_power_generation_by_area
 
 電力調査統計の統計表 5-(2)「自家用発電実績」を、地域×月×原動力で1レコードとした月次データです。
 2017年4月から2024年3月までの84か月・19,440行を収録します。10地域のみで、全国合計の列はありません。
@@ -744,7 +786,7 @@ power_source_group と power_source_name の組み合わせは次の23通りで�
   別レイアウトの1ファイル）に統合され、この統計表の形式では配布されていません。
   2024年度以降は captive_power_generation_by_prefecture に続きます。
 
-## テーブル: captive_power_generation_by_prefecture
+## energy.captive_power_generation_by_prefecture
 
 電力調査統計の統計表 5「自家用発電所等実績」を、都道府県×月×原動力で1レコードとした
 月次データです。2024年4月から2026年3月までの24か月・28,200行を収録します。
@@ -822,7 +864,7 @@ power_source_group と power_source_name の組み合わせは次の25通りで�
 - 原典の全国合計のブロックは収録していません（47都道府県の和と一致することを確認しています）。
   全国の数字が要るときは都道府県を合算してください。
 
-## テーブル: captive_power_plants_by_prefecture
+## energy.captive_power_plants_by_prefecture
 
 電力調査統計の統計表 5「自家用発電所等実績」のうち発電所数を、都道府県×年度×原動力で
 1レコードとした年度データです。2024年度と2025年度の2年度・2,350行を収録します。
@@ -866,7 +908,7 @@ power_source_group と power_source_name の組み合わせは captive_power_gen
 - 原典の全国合計のブロックは収録していません（47都道府県の和と一致することを確認しています）。
   全国の数字が要るときは都道府県を合算してください。
 
-## テーブル: power_demand_by_municipality
+## energy.power_demand_by_municipality
 
 電力調査統計の統計表 6-(1)「市町村別需要電力量」を、市区町村×月で1レコードとした
 月次データです。2022年度4月から2025年3月までの36か月を収録します。
@@ -884,7 +926,7 @@ power_source_group と power_source_name の組み合わせは captive_power_gen
 - total_demand_mwh: 需要電力量の合計（DOUBLE、MWh）
 - published_as_of: 当該月の値の公表時点（DATE）
 
-## テーブル: reverse_power_flow_by_municipality
+## energy.reverse_power_flow_by_municipality
 
 電力調査統計の統計表 6-(2)「市町村別逆潮流量」を、市区町村×月で1レコードとした
 月次データです。収録範囲と市区町村の粒度は power_demand_by_municipality と同じです。
@@ -940,7 +982,7 @@ power_source_group と power_source_name の組み合わせは captive_power_gen
   2022〜2024年度では、需要電力量・逆潮流量とも差が 0.5 MWh を超える行はありません。
 - 年度計のシートは取り込んでいません。
 
-## テーブル: power_thermal_fuel_by_type
+## energy.power_thermal_fuel_by_type
 
 電力調査統計の統計表 4「火力発電燃料実績」を、燃料種×月で1レコードとした月次データです。
 2016年度4月以降を収録します。全国の値のみで、都道府県別・発電所別の内訳はありません。
@@ -1003,7 +1045,7 @@ power_source_group と power_source_name の組み合わせは captive_power_gen
   2017年度の前半は原典に記載が無く NULL）。年度計のシートは取り込んでいません。
 - 2015年度以前は旧 Excel 形式での配布のため収録していません。
 
-## テーブル: petroleum_retail_price_by_area
+## energy.petroleum_retail_price_by_area
 
 石油製品価格調査の給油所小売価格を、調査日×油種×地域で1レコードとした週次データです。
 1990年8月27日調査以降を収録します。調査は原則毎週月曜です。
@@ -1037,55 +1079,9 @@ power_source_group と power_source_name の組み合わせは captive_power_gen
 - 灯油の fuel_tax_yen は NULL です。原典に税の列がありません。
 - 2011年3月14日調査は都道府県の値が無く（全国と経済産業局のみ）、3月22日調査は東北6県の値がありません。
 
-## データ更新手順
+## 更新
 
-main.py が5つの統計の公開 Excel を取得して CSV へ整形し、dbt build で各テーブルを再生成する。
-時系列表のファイル名は公表年度と確報／速報で変わり、電力調査統計のファイル名は年度で命名規則が
-変わる（西暦・元号・機械判読用レイアウト版）ため、いずれも統計表一覧ページからリンクを解決している。
-電力調査統計は統計表ごと・年度ごとに1ファイルなので、1回のビルドで統計表数×年度数だけ取得する。
-発電実績・発電所数・市町村別逆潮流量・燃料実績は列の構成や見出しが年度で変わる（発電実績・
-発電所数と逆潮流量は蓄電池・配電事業者・特定卸供給事業者の列が後から足された。燃料実績は
-2016年度にだけ余分な列があり、2021年4月は月末貯蔵量の見出しが年度末貯蔵量になっている）ため、
-列位置ではなく見出しで対応づけている。知らない見出しが出たらそこで失敗する。
-月次シートの名前も年度で揺れる（2025.4 / H28.4 / 2023年4月）ので、読み方の分からないシートは
-黙って飛ばさずに失敗させている。自家用発電実績だけは月次シートではなく上期・下期の2シートに
-月ごとの塊が縦に積まれる形なので、塊の切れ目を大分類の見出しで拾い、6か月が揃わなければ
-失敗させている。2024年度以降の自家用発電所等実績は年度ごとに1シートで、都道府県のブロックが
-縦に積まれ年度計と12か月が横に並ぶ。原典が持つ全国合計のブロックと47都道府県の和が
-一致することを取得のたびに確かめ、行がずれて読めていれば失敗させている。
-発電所数を持つのは年度計の欄だけなので、1度の読み取りで月次の実績と年度の発電所数を
-別々の CSV へ書き分けている。年度計の最大出力は期末（3月）の値で月次と重なるため
-持たず、重なっていることを取得のたびに確かめている。
-電力量の単位はこの統計表だけ kWh（他は 1,000kWh）なので、単位の注記が変わったら
-失敗させている。事業者別の電力需要実績は
-1シートに事業者区分ごとの表が縦に並び、区分によって見出しの段数と列数が違うため、大分類と小分類の
-組み合わせで列を引いている。見出しの無い列に値があるときも失敗させ、列の読み落としに
-気付けるようにしている。
-統計表一覧ページに載っていても実体が配信されていないファイルがある（6-(2) の2025年度）。
-そのファイルだけ飛ばして続けるが、飛ばした年度は警告としてログに残す。
-商業動態統計調査は時系列データの統計表を取得する。統計表ごとに列の構成も見出しの段数も違うが、
-「時間軸コード」「年月」を持つ行が見出し行で、その1行上に日本語の項目名、さらに上の行に単位が
-入る作りは共通しているため、見出し行の位置から単位の入った列だけを値として拾っている。
-年・年度・四半期の集計表と前年比の表は取らない（月次の実額があれば SQL で作れる）。
-年月は時間軸コードと年月の表記を突き合わせ、食い違えば失敗させている。
-石油製品価格調査は1990年8月以降の全調査日を収めた週次ファイル1本を取得する。ファイル名が公表のたびに
-変わるため、調査結果のページからリンクを解決している。油種ごとのシート名・地域の見出し・単位が
-想定と違えば失敗させている。
-
-資源エネルギー庁と経済産業省のサイトは CloudFront + AWS WAF の challenge action で保護されており、
-短時間に続けて取得すると HTTP 202 と検証ページが返る。取得側は間隔を空けて取り直す。
-ビルドは `bash scripts/build.sh` で実行する（Queria に公開する）。
-
-## ライセンス
-
-経済産業省ウェブサイトのコンテンツに準拠する[公共データ利用規約（第1.0版）（PDL1.0）](https://www.meti.go.jp/main/rules.html)に従う。
-
-出典:
-
-- 「第３次産業活動指数」（経済産業省）（https://www.meti.go.jp/statistics/tyo/sanzi/）を加工して作成。
-- 「商業動態統計調査」（経済産業省）（https://www.meti.go.jp/statistics/tyo/syoudou/）を加工して作成。
-- 「総合エネルギー統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/total_energy/）を加工して作成。
-- 「電力調査統計」（経済産業省）（https://www.enecho.meti.go.jp/statistics/electric_power/ep002/）を加工して作成。
-- 「石油製品価格調査」（経済産業省）（https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/）を加工して作成。
-
-いずれも公表 Excel の表形式を機械可読な行へ整形する加工を行っている。統計値そのものは改変していない。
+```bash
+uv sync
+bash scripts/build.sh
+```
