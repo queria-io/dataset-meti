@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_demand_operator
 description: 電力調査統計 電力需要実績（事業者別）の生データ（事業者×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

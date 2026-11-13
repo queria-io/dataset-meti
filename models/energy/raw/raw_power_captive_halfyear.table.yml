@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_captive_halfyear
 description: 電力調査統計 自家用発電所等実績の生データ（都道府県×月×原動力）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

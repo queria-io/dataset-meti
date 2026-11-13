@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_thermal_fuel
 description: 電力調査統計 火力発電燃料実績の生データ（燃料種×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

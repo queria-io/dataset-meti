@@ -1,7 +1,7 @@
 schema: commerce
 name: raw_commercial_sales_industry
 description: 商業動態統計調査 業種別商業販売額（月次）の生データ（業種×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

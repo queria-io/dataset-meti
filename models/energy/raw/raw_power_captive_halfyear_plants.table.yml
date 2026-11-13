@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_captive_halfyear_plants
 description: 電力調査統計 自家用発電所等実績の年度計の欄にある発電所数の生データ（都道府県×年度×原動力）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: fiscal_year
     description: 年度（4月始まり）

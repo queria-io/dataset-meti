@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_plants
 description: 電力調査統計 都道府県別発電所数、出力の生データ（都道府県×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

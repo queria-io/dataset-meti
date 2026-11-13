@@ -1,7 +1,7 @@
 schema: commerce
 name: raw_retail_sales_business_type
 description: 商業動態統計調査 業態別・商品別販売額（月次）の生データ（業態×商品×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）
