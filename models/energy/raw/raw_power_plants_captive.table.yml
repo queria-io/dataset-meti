@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_plants_captive
 description: 電力調査統計 自家用発電所数、出力の生データ（地域×時点）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）。その月末時点の値で、9月末と3月末の年2回

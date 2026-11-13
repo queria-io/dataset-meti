@@ -1,7 +1,7 @@
 schema: energy
 name: raw_power_demand_municipality
 description: 電力調査統計 市町村別需要電力量の生データ（市区町村×月）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）

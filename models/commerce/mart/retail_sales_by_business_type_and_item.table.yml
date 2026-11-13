@@ -18,8 +18,7 @@ keywords:
   - ホームセンター
   - 商品別販売額
   - 店舗数
-published: true
-themes: [commerce_services]
+annotations: { queria: { themes: [commerce_services] } }
 sources:
   - path: https://www.meti.go.jp/statistics/tyo/syoudou/
 fields:

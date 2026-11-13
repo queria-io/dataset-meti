@@ -1,7 +1,7 @@
 schema: main
 name: raw_ita_monthly
 description: 第３次産業活動指数（2020年基準）月次の生データ（季節調整済指数・原指数）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: item_code
     description: 品目番号

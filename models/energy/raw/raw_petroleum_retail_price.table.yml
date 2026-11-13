@@ -1,7 +1,7 @@
 schema: energy
 name: raw_petroleum_retail_price
 description: 石油製品価格調査 給油所小売価格の生データ（調査日×油種×地域）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: survey_date
     description: 調査日

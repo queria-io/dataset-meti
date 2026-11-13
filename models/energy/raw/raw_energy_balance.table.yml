@@ -1,7 +1,7 @@
 schema: energy
 name: raw_energy_balance
 description: 総合エネルギー統計 時系列表の生データ（統計表×項目×系列×年度）
-published: false
+annotations: { queria: { published: false } }
 fields:
   - name: table_no
     description: 統計表番号（1〜7）
