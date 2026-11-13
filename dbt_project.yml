@@ -7,17 +7,13 @@ model-paths: ["models"]
 macro-paths: ["macros", "shared/macros"]
 clean-targets: ["target", "dbt_packages"]
 
+on-run-start:
+  - "{{ drop_energy_schema() }}"
+
 models:
   meti:
     +database: meti
     main:
-      raw:
-        +materialized: table
-      stg:
-        +materialized: view
-      mart:
-        +materialized: view
-    energy:
       raw:
         +materialized: table
       stg:
