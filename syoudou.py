@@ -23,7 +23,7 @@ from pathlib import Path
 
 import openpyxl
 
-from enecho import fetch_file
+from fetch import fetch_file
 
 # 商業動態統計調査 時系列データ
 BASE_URL = "https://www.meti.go.jp/statistics/tyo/syoudou/result-2/excel/"
@@ -78,8 +78,8 @@ BUSINESS_TYPE_COLUMNS = [
 def _fetch(filename: str, dest: Path) -> None:
     """統計表の Excel を取得して保存する。
 
-    www.meti.go.jp は enecho.meti.go.jp と同じ CloudFront + WAF の下にあり、
-    続けて叩くと challenge ページが返る。間隔と再取得は enecho の取得経路に任せる。
+    www.meti.go.jp は CloudFront + WAF の下にあり、続けて叩くと challenge ページが返る。
+    間隔と再取得は fetch の取得経路に任せる。
     """
     fetch_file(BASE_URL + filename, dest)
 
