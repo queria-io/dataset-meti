@@ -19,11 +19,11 @@ models:
       stg:
         +materialized: view
       mart:
-        +materialized: view
+        +materialized: table
     commerce:
       raw:
         +materialized: table
       stg:
         +materialized: view
       mart:
-        +materialized: view
+        +materialized: table
