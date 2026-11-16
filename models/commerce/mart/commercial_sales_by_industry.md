@@ -1,5 +1,6 @@
-schema: commerce
-name: commercial_sales_by_industry
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: commerce.commercial_sales_by_industry
 title: 業種別商業販売額（月次）
 description: |-
   商業動態統計調査の業種別・月次の商業販売額（10億円、全国）です。
@@ -13,7 +14,6 @@ keywords:
   - 卸売業
   - 小売業
   - 無店舗小売業
-annotations: { queria: { themes: [commerce_services] } }
 sources:
   - path: https://www.meti.go.jp/statistics/tyo/syoudou/
 fields:
@@ -33,3 +33,5 @@ fields:
     title: 業種名（英語）
   - name: sales_value_billion_yen
     title: 商業販売額（10億円）
+themes: [commerce_services]
+---

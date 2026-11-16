@@ -1,5 +1,6 @@
-schema: commerce
-name: retail_sales_by_business_type_and_item
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: commerce.retail_sales_by_business_type_and_item
 title: 業態別・商品別販売額（月次）
 description: |-
   商業動態統計調査の、百貨店・スーパー・コンビニエンスストアなど業態別・商品分類別の月次販売額（全国）です。
@@ -18,7 +19,6 @@ keywords:
   - ホームセンター
   - 商品別販売額
   - 店舗数
-annotations: { queria: { themes: [commerce_services] } }
 sources:
   - path: https://www.meti.go.jp/statistics/tyo/syoudou/
 fields:
@@ -42,3 +42,5 @@ fields:
     title: 販売額（百万円）
   - name: establishments
     title: 期末の店舗数（店）
+themes: [commerce_services]
+---

@@ -1,7 +1,7 @@
-schema: main
-name: raw_ita_monthly
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: main.raw_ita_monthly
 description: 第３次産業活動指数（2020年基準）月次の生データ（季節調整済指数・原指数）
-annotations: { queria: { published: false } }
 fields:
   - name: item_code
     description: 品目番号
@@ -17,3 +17,5 @@ fields:
     description: 年月（YYYYMM）
   - name: index_value
     description: 指数値（2020年=100）
+published: false
+---

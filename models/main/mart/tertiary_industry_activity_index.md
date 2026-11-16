@@ -1,5 +1,6 @@
-schema: main
-name: tertiary_industry_activity_index
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: main.tertiary_industry_activity_index
 title: 第３次産業活動指数（2020年基準・月次）
 description: |-
   第３次産業活動指数（2020年基準）の業種別・月次の指数（2020年=100）です。
@@ -12,7 +13,6 @@ keywords:
   - サービス産業
   - 景気
   - 指数
-annotations: { queria: { themes: [commerce_services] } }
 sources:
   - path: https://www.meti.go.jp/statistics/tyo/sanzi/
 fields:
@@ -34,3 +34,5 @@ fields:
     title: 月
   - name: index_value
     title: 指数値（2020年＝100）
+themes: [commerce_services]
+---
