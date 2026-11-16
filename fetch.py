@@ -5,8 +5,10 @@
 challenge は時間で解けるので、202 が返ったら間隔を空けて取り直す。
 """
 
+import hashlib
 import logging
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 from curl_cffi import requests
@@ -59,3 +61,29 @@ def fetch_file(url: str, dest: Path) -> None:
         raise RuntimeError(f"xlsx ではない応答が返った: {url}")
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(resp.content)
+
+
+def fetch_pdf(url: str, dest: Path) -> dict | None:
+    """計画・通知等の PDF を取得して保存し、shared/fetch.py の fetch_file と同じ形の行を返す。
+
+    shared/review_plans.py の download_plans に fetch として渡す。4xx（リンク切れなど）は None を返し、
+    PDF かどうかは download_plans が確かめる。
+    """
+    try:
+        resp = _get(url)
+    except requests.exceptions.HTTPError as error:
+        if error.response is not None and error.response.status_code < 500:
+            return None
+        raise
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(resp.content)
+    return {
+        "url": url,
+        "sha256": hashlib.sha256(resp.content).hexdigest(),
+        "bytes": len(resp.content),
+        "media_type": resp.headers.get("Content-Type", "").split(";")[0].strip()
+        or None,
+        "retrieved_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "etag": resp.headers.get("ETag"),
+        "last_modified": resp.headers.get("Last-Modified"),
+    }

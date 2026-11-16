@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: plans_documents
+    access: public
+    columns:
+      - name: url
+      - name: sha256
+      - name: title
+      - name: bytes
+      - name: page_count
+      - name: fetched_url
+      - name: fetched_at
+
+  - name: plans_pages
+    access: public
+    columns:
+      - name: sha256
+      - name: page
+      - name: page_label
+      - name: text
+      - name: cid_repaired_chars

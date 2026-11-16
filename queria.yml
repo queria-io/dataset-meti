@@ -4,6 +4,7 @@ title: 経済産業省 第３次産業活動指数・商業動態統計
 description: |-
   第３次産業活動指数と、商業動態統計の販売額を収録した統計です。
   出典は経済産業省の公表統計です。
+  行政事業レビューのシートが関係する計画・通知等として挙げる経済産業省のサイトの PDF を、ページごとの本文で持ちます（plans）。
   電力調査統計・総合エネルギー統計・石油製品価格調査は、資源エネルギー庁のデータセット enecho にあります。
 keywords:
   - 経済産業省
@@ -29,6 +30,8 @@ sources:
     path: https://www.meti.go.jp/statistics/tyo/sanzi/
   - title: 商業動態統計調査（経済産業省）
     path: https://www.meti.go.jp/statistics/tyo/syoudou/
+  - title: 行政事業レビュー見える化サイト
+    path: https://rssystem.go.jp
 
 contributors:
   - title: 経済産業省
@@ -43,6 +46,8 @@ schemas:
     title: メイン
   - name: commerce
     title: 商業動態統計
+  - name: plans
+    title: 計画・通知等
 themes: [commerce_services]
 cover: 📈
 ai_context:
@@ -52,6 +57,8 @@ ai_context:
     commerce.retail_sales_by_business_type_and_item が商業動態統計調査の
     業種別商業販売額・業態別商品別販売額。粒度も単位も別なので混ぜない。
     電力・エネルギー需給・給油所の価格は資源エネルギー庁のデータセット enecho にある。
+    plans.documents と plans.pages は統計ではなく、行政事業レビューのシートが挙げる
+    経済産業省の計画・通知等の PDF の一覧とページごとの本文。sha256 で結合する。
 
     main.tertiary_industry_activity_index はサービス産業の景気動向を業種別に見るのに使う。
     1行が「品目（業種）× 月 × 系列種別」で、

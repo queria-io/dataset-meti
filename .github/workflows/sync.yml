@@ -19,7 +19,7 @@ jobs:
       contents: write
       pull-requests: write
       id-token: write
-    uses: queria-io/dataset-shared/.github/workflows/sync.yml@3152e2a8a30c350f15e5ab15d7a55847fdf0679c
+    uses: queria-io/dataset-shared/.github/workflows/sync.yml@b5beea7a52b0e1b05587583b6e0f8f5edd351e3a
     with:
       dataset_name: meti
     secrets:
