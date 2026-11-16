@@ -1,7 +1,7 @@
-schema: commerce
-name: raw_retail_sales_business_type
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: commerce.raw_retail_sales_business_type
 description: 商業動態統計調査 業態別・商品別販売額（月次）の生データ（業態×商品×月）
-annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）
@@ -17,3 +17,5 @@ fields:
     description: 販売額（百万円）。店舗数の行では NULL
   - name: establishments
     description: 期末の店舗数（店）。販売額の行では NULL
+published: false
+---

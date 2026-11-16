@@ -1,7 +1,7 @@
-schema: commerce
-name: raw_commercial_sales_industry
+---
+$schema: https://queria.io/schemas/table/v1.json
+table: commerce.raw_commercial_sales_industry
 description: 商業動態統計調査 業種別商業販売額（月次）の生データ（業種×月）
-annotations: { queria: { published: false } }
 fields:
   - name: year_month
     description: 年月（YYYYMM）
@@ -13,3 +13,5 @@ fields:
     description: 業種名（英語）
   - name: sales_value_billion_yen
     description: 商業販売額（10億円）
+published: false
+---
