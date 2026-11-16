@@ -6,6 +6,7 @@
 
 - [第３次産業活動指数](https://www.meti.go.jp/statistics/tyo/sanzi/)（経済産業省 経済解析室）
 - [商業動態統計調査](https://www.meti.go.jp/statistics/tyo/syoudou/)（経済産業省）
+- 計画・通知等の PDF（経済産業省）。URL は[行政事業レビュー見える化サイト](https://rssystem.go.jp)のシートから集めています
 
 経済産業省ウェブサイトのコンテンツに準拠する[公共データ利用規約（第1.0版）（PDL1.0）](https://www.meti.go.jp/main/rules.html)に従います。
 
@@ -14,7 +15,7 @@
 - 「第３次産業活動指数」（経済産業省）（https://www.meti.go.jp/statistics/tyo/sanzi/）を加工して作成。
 - 「商業動態統計調査」（経済産業省）（https://www.meti.go.jp/statistics/tyo/syoudou/）を加工して作成。
 
-いずれも公表 Excel の表を機械可読な行の形に整形しています。統計値そのものは変更していません。
+統計はいずれも公表 Excel の表を機械可読な行の形に整形しています。統計値そのものは変更していません。
 
 ## テーブル
 
@@ -23,6 +24,8 @@
 | `main.tertiary_industry_activity_index` | 第３次産業活動指数（2020年基準）の業種別・月次の指数（2020年=100） | 52,416 |
 | `commerce.commercial_sales_by_industry` | 商業動態統計調査の業種別・月次の商業販売額（10億円、全国） | 14,674 |
 | `commerce.retail_sales_by_business_type_and_item` | 商業動態統計調査の、百貨店・スーパー・コンビニエンスストアなど業態別・商品分類別の月次販売額（全国） | 29,551 |
+| `plans.documents` | 行政事業レビューのシートが挙げる経済産業省の計画・通知等の PDF の URL。名前・sha256・ページ数・取得日時 | |
+| `plans.pages` | `plans.documents` の PDF の本文。1 行が 1 ページで、NFKC で正規化しています | |
 
 ## 使い方
 
@@ -158,3 +161,11 @@ sales_value_million_yen と establishments はどちらか一方だけが入り�
 
 集計に必要なデータが無い月（原典の「***」）と秘匿された値（「X」）は行ごと落としています。
 コンビニエンスストアは1997年1月から表に行がありますが、値が入るのは1997年4月分からです。
+
+## plans.documents・plans.pages
+
+[行政事業レビュー見える化サイト](https://rssystem.go.jp)のレビューシート（政策・施策、法令等、2024 年度から）が「関係する計画・通知等」に挙げる URL のうち、経済産業省のサイト（www.meti.go.jp）の PDF を取得し、ページごとの本文にしています。
+
+- 取得できなかった URL（リンク切れ、PDF ではない応答）と、開けない PDF は入っていません
+- PDF の実体は置いていません。`plans.documents` の `url` から経済産業省のサイトで開けます
+- URL の収集と Parquet 化は dataset-shared の `review_plans.py` で行います。PDF の取得は統計の Excel と同じ `fetch.py` で、25 秒以上の間隔を空けて取得します

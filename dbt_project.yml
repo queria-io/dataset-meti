@@ -20,6 +20,8 @@ models:
         +materialized: view
       mart:
         +materialized: table
+    plans:
+      +materialized: table
     commerce:
       raw:
         +materialized: table

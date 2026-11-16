@@ -3,7 +3,8 @@
 1. ita:     第３次産業活動指数の公開 Excel を取得し縦持ち CSV へ整形（季調・原の月次）
 2. syoudou: 商業動態統計調査 時系列データの公開 Excel を取得し、業種別商業販売額と
    業態別・商品別販売額の2つの CSV へ整形
-3. dbt:     dbt ビルド
+3. plans:   行政事業レビューが挙げる計画・通知等の PDF を取得し、ページごとの本文の Parquet にする
+4. dbt:     dbt ビルド
 """
 
 import logging
@@ -11,6 +12,7 @@ from pathlib import Path
 
 from dbt.cli.main import dbtRunner
 
+import plans
 import syoudou
 from ita import download_and_parse
 
@@ -34,17 +36,21 @@ def dbt_build() -> None:
 def main() -> None:
     WORK_DIR.mkdir(exist_ok=True)
 
-    logger.info("1/3: ita (第３次産業活動指数 月次)")
+    logger.info("1/4: ita (第３次産業活動指数 月次)")
     rows = download_and_parse(CSV_PATH)
     logger.info(f"  meti_ita_monthly.csv: {rows} rows")
 
-    logger.info("2/3: syoudou (商業動態統計調査 時系列データ)")
+    logger.info("2/4: syoudou (商業動態統計調査 時系列データ)")
     rows = syoudou.download_and_parse_industry(COMMERCIAL_SALES_INDUSTRY_CSV_PATH)
     logger.info(f"  meti_commercial_sales_industry.csv: {rows} rows")
     rows = syoudou.download_and_parse_business_type(RETAIL_SALES_BUSINESS_TYPE_CSV_PATH)
     logger.info(f"  meti_retail_sales_business_type.csv: {rows} rows")
 
-    logger.info("3/3: dbt build")
+    logger.info("3/4: plans (行政事業レビューが挙げる計画・通知等)")
+    plans.download_plans()
+    plans.build_plans_parquet()
+
+    logger.info("4/4: dbt build")
     dbt_build()
 
 
