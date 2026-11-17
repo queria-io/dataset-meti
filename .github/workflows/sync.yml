@@ -22,5 +22,7 @@ jobs:
     uses: queria-io/dataset-shared/.github/workflows/sync.yml@04fbe6d45c1b16654fc8bf8d2158244c6ea27da2
     with:
       dataset_name: meti
+      # 経済産業省のサイトは取得の間隔を 25 秒以上空けるので、計画・通知等の PDF だけで 1 時間ほどかかる
+      timeout_minutes: 240
     secrets:
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
