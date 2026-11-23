@@ -1,0 +1,55 @@
+$schema: https://tabledoc.queria.io/schemas/dataset/v1.json
+name: meti
+title: 経済産業省 第３次産業活動指数・商業動態統計
+description: |-
+  第３次産業活動指数と、商業動態統計の販売額を収録した統計です。
+  出典は経済産業省の公表統計です。
+  行政事業レビューのシートが関係する計画・通知等として挙げる経済産業省のサイトの PDF を、ページごとの本文で持ちます（plans）。
+  電力調査統計・総合エネルギー統計・石油製品価格調査は、資源エネルギー庁のデータセット enecho にあります。
+topics:
+  - 経済産業省
+  - 第3次産業活動指数
+  - サービス産業
+  - 景気
+  - 商業動態統計調査
+  - 商業販売額
+  - 卸売業
+  - 小売業
+  - 百貨店
+  - スーパー
+  - コンビニエンスストア
+  - ドラッグストア
+  - ホームセンター
+homepage: https://github.com/queria-io/dataset-meti
+language: ja
+licenses:
+  - JP-PDL-1.0
+
+sources:
+  - id: sanzi
+    title: 第３次産業活動指数（経済産業省 経済解析室）
+    path: https://www.meti.go.jp/statistics/tyo/sanzi/
+  - id: syoudou
+    title: 商業動態統計調査（経済産業省）
+    path: https://www.meti.go.jp/statistics/tyo/syoudou/
+  - id: rssystem
+    title: 行政事業レビュー見える化サイト
+    path: https://rssystem.go.jp
+
+contributors:
+  - id: meti
+    title: 経済産業省
+    path: https://www.meti.go.jp/
+    roles: [rightsHolder]
+
+temporal_coverage: {start: "1980-01", end: null}
+spatial_coverage: [JP]
+update_frequency: monthly
+schemas:
+  - name: main
+    title: メイン
+  - name: commerce
+    title: 商業動態統計
+  - name: plans
+    title: 計画・通知等
+synonyms: [第3次産業活動指数, サービス産業, 景気指数, 経済解析室, 商業動態統計, 商業販売額, 小売販売額, 卸売販売額, 百貨店売上, スーパー売上, コンビニ売上, ドラッグストア売上, ホームセンター売上, 家電量販店, 無店舗小売, 商品別販売額, 業態別販売額, 店舗数]

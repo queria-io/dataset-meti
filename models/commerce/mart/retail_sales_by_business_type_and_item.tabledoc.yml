@@ -1,13 +1,11 @@
----
-$schema: https://queria.io/schemas/table/v1.json
-table: commerce.retail_sales_by_business_type_and_item
+$schema: https://tabledoc.queria.io/schemas/table/v1.json
 title: 業態別・商品別販売額（月次）
 description: |-
   商業動態統計調査の、百貨店・スーパー・コンビニエンスストアなど業態別・商品分類別の月次販売額（全国）です。
 
   - 「百貨店・スーパー」は百貨店とスーパーの合計で、商品分類も合計と内訳が同じ列に並びます。絞らずに合計すると二重に数えます。
   - 収録の開始時点は業態で違います（百貨店・スーパー 1980年、コンビニ 1997年、その他 2014年）。
-keywords:
+topics:
   - 経済産業省
   - 商業動態統計調査
   - 小売業
@@ -19,9 +17,8 @@ keywords:
   - ホームセンター
   - 商品別販売額
   - 店舗数
-sources:
-  - path: https://www.meti.go.jp/statistics/tyo/syoudou/
-fields:
+sources: [syoudou]
+columns:
   - name: fiscal_year
     title: 年度（4月始まり）
   - name: year
@@ -42,5 +39,3 @@ fields:
     title: 販売額（百万円）
   - name: establishments
     title: 期末の店舗数（店）
-themes: [commerce_services]
----

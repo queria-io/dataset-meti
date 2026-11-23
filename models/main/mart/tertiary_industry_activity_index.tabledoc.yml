@@ -1,21 +1,18 @@
----
-$schema: https://queria.io/schemas/table/v1.json
-table: main.tertiary_industry_activity_index
+$schema: https://tabledoc.queria.io/schemas/table/v1.json
 title: 第３次産業活動指数（2020年基準・月次）
 description: |-
   第３次産業活動指数（2020年基準）の業種別・月次の指数（2020年=100）です。
 
   - 季節調整済指数と原指数を `series_type` で区別します。
   - 業種は「第３次産業総合」から個別業種までの階層を同じ列に持ちます。
-keywords:
+topics:
   - 経済産業省
   - 第3次産業活動指数
   - サービス産業
   - 景気
   - 指数
-sources:
-  - path: https://www.meti.go.jp/statistics/tyo/sanzi/
-fields:
+sources: [sanzi]
+columns:
   - name: item_code
     title: 品目番号
   - name: item_name
@@ -34,5 +31,3 @@ fields:
     title: 月
   - name: index_value
     title: 指数値（2020年＝100）
-themes: [commerce_services]
----

@@ -13,13 +13,11 @@ concurrency:
 
 jobs:
   sync:
-    # Queria への書き込みは GitHub Actions の OIDC で 1 時間のトークンを取って行う。
-    # contents と pull-requests は、Queria で変更された説明をこのリポジトリに戻す PR に使う
+    # Queria への書き込みは GitHub Actions の OIDC で 1 時間のトークンを取って行う
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
-    uses: queria-io/dataset-shared/.github/workflows/sync.yml@04fbe6d45c1b16654fc8bf8d2158244c6ea27da2
+    uses: queria-io/dataset-shared/.github/workflows/sync.yml@8572caf169e07ce5a0c6e9e88c68c45d1dccf1a2
     with:
       dataset_name: meti
       # 経済産業省のサイトは取得の間隔を 25 秒以上空けるので、計画・通知等の PDF だけで 1 時間ほどかかる
