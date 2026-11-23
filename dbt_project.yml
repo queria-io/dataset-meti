@@ -21,7 +21,12 @@ models:
       mart:
         +materialized: table
     plans:
-      +materialized: table
+      raw:
+        +materialized: table
+      stg:
+        +materialized: view
+      mart:
+        +materialized: table
     commerce:
       raw:
         +materialized: table
