@@ -15,4 +15,4 @@ columns:
     description: 販売額（百万円）。店舗数の行では NULL
   - name: establishments
     description: 期末の店舗数（店）。販売額の行では NULL
-listed: false
+hidden: true

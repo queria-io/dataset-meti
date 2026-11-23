@@ -11,4 +11,4 @@ columns:
     description: 業種名（英語）
   - name: sales_value_billion_yen
     description: 商業販売額（10億円）
-listed: false
+hidden: true
