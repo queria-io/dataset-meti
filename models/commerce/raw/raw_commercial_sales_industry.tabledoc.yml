@@ -1,8 +1,6 @@
----
-$schema: https://queria.io/schemas/table/v1.json
-table: commerce.raw_commercial_sales_industry
+$schema: https://tabledoc.queria.io/schemas/table/v1.json
 description: 商業動態統計調査 業種別商業販売額（月次）の生データ（業種×月）
-fields:
+columns:
   - name: year_month
     description: 年月（YYYYMM）
   - name: industry_order
@@ -13,5 +11,4 @@ fields:
     description: 業種名（英語）
   - name: sales_value_billion_yen
     description: 商業販売額（10億円）
-published: false
----
+listed: false
