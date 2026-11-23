@@ -15,4 +15,4 @@ columns:
     description: 年月（YYYYMM）
   - name: index_value
     description: 指数値（2020年=100）
-listed: false
+hidden: true

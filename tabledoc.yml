@@ -29,18 +29,18 @@ licenses:
 sources:
   - id: sanzi
     title: 第３次産業活動指数（経済産業省 経済解析室）
-    path: https://www.meti.go.jp/statistics/tyo/sanzi/
+    url: https://www.meti.go.jp/statistics/tyo/sanzi/
   - id: syoudou
     title: 商業動態統計調査（経済産業省）
-    path: https://www.meti.go.jp/statistics/tyo/syoudou/
+    url: https://www.meti.go.jp/statistics/tyo/syoudou/
   - id: rssystem
     title: 行政事業レビュー見える化サイト
-    path: https://rssystem.go.jp
+    url: https://rssystem.go.jp
 
 contributors:
   - id: meti
     title: 経済産業省
-    path: https://www.meti.go.jp/
+    url: https://www.meti.go.jp/
     roles: [rightsHolder]
 
 temporal_coverage: {start: "1980-01", end: null}
