@@ -29,12 +29,15 @@ columns:
     title: 年月（YYYYMM）
   - name: business_type
     title: 業態
+    dimension: categorical
   - name: item_order
     title: 原典の統計表での商品分類の並び順
   - name: item_name
     title: 商品分類名
+    dimension: categorical
   - name: item_name_en
     title: 商品分類名（英語）
+    dimension: categorical
   - name: sales_value_million_yen
     title: 販売額（百万円）
   - name: establishments

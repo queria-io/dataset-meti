@@ -26,7 +26,9 @@ columns:
     title: 原典の統計表での業種の並び順
   - name: industry_name
     title: 業種名
+    dimension: categorical
   - name: industry_name_en
     title: 業種名（英語）
+    dimension: categorical
   - name: sales_value_billion_yen
     title: 商業販売額（10億円）
