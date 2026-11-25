@@ -15,14 +15,18 @@ sources: [sanzi]
 columns:
   - name: item_code
     title: 品目番号
+    dimension: categorical
   - name: item_name
     title: 品目名称（業種名）
+    dimension: categorical
   - name: weight
     title: ウエイト（2020年基準）
   - name: series_type
     title: 系列種別コード（seasonally_adjusted／original）
+    dimension: categorical
   - name: series_type_ja
     title: 系列種別名（季節調整済指数／原指数）
+    dimension: categorical
   - name: year_month
     title: 年月（YYYYMM）
   - name: year
